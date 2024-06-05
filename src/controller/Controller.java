@@ -15,14 +15,14 @@ public class Controller implements GameCanvasListener {
 	View m_view;
 	Model m_model;
 	private long tick;
-	List keyList;
+	List<Integer> keyList;
 
 	public Controller() {
 		m_controller = this;
 		m_view = new View(this);
 		m_model = new Model(this, m_view);
 		this.tick = 0;
-		this.keyList = new List<int>;
+		this.keyList = new LinkedList<Integer>();
 	}
 
 	public static Controller getInstance() {
@@ -129,6 +129,7 @@ public class Controller implements GameCanvasListener {
 	@Override
 	public void exit() {
 		// TODO Auto-generated method stub
+		System.exit(0);
 
 	}
 
