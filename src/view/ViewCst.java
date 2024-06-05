@@ -2,6 +2,11 @@ package view;
 
 import java.awt.Color;
 
+/**
+ * Classe listant l'integralite des constantes relative a la View.
+ * 
+ * @implNote TODO Supprimer les constantes inutiles
+ */
 public class ViewCst {
 
 	public static final int WIN_WIDTH = 1024;
@@ -13,9 +18,9 @@ public class ViewCst {
 
 	public static final int PLAYGROUND_WIDTH = 500;
 	public static final int PLAYGROUND_HEIGHT = 500;
-	
-	public static final int X_MARGIN = (WIN_WIDTH - PLAYGROUND_WIDTH)/2;
-	public static final int Y_MARGIN = (WIN_HEIGHT - PLAYGROUND_HEIGHT)/2;
+
+	public static final int X_MARGIN = (WIN_WIDTH - PLAYGROUND_WIDTH) / 2;
+	public static final int Y_MARGIN = (WIN_HEIGHT - PLAYGROUND_HEIGHT) / 2;
 
 	// a supprimer (from model)
 	public static final int NB_CELL_HEIGHT = 15;
