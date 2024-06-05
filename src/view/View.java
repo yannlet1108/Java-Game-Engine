@@ -101,8 +101,16 @@ public class View {
 		g.setColor(ViewCst.BACKGROUND_COLOR);
 		g.fillRect(0, 0, ViewCst.WIN_WIDTH, ViewCst.WIN_HEIGHT);
 		g.setColor(ViewCst.PLAYGROUND_COLOR);
-		g.fillRect(ViewCst.X_MARGIN, ViewCst.Y_MARGIN, ViewCst.WIN_WIDTH - ViewCst.X_MARGIN,
-				ViewCst.WIN_HEIGHT - ViewCst.Y_MARGIN);
+		g.fillRect(ViewCst.X_MARGIN, ViewCst.Y_MARGIN, ViewCst.PLAYGROUND_WIDTH, ViewCst.PLAYGROUND_HEIGHT);
+		
+		//affichage du quadrillage
+		g.setColor(ViewCst.LINE_COLOR);
+		for(int i = 0;i < ViewCst.NB_CELL_HEIGHT; i++ ) {
+			g.drawLine(0+ViewCst.X_MARGIN,i*ViewCst.CELL_HEIGHT+ViewCst.Y_MARGIN, ViewCst.X_MARGIN+ViewCst.PLAYGROUND_WIDTH, i*ViewCst.CELL_HEIGHT+ViewCst.Y_MARGIN);
+			for(int j = 0; j < ViewCst.NB_CELL_WIDTH; j++) {
+				g.drawLine(j*ViewCst.CELL_WIDTH+ViewCst.X_MARGIN,0+ViewCst.Y_MARGIN, j*ViewCst.CELL_WIDTH+ViewCst.X_MARGIN, ViewCst.PLAYGROUND_HEIGHT+ViewCst.Y_MARGIN);
+			}
+		}
 	}
 
 	private SpriteBank bank;
