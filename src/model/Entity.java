@@ -34,7 +34,7 @@ public class Entity {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 
-	public void setDirection() {
+	public void setDirection(Direction direction) {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 }
