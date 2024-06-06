@@ -2,11 +2,11 @@ package automaton;
 
 import model.Entity;
 
-public class Destroy implements Action {
+public class Explode implements Action {
 
 	@Override
 	public void exec(Entity e) {
-		e.destroy();
+		e.explode();
 	}
 
 }

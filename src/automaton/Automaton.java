@@ -116,7 +116,7 @@ public class Automaton {
 		transitions.add(new Transition(forwardState,
 				new Conjonction(new Conjonction(new Cell(forward, obstacle), new Cell(right, obstacle)),
 						new Cell(left, obstacle)),
-				new Destroy(), deadState));
+				new Explode(), deadState));
 
 		return transitions;
 	}
