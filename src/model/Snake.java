@@ -28,6 +28,12 @@ public class Snake extends Entity {
 	public int getLength() {
 		return pointsList.size();
 	}
+	
+	/* retourne la position de la tête de Snake*/
+	@Override
+	public Point getPosition() {
+		return this.pointsList.get(0).getLocation();
+	}
 
 	/*
 	 * Prends comme paramètre une direction et move le snake dans cette direction.
@@ -85,37 +91,5 @@ public class Snake extends Entity {
 
 	}
 
-	/*
-	 * transforme la direction en un "vecteur de translation" (pas vraiment elle
-	 * rend un point qui est utilisé comme vecteur) Cette fonction est privée !
-	 * Author : Moataz ERRAMI
-	 */
-	private Point whereTo(Direction newDirect) {
-		Point firstPosition = pointsList.get(0).getLocation();
-
-		int borderPointY = this.model.getBoardHeight();
-		int borderPointX = this.model.getBoardWidth();
-
-		Point theMove = new Point(0, 0);
-		if (newDirect == Direction.N && firstPosition.y > 0)
-			theMove.move(0, -1);
-		else if (newDirect == Direction.S && firstPosition.y < borderPointY)
-			theMove.move(0, 1);
-		else if (newDirect == Direction.E && firstPosition.x < borderPointX)
-			theMove.move(1, 0);
-		else if (newDirect == Direction.W && firstPosition.x > 0)
-			theMove.move(-1, 0);
-		else if (newDirect == Direction.NE && firstPosition.y > 0 && firstPosition.x < borderPointX)
-			theMove.move(1, -1);
-		else if (newDirect == Direction.NW && firstPosition.y > 0 && firstPosition.x > 0)
-			theMove.move(-1, -1);
-		else if (newDirect == Direction.SW && firstPosition.y < borderPointY && firstPosition.x > 0)
-			theMove.move(-1, 1);
-		else if (newDirect == Direction.SE && firstPosition.y < borderPointY && firstPosition.x < borderPointX)
-			theMove.move(1, 1);
-		else
-			throw new RuntimeException("Direction Unknown or border reached");
-
-		return theMove;
-	}
+	
 }
