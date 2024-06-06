@@ -7,6 +7,7 @@ import automaton.Automaton;
 public class Entity {
 	Point position;
 	Direction direction;
+	Model model;
 
 	public Entity(Point position, Direction direction) {
 		this.position = position;
@@ -21,7 +22,7 @@ public class Entity {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 
-	public void move() {
+	public void move(Direction direction) {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 
