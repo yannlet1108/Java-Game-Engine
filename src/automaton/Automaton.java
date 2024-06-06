@@ -66,13 +66,11 @@ public class Automaton {
 	private List<Transition> snakeTransitions() {
 		State waitState = currentState;
 		State forwardState = new State(State.FORWARD);
-		State deadState = new State(State.DEAD);
 
 		List<Transition> transitions = new LinkedList<Transition>();
 
 		Direction forward = new Direction(Direction.F);
 		Category voidCategory = new Category(Category.V);
-		Category obstacle = new Category(Category.O);
 
 		transitions.add(new Transition(waitState, new Cell(forward, voidCategory), new Move(forward), forwardState));
 		transitions.add(new Transition(forwardState, new Cell(forward, voidCategory), new Move(forward), forwardState));
