@@ -1,6 +1,11 @@
 package model;
 
 public class Direction {
+	int direction;
+	
+	public Direction(int d) {
+		direction = d;
+	}
 	
 	public static final int N = 0 ;
 	
