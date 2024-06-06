@@ -31,7 +31,7 @@ public class View {
 	JLabel m_text;
 
 	private long m_textElapsed;
-	
+
 	private LinkedList<Avatar> avatarStorage;
 	private SpriteBank bank;
 
@@ -96,7 +96,8 @@ public class View {
 			int fps = m_canvas.getFPS();
 
 			String txt = "Tick=" + period + "ms";
-			while (txt.length() < 15) txt += " ";
+			while (txt.length() < 15)
+				txt += " ";
 			txt = txt + fps + " fps   ";
 			m_text.setText(txt);
 		}
@@ -156,28 +157,55 @@ public class View {
 	 *          le but de odifier la fenetre graphique
 	 */
 	private void fillPlayground(Graphics g) {
+		// Remplissage de la fenetre
 		g.setColor(ViewCst.BACKGROUND_COLOR);
-		g.fillRect(0, 0, ViewCst.WIN_WIDTH, ViewCst.WIN_HEIGHT);
-		g.setColor(ViewCst.PLAYGROUND_COLOR);
-		g.fillRect(ViewCst.X_MARGIN, ViewCst.Y_MARGIN, ViewCst.PLAYGROUND_WIDTH, ViewCst.PLAYGROUND_HEIGHT);
+		g.fillRect(0, 0, m_canvas.getWidth(), m_canvas.getHeight());
 
+		// Remplissage du playground
+		g.setColor(ViewCst.PLAYGROUND_COLOR);
+		g.fillRect(getXmargin(), getYmargin(), getPlaygroundSize(), getPlaygroundSize());
+
+		//Quadrillage
 		g.setColor(ViewCst.LINE_COLOR);
 		for (int i = 0; i < ViewCst.NB_CELL_HEIGHT; i++) {
-			g.drawLine(0 + ViewCst.X_MARGIN, i * ViewCst.CELL_HEIGHT + ViewCst.Y_MARGIN,
-					ViewCst.X_MARGIN + ViewCst.PLAYGROUND_WIDTH, i * ViewCst.CELL_HEIGHT + ViewCst.Y_MARGIN);
+			g.drawLine(0 + getXmargin(), i * getCellSize()+ getYmargin(),
+					getXmargin() + getPlaygroundSize(), i * getCellSize() + getYmargin());
 			for (int j = 0; j < ViewCst.NB_CELL_WIDTH; j++) {
-				g.drawLine(j * ViewCst.CELL_WIDTH + ViewCst.X_MARGIN, 0 + ViewCst.Y_MARGIN,
-						j * ViewCst.CELL_WIDTH + ViewCst.X_MARGIN, ViewCst.PLAYGROUND_HEIGHT + ViewCst.Y_MARGIN);
+				g.drawLine(j * getCellSize()+ getXmargin(), 0 + getYmargin(),
+						j * getCellSize() + getXmargin(), getPlaygroundSize() + getYmargin());
 			}
 		}
+		
+		g.setColor(Color.RED);
+		g.drawString("(" + m_frame.getSize().width + ", " + m_frame.getSize().height + ")", 5, 25);
 	}
 	
+	private int getPlaygroundSize() {
+		if(m_frame.getWidth() < m_frame.getHeight()) {
+			return m_frame.getWidth() - ViewCst.DEFAULT_MARGIN*2;
+		}
+		return m_frame.getHeight() - ViewCst.DEFAULT_MARGIN*2;
+	}
+	
+	private int getXmargin() {
+		return (m_frame.getWidth()-getPlaygroundSize())/2;
+	}
+	private int getYmargin() {
+		return (m_frame.getHeight()-getPlaygroundSize())/2;
+	}
+	
+	public int getCellSize() {
+		return getPlaygroundSize()/ViewCst.NB_CELL_HEIGHT;
+	}
+		
+
+
 	/**
 	 * Stocke la banque des Sprites dans la View
 	 * 
 	 * @param sb : Banque des Sprites chargee
 	 */
-	
+
 	public void setBank(SpriteBank sb) {
 		bank = sb;
 	}
@@ -205,10 +233,16 @@ public class View {
 	private Iterator<Avatar> getAvatarIterator() {
 		return avatarStorage.iterator();
 	}
-	
-	private Point playGroundtoWindow(Point p) {
+
+	public Point playGroundtoWindow(Point p) {
 		Point np = new Point(p);
-		np.translate(ViewCst.X_MARGIN, ViewCst.Y_MARGIN);
+		np.translate(getXmargin(),getYmargin());
+		return np;
+	}
+	
+	public Point modelToPlayground(Point p) {
+		Point np = new Point();
+		np.setLocation(p.x*getCellSize(),p.y*getCellSize());
 		return np;
 	}
 

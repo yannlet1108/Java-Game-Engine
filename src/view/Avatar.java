@@ -9,7 +9,7 @@ public abstract class Avatar {
 
 	View m_view;
 
-	// protected Entity instanceEntity;
+	protected Entity instanceEntity;
 
 	protected boolean isVisible;
 
@@ -30,9 +30,9 @@ public abstract class Avatar {
 	 * 
 	 * @return Entite liee
 	 */
-	// public Entity getEntity() {
-	// return instanceEntity;
-	// }
+	public Entity getEntity() {
+	 return instanceEntity;
+	}
 
 	/**
 	 * Parametre l'Avatar comme etant visible
