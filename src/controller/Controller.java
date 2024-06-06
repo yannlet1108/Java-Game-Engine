@@ -106,7 +106,7 @@ public class Controller implements GameCanvasListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		System.out.println("Key released: " + e.getKeyChar() + " code=" + e.getKeyCode());
-		keyList.remove(e.getKeyCode());
+		keyList.remove((Object) e.getKeyCode());
 	}
 
 	/**
