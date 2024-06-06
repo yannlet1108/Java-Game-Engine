@@ -9,7 +9,7 @@ public class Cell implements Condition {
 	Direction dir;
 	Category cat;
 
-	public Cell(Direction dir, Category cat) {
+	Cell(Direction dir, Category cat) {
 		this.dir = dir;
 		this.cat = cat;
 	}

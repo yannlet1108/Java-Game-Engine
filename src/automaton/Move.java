@@ -5,15 +5,25 @@ import model.Direction;
 
 public class Move implements Action {
 
-	Direction dir;
+	private Direction dir;
+	private boolean isDirectionPrecised;
+
+	Move() {
+		isDirectionPrecised = false;
+	}
 
 	Move(Direction dir) {
 		this.dir = dir;
+		isDirectionPrecised = true;
 	}
 
 	@Override
 	public void exec(Entity e) {
-		e.move(dir);
+		if (isDirectionPrecised) {
+			e.move(dir);
+		} else {
+			e.move();
+		}
 	}
 
 }
