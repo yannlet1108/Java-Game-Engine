@@ -91,7 +91,7 @@ public class Game {
 		// center the window on the screen
 		m_frame.setLocationRelativeTo(null);
 
-		// make the vindow visible
+		// make the window visible
 		m_frame.setVisible(true);
 	}
 

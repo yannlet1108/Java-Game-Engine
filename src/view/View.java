@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -155,20 +156,91 @@ public class View {
 	 *          le but de odifier la fenetre graphique
 	 */
 	private void fillPlayground(Graphics g) {
+		// Remplissage de la fenetre
 		g.setColor(ViewCst.BACKGROUND_COLOR);
-		g.fillRect(0, 0, ViewCst.WIN_WIDTH, ViewCst.WIN_HEIGHT);
-		g.setColor(ViewCst.PLAYGROUND_COLOR);
-		g.fillRect(ViewCst.X_MARGIN, ViewCst.Y_MARGIN, ViewCst.PLAYGROUND_WIDTH, ViewCst.PLAYGROUND_HEIGHT);
+		g.fillRect(0, 0, m_canvas.getWidth(), m_canvas.getHeight());
 
-		g.setColor(ViewCst.LINE_COLOR);
-		for (int i = 0; i < ViewCst.NB_CELL_HEIGHT; i++) {
-			g.drawLine(0 + ViewCst.X_MARGIN, i * ViewCst.CELL_HEIGHT + ViewCst.Y_MARGIN,
-					ViewCst.X_MARGIN + ViewCst.PLAYGROUND_WIDTH, i * ViewCst.CELL_HEIGHT + ViewCst.Y_MARGIN);
-			for (int j = 0; j < ViewCst.NB_CELL_WIDTH; j++) {
-				g.drawLine(j * ViewCst.CELL_WIDTH + ViewCst.X_MARGIN, 0 + ViewCst.Y_MARGIN,
-						j * ViewCst.CELL_WIDTH + ViewCst.X_MARGIN, ViewCst.PLAYGROUND_HEIGHT + ViewCst.Y_MARGIN);
+		// Remplissage du playground
+		g.setColor(ViewCst.PLAYGROUND_COLOR);
+		g.fillRect(getXmargin(), getYmargin(), getRealSize(), getRealSize());
+
+		// Quadrillage
+		g.setColor(ViewCst.LINE_COLOR_SEC);
+		for (int i = 0; i <= ViewCst.NB_CELL_HEIGHT; i++) {
+			if (i == ViewCst.NB_CELL_HEIGHT) g.setColor(ViewCst.LINE_COLOR_SEC);
+			g.drawLine(0 + getXmargin(), i * getCellSize() + getYmargin(), getXmargin() + getRealSize(),
+					i * getCellSize() + getYmargin());
+
+			for (int j = 0; j <= ViewCst.NB_CELL_WIDTH; j++) {
+				if (j == ViewCst.NB_CELL_WIDTH) g.setColor(ViewCst.LINE_COLOR_SEC);
+				g.drawLine(j * getCellSize() + getXmargin(), 0 + getYmargin(), j * getCellSize() + getXmargin(),
+						getRealSize() + getYmargin());
+				g.setColor(ViewCst.LINE_COLOR);
 			}
 		}
+
+		g.setColor(Color.RED);
+		g.drawString("(" + m_frame.getSize().width + ", " + m_frame.getSize().height + ")", 5, 25);
+	}
+
+	/**
+	 * Calcule la taille theorique du playground
+	 * 
+	 * @return Taille theorique du playground
+	 */
+	private int getPlaygroundSize() {
+		if (m_canvas.getWidth() < m_canvas.getHeight()) {
+			return m_canvas.getWidth() - ViewCst.DEFAULT_MARGIN * 2;
+		}
+		return m_canvas.getHeight() - ViewCst.DEFAULT_MARGIN * 2;
+	}
+
+	/**
+	 * Calcule la taille d'une cellule sur l'interface graphique
+	 * 
+	 * @return Taille en pixel d'une cellule
+	 */
+	public int getCellSize() {
+		return getPlaygroundSize() / ViewCst.NB_CELL_HEIGHT;
+	}
+
+	/**
+	 * Calcule la taille reelle du playground en fonction de la taille des cellule
+	 * pour afficher de maniere centre et sans espace entre les cellule et les
+	 * bordures du playground
+	 * 
+	 * @return Taille du playground en pixel
+	 */
+	private int getRealSize() {
+		return getCellSize() * ViewCst.NB_CELL_HEIGHT;
+	}
+
+	/**
+	 * Calcule la difference entre la taille theorique et la taille reelle du
+	 * playground pour ajuster les offsets d'affichage
+	 * 
+	 * @return Difference de taille
+	 */
+	private int getLeftover() {
+		return getPlaygroundSize() - getRealSize();
+	}
+
+	/**
+	 * Calcule l'offset d'affichage du playground sur X
+	 * 
+	 * @return Marge sur l'axe des abscisse
+	 */
+	private int getXmargin() {
+		return (m_canvas.getWidth() - getPlaygroundSize()) / 2 + getLeftover() / 2;
+	}
+
+	/**
+	 * Calcule l'offset d'affchage du playground sur Y
+	 * 
+	 * @return Marge sur l'axe des ordonnees
+	 */
+	private int getYmargin() {
+		return (m_canvas.getHeight() - getPlaygroundSize()) / 2 + getLeftover() / 2;
 	}
 
 	/**
@@ -176,6 +248,7 @@ public class View {
 	 * 
 	 * @param sb : Banque des Sprites chargee
 	 */
+
 	public void setBank(SpriteBank sb) {
 		bank = sb;
 	}
@@ -202,6 +275,18 @@ public class View {
 	 */
 	private Iterator<Avatar> getAvatarIterator() {
 		return avatarStorage.iterator();
+	}
+
+	public Point playGroundtoWindow(Point p) {
+		Point np = new Point(p);
+		np.translate(getXmargin(), getYmargin());
+		return np;
+	}
+
+	public Point modelToPlayground(Point p) {
+		Point np = new Point();
+		np.setLocation(p.x * getCellSize(), p.y * getCellSize());
+		return np;
 	}
 
 }

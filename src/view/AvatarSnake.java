@@ -1,8 +1,12 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.util.Iterator;
 
 import model.Entity;
+import model.Snake;
 
 public class AvatarSnake extends Avatar {
 
@@ -12,13 +16,12 @@ public class AvatarSnake extends Avatar {
 
 	@Override
 	public void paint(Graphics g) {
-		// LinkedList<int[]> points = ((Snake) instanceEntity).getPointsList();
-		// Iterator<int[]> pointsIterator = points.iterator();
-		// int currentPoint[] = pointsIterator.next();
-		// m_view.paintShape(g, 3, Color.ORANGE, currentPoint[0], currentPoint[1]);
-		// while (pointsIterator.hasNext()) {
-		// currentPoint = pointsIterator.next();
-		// m_view.paintShape(g, 1, Color.ORANGE, currentPoint[0], currentPoint[1]);
-		// }
+		Iterator<Point> pointsIterator = ((Snake)instanceEntity).getPointsIterator();
+		Point currentPoint = pointsIterator.next();
+		m_view.paintShape(g, 3, Color.ORANGE, currentPoint.x, currentPoint.y);
+		while (pointsIterator.hasNext()) {
+			currentPoint = pointsIterator.next();
+			m_view.paintShape(g, 1, Color.ORANGE, currentPoint.x, currentPoint.y);
+		}
 	}
 }
