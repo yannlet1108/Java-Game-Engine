@@ -1,6 +1,17 @@
 package model;
 
+import java.awt.Point;
+
+import automaton.Automaton;
+
 public class Entity {
+	Point position;
+	Direction direction;
+
+	public Entity(Point position, Direction direction) {
+		this.position = position;
+		this.direction = direction;
+	}
 
 	public int getX() {
 		throw new RuntimeException("Not Yet Implemented");
@@ -35,6 +46,10 @@ public class Entity {
 	}
 
 	public void setDirection(Direction direction) {
+		throw new RuntimeException("Not Yet Implemented");
+	}
+
+	public void step() {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 }
