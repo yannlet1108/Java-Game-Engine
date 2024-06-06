@@ -2,6 +2,8 @@ package view;
 
 import java.awt.Graphics;
 
+import model.Entity;
+
 /**
  * Classe contenant les operations communes a tout les Avatars
  */
@@ -9,7 +11,7 @@ public abstract class Avatar {
 
 	View m_view;
 
-	// protected Entity instanceEntity;
+	protected Entity instanceEntity;
 
 	protected boolean isVisible;
 
@@ -19,9 +21,9 @@ public abstract class Avatar {
 	 * @param m_view : Instance de la vew
 	 * @param e      : Entite liee a l'Avatar courant
 	 */
-	Avatar(View m_view/* , Entity e */) {
+	Avatar(View m_view, Entity e) {
 		this.m_view = m_view;
-		// instanceEntity = e;
+		instanceEntity = e;
 		setInvisible();
 	}
 
@@ -30,9 +32,9 @@ public abstract class Avatar {
 	 * 
 	 * @return Entite liee
 	 */
-	// public Entity getEntity() {
-	// return instanceEntity;
-	// }
+	public Entity getEntity() {
+		return instanceEntity;
+	}
 
 	/**
 	 * Parametre l'Avatar comme etant visible

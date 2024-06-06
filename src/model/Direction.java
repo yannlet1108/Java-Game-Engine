@@ -1,5 +1,8 @@
 package model;
-
+/**
+ * @implNote TODO
+ * @implNote TODO Choisir le package de la classe (model vs automaton)
+ */
 public class Direction {
 	int direction;
 	

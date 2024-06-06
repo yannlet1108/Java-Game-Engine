@@ -13,18 +13,18 @@ import javax.swing.JLabel;
 
 import controller.Controller;
 import info3.game.graphics.GameCanvas;
+import model.Entity;
+import model.Model;
 
 /**
  * Classe gerant l'aspect visuel du jeu. Gere la fenetre graphique et son
  * contenu. Gere l'avatar des entites. S'occupe de convertir les coordonnees du
  * model en coordonnees affichable.
- * 
- * @implNote TODO Implementer et lier le model
  */
 public class View {
 
 	Controller m_controller;
-	// Model m_model;
+	Model m_model;
 	GameCanvas m_canvas;
 	JFrame m_frame;
 	JLabel m_text;
@@ -38,7 +38,7 @@ public class View {
 	 * Initialise la view, la fenetre graphique, la liste d'avatar et la banque
 	 * d'avatar.
 	 * 
-	 * @param m_controller : Instance courrante du Controller
+	 * @param m_controller : Instance courante du Controller
 	 */
 	public View(Controller m_controller) {
 
@@ -58,9 +58,9 @@ public class View {
 	/**
 	 * Enregistre le model courant.
 	 */
-	// public void setModel(Model m_model) {
-	// this.m_model = m_model;
-	// }
+	public void setModel(Model m_model) {
+		this.m_model = m_model;
+	}
 
 	/**
 	 * Parametre la fenetre d'affichage. La plupart des parametres sont
@@ -122,17 +122,17 @@ public class View {
 	 * 
 	 * @param e : Entite en cours de destruction
 	 */
-	// public void destroy(Entity e) {
-	// Iterator<Avatar> avatarIterator = getAvatarIterator();
-	// Avatar current;
-	// while (avatarIterator.hasNext()) {
-	// current = avatarIterator.next();
-	// if (current.getEntity() == e) {
-	// avatarStorage.remove(current);
-	// return;
-	// }
-	// }
-	// }
+	public void destroy(Entity e) {
+		Iterator<Avatar> avatarIterator = getAvatarIterator();
+		Avatar current;
+		while (avatarIterator.hasNext()) {
+			current = avatarIterator.next();
+			if (current.getEntity() == e) {
+				avatarStorage.remove(current);
+				return;
+			}
+		}
+	}
 
 	/**
 	 * Affiche l'integralite des elements a afficher.

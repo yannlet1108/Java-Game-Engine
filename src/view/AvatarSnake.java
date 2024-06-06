@@ -2,10 +2,12 @@ package view;
 
 import java.awt.Graphics;
 
+import model.Entity;
+
 public class AvatarSnake extends Avatar {
 
-	AvatarSnake(View m_view/* , Entity e */) {
-		super(m_view/* , e */);
+	AvatarSnake(View m_view, Entity e) {
+		super(m_view, e);
 	}
 
 	@Override

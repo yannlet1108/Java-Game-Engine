@@ -7,20 +7,19 @@ import java.awt.event.MouseEvent;
 import java.util.*;
 
 import info3.game.graphics.GameCanvasListener;
+import model.Model;
 import view.View;
 
 /**
  * Classe liant l'integralite des packages. Initialise les objets necessaire au
  * fonctionnement du jeu. Contient les listeners sur la souris et le clavier.
  * Contient les listeners sur le GameCanvas.
- * 
- * @implNote TODO Implementer et lier le model
  */
 public class Controller implements GameCanvasListener {
 
 	Controller m_controller;
 	View m_view;
-	// Model m_model;
+	Model m_model;
 	private long tick;
 	List<Integer> keyList;
 
@@ -30,7 +29,7 @@ public class Controller implements GameCanvasListener {
 	public Controller() {
 		m_controller = this;
 		m_view = new View(this);
-		// m_model = new Model(this, m_view);
+		m_model = new Model(this, m_view);
 		this.tick = 0;
 		this.keyList = new LinkedList<Integer>();
 	}
@@ -124,7 +123,7 @@ public class Controller implements GameCanvasListener {
 	public void tick(long elapsed) {
 		m_view.tick(elapsed);
 		if ((elapsed - tick) >= 1000) {
-			// m_model.tick();
+			m_model.step();
 			tick = elapsed;
 		}
 	}
