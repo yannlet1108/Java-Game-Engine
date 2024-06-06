@@ -15,5 +15,5 @@ public class Move implements Action {
 	public void exec(Entity e) {
 		e.move(dir);
 	}
-	
+
 }

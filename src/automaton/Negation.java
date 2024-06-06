@@ -2,11 +2,11 @@ package automaton;
 
 import model.Entity;
 
-public class Negation  implements Condition {
+public class Negation implements Condition {
 
 	Condition cond;
-	
-	Negation(Condition cond){
+
+	Negation(Condition cond) {
 		this.cond = cond;
 	}
 
