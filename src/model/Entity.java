@@ -13,6 +13,7 @@ public abstract class Entity {
 	public Entity(Point position, Direction direction) {
 		this.position = position;
 		this.direction = direction;
+		model.addEntity(this);
 	}
 
 	public int getX() {
@@ -21,7 +22,7 @@ public abstract class Entity {
 
 	public int getY() {
 		return position.y;
-		
+
 	}
 
 	public void move(Direction direction) {

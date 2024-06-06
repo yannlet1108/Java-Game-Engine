@@ -16,11 +16,11 @@ public class Model {
 		board = new Entity[boardWidth][boardHeight];
 		entities = new LinkedList<Entity>();
 	}
-	
+
 	public int getBoardHeight() {
 		return boardHeight;
 	}
-	
+
 	public int getBoardWidth() {
 		return boardWidth;
 	}
@@ -37,5 +37,15 @@ public class Model {
 
 	void setEntityAt(Point position, Entity e) {
 		board[position.y][position.x] = e;
+	}
+
+	void removeEntity(Entity e) {
+		entities.remove(e);
+		board[e.getY()][e.getX()] = null;
+	}
+
+	void addEntity(Entity e) {
+		entities.add(e);
+		board[e.getY()][e.getX()] = e;
 	}
 }
