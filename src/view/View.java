@@ -163,16 +163,22 @@ public class View {
 
 		// Remplissage du playground
 		g.setColor(ViewCst.PLAYGROUND_COLOR);
-		g.fillRect(getXmargin(), getYmargin(), getPlaygroundSize(), getPlaygroundSize());
+		g.fillRect(getXmargin(), getYmargin(), getRealSize(), getRealSize());
 
 		//Quadrillage
-		g.setColor(ViewCst.LINE_COLOR);
-		for (int i = 0; i < ViewCst.NB_CELL_HEIGHT; i++) {
+		g.setColor(ViewCst.LINE_COLOR_SEC);
+		for (int i = 0; i <= ViewCst.NB_CELL_HEIGHT; i++) {
+			if(i == ViewCst.NB_CELL_HEIGHT)
+				g.setColor(ViewCst.LINE_COLOR_SEC);
 			g.drawLine(0 + getXmargin(), i * getCellSize()+ getYmargin(),
-					getXmargin() + getPlaygroundSize(), i * getCellSize() + getYmargin());
-			for (int j = 0; j < ViewCst.NB_CELL_WIDTH; j++) {
+					getXmargin() + getRealSize(), i * getCellSize() + getYmargin());
+			
+			for (int j = 0; j <= ViewCst.NB_CELL_WIDTH; j++) {
+				if(j == ViewCst.NB_CELL_WIDTH)
+					g.setColor(ViewCst.LINE_COLOR_SEC);
 				g.drawLine(j * getCellSize()+ getXmargin(), 0 + getYmargin(),
-						j * getCellSize() + getXmargin(), getPlaygroundSize() + getYmargin());
+						j * getCellSize() + getXmargin(), getRealSize() + getYmargin());
+				g.setColor(ViewCst.LINE_COLOR);
 			}
 		}
 		
@@ -181,21 +187,29 @@ public class View {
 	}
 	
 	private int getPlaygroundSize() {
-		if(m_frame.getWidth() < m_frame.getHeight()) {
-			return m_frame.getWidth() - ViewCst.DEFAULT_MARGIN*2;
+		if(m_canvas.getWidth() < m_canvas.getHeight()) {
+			return m_canvas.getWidth() - ViewCst.DEFAULT_MARGIN*2;
 		}
-		return m_frame.getHeight() - ViewCst.DEFAULT_MARGIN*2;
+		return m_canvas.getHeight() - ViewCst.DEFAULT_MARGIN*2;
 	}
 	
 	private int getXmargin() {
-		return (m_frame.getWidth()-getPlaygroundSize())/2;
+		return (m_canvas.getWidth()-getPlaygroundSize())/2+getLeftover()/2;
 	}
 	private int getYmargin() {
-		return (m_frame.getHeight()-getPlaygroundSize())/2;
+		return (m_canvas.getHeight()-getPlaygroundSize())/2+getLeftover()/2;
 	}
 	
 	public int getCellSize() {
 		return getPlaygroundSize()/ViewCst.NB_CELL_HEIGHT;
+	}
+	
+	private int getRealSize() {
+		return getCellSize()*ViewCst.NB_CELL_HEIGHT;
+	}
+	
+	private int getLeftover() {
+		return getPlaygroundSize() - getRealSize();
 	}
 		
 

@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.io.File;
 
 /**
  * Classe listant l'integralite des constantes relative a la View.
@@ -14,6 +15,7 @@ public class ViewCst {
 
 	public static final Color BACKGROUND_COLOR = Color.GRAY;
 	public static final Color LINE_COLOR = Color.RED;
+	public static final Color LINE_COLOR_SEC = Color.MAGENTA;
 	public static final Color PLAYGROUND_COLOR = Color.GREEN;
 
 	public static final int DEFAULT_MARGIN = 10;
