@@ -4,7 +4,7 @@ public class Matrix {
 	Entity[][] prvMatrix;
 
 	/*
-	 * Crée une matrice Paramétres : numberOfColumns numberOfRows retourne une
+	 * Crée une matrice Paramétres : numberOfColumns, numberOfRows. Retourne une
 	 * matrice de numberOfRows lignes et numberOfColumns colonnes Author : Moataz
 	 * ERRAMI :)
 	 */
@@ -13,16 +13,16 @@ public class Matrix {
 	}
 
 	/*
-	 * Paramétres : position x position y retourne l'entité à (x,y) Author : Moataz
-	 * ERRAMI :)
+	 * Paramétres : position x, position y, retourne l'entité à (x,y) Author :
+	 * Moataz ERRAMI :)
 	 */
 	public Entity getEntityAt(int x, int y) {
 		return prvMatrix[x][y];
 	}
 
 	/*
-	 * Paramétres : position x position y entité e fixer l'entité e à (x,y) Author :
-	 * Moataz ERRAMI :)
+	 * Paramétres : position x, position y, entité e, fixer l'entité e à (x,y)
+	 * Author : Moataz ERRAMI :)
 	 */
 	public void setEntityAt(int x, int y, Entity e) {
 		prvMatrix[x][y] = e;
