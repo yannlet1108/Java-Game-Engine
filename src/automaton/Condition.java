@@ -2,8 +2,8 @@ package automaton;
 
 import model.Entity;
 
-public interface Condition {
+interface Condition {
 
-	public boolean eval(Entity e);
+	boolean eval(Entity e);
 
 }
