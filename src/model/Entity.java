@@ -4,10 +4,11 @@ import java.awt.Point;
 
 import automaton.Automaton;
 
-public class Entity {
+public abstract class Entity {
 	Point position;
 	Direction direction;
 	Model model;
+	Automaton automaton;
 
 	public Entity(Point position, Direction direction) {
 		this.position = position;
@@ -15,39 +16,34 @@ public class Entity {
 	}
 
 	public int getX() {
-		throw new RuntimeException("Not Yet Implemented");
+		return position.x;
 	}
 
 	public int getY() {
-		throw new RuntimeException("Not Yet Implemented");
+		return position.y;
+		
 	}
 
 	public void move(Direction direction) {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 
-	public void egg() {
-		throw new RuntimeException("Not Yet Implemented");
-	}
+	public abstract void egg();
 
-	public void pick() {
-		throw new RuntimeException("Not Yet Implemented");
-	}
+	public abstract void pick();
 
-	public void explode() {
-		throw new RuntimeException("Not Yet Implemented");
-	}
+	public abstract void explode();
 
 	public boolean cell(Direction direction, Category category) {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 
 	public Direction getDirection() {
-		throw new RuntimeException("Not Yet Implemented");
+		return direction;
 	}
 
 	public void setDirection(Direction direction) {
-		throw new RuntimeException("Not Yet Implemented");
+		this.direction = direction;
 	}
 
 	public void step() {
