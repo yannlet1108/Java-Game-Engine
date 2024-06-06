@@ -13,7 +13,7 @@ public class AvatarSnake extends Avatar {
 
 	@Override
 	public void paint(Graphics g) {
-		LinkedList<int[]> points = ((Snake) instanceEntity).getPointsList();
+		LinkedList<int[]> points = ((Snake) instanceEntity()).getPointsList();
 		Iterator<int[]> pointsIterator = points.iterator();
 		int currentPoint[] = pointsIterator.next();
 		m_view.paintShape(g, 3, Color.ORANGE, currentPoint[0], currentPoint[1]);

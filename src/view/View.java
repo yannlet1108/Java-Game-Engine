@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -21,6 +22,10 @@ public class View {
 	JLabel m_text;
 
 	private long m_textElapsed;
+	
+	private LinkedList<Avatar> avatarStorage;
+	private SpriteBank bank;
+
 
 	public View(Controller m_controller) {
 
@@ -67,7 +72,7 @@ public class View {
 		}
 	}
 
-	private LinkedList<Avatar> avatarStorage;
+	
 
 	private void initAvatar() {
 		avatarStorage = new LinkedList<Avatar>();
@@ -113,8 +118,7 @@ public class View {
 		}
 	}
 
-	private SpriteBank bank;
-
+	
 	public void setBank(SpriteBank sb) {
 		bank = sb;
 	}
@@ -125,6 +129,12 @@ public class View {
 
 	private Iterator<Avatar> getAvatarIterator() {
 		return avatarStorage.iterator();
+	}
+	
+	private Point playGroundtoWindow(Point p) {
+		Point np = new Point(p);
+		np.translate(ViewCst.X_MARGIN, ViewCst.Y_MARGIN);
+		return np;
 	}
 
 }
