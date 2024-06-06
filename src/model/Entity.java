@@ -10,7 +10,8 @@ public abstract class Entity {
 	Model model;
 	Automaton automaton;
 
-	public Entity(Point position, Direction direction) {
+	public Entity(Point position, Direction direction, Model model) {
+		this.model = model;
 		this.position = position;
 		this.direction = direction;
 		model.addEntity(this);

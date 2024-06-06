@@ -7,8 +7,8 @@ import java.util.List;
 public class Snake extends Entity {
 	List<Point> pointsList;
 
-	public Snake(Point position, Direction direction) {
-		super(position, direction);
+	public Snake(Point position, Direction direction, Model model) {
+		super(position, direction, model);
 		pointsList = new LinkedList<Point>();
 	}
 
