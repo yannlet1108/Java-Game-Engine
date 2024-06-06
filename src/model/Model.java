@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Point;
+
 public class Model {
 
 	public Model() {
@@ -10,11 +12,11 @@ public class Model {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 
-	public Entity getEntityAt(int x, int y) {
+	public Entity getEntityAt(Point position) {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 
-	public void setEntityAt(int x, int y, Entity e) {
+	public void setEntityAt(Point position, Entity e) {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 }
