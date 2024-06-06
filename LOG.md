@@ -16,19 +16,21 @@
 | Lier le model aux automates | Elevé | Gwendal, Moataz, Yann |
 | Lier la view-le controller et le model-les automates | Elevé | Axel |
 
+
 ### Jeudi 06 Juin
 
-####Taches effectués
 | Nom | Tache | Etat |
 |:-:|---|:-:|
-| Axel et Yohan | View dynamique | Done |
+| Axel, Yohan | Vue dynamique prennant en compte le resize | Done |
 | Matthieu | Correction de bug dans le controller | Done |
-| Axel | la view-le controller et le model-les automates | Done |
+| Axel | Lier la view-le controller et le model-les automates | Done |
+| Gwendal, Moataz | Première implémentation du model | In progress |
+| Yann | Première implémentation des automates | Done |
 
 ####Taches programmés
+
 | Tache | Priorité | Participants |
 | --- | :-: | :-: |
-| Implementer le modele |
-| Tester les automates |
-| Tester le modele |
-| Finir de tester le modele |
+| Tester les automates | Elevé | Yann |
+| Tester le modele | Elevé | Gwendal, Moataz |
+| Tester la view | Elevé | Axel, Yohan |
