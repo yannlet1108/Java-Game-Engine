@@ -1,5 +1,7 @@
 package automaton;
 
+import model.Entity;
+
 public class Negation  implements Condition {
 
 	Condition cond;

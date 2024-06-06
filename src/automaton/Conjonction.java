@@ -1,5 +1,7 @@
 package automaton;
 
+import model.Entity;
+
 public class Conjonction implements Condition {
 
 	Condition c1;

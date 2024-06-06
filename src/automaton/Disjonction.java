@@ -1,5 +1,7 @@
 package automaton;
 
+import model.Entity;
+
 public class Disjonction implements Condition {
 
 	Condition c1;

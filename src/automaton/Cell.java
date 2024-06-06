@@ -1,5 +1,9 @@
 package automaton;
 
+import model.Entity;
+import model.Direction;
+import model.Category;
+
 public class Cell implements Condition {
 
 	Direction dir;
