@@ -1,14 +1,11 @@
 package view;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 public class AvatarSnake extends Avatar {
 
-	AvatarSnake(View m_view, Entity e) {
-		super(m_view, e);
+	AvatarSnake(View m_view/* , Entity e */) {
+		super(m_view/* , e */);
 	}
 
 	@Override
