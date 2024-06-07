@@ -11,6 +11,9 @@ public abstract class Entity {
 	Model model;
 	Automaton automaton;
 
+	/*
+	 * TO DO : initialisation de la catégorie dans le tableau
+	 */
 	public Entity(Point position, Direction direction, Model model) {
 		this.model = model;
 		this.position = position;
@@ -71,7 +74,7 @@ public abstract class Entity {
 	}
 
 	public void step() {
-		throw new RuntimeException("Not Yet Implemented");
+		automaton.step();
 	}
 
 	/*

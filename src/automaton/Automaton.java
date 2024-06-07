@@ -34,7 +34,7 @@ public class Automaton {
 		switch (whichAutomaton) {
 		case SNAKE:
 			currentState = State.WAIT;
-			transitions = snakeTransitions();
+			transitions = snakeTransitionsTest();
 			break;
 		case APPLE:
 			currentState = State.WAIT;
@@ -75,6 +75,23 @@ public class Automaton {
 		transitions.add(new Transition(waitState, new Cell(forward, voidCategory), new Move(forward), forwardState));
 		transitions.add(new Transition(forwardState, new Cell(forward, voidCategory), new Move(forward), forwardState));
 		transitions.add(new Transition(forwardState, new Cell(forward, voidCategory), new Move(forward), waitState));
+		return transitions;
+	}
+	
+	private List<Transition> snakeTransitionsTest() {
+		State waitState = State.WAIT;
+		State forwardState = State.FORWARD;
+		State deadState = State.DEAD;
+
+		List<Transition> transitions = new LinkedList<Transition>();
+
+		Direction north = Direction.N;
+		Category voidCategory = Category.VOID;
+		Category obstacle = Category.OBSTACLE;
+
+		transitions.add(new Transition(waitState, new Cell(north, voidCategory), new Move(north), forwardState));
+		transitions.add(new Transition(forwardState, new Cell(north, voidCategory), new Move(north), forwardState));
+		transitions.add(new Transition(forwardState, new Cell(north, voidCategory), new Move(north), waitState));
 		return transitions;
 	}
 
