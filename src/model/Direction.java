@@ -5,16 +5,17 @@ public enum Direction {
 
 	public static Direction relativeToAbsolute(Direction absoluteDirection, Direction relativeDirection) {
 		switch (relativeDirection) {
-		case FORWARD:
-			return absoluteDirection;
 		case BACKWARD:
 			return oppositeDirection(absoluteDirection);
 		case LEFT:
 			return rotateLeft(absoluteDirection);
 		case RIGHT:
 			return rotateRight(absoluteDirection);
-		default:
+		case FORWARD:
+		case HERE:
 			return absoluteDirection;
+		default:
+			return relativeDirection;
 		}
 	}
 
