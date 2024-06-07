@@ -38,7 +38,7 @@ public abstract class Entity {
 	public void move(Direction direction) {
 		Point toMovePoint = this.whereTo(direction);
 		this.model.setEntityAt(position, null);
-		this.position.move(toMovePoint.x, toMovePoint.y);
+		this.position.move(toMovePoint.x + getX(), toMovePoint.y + getY());
 		this.model.setEntityAt(position, this);
 	}
 
@@ -54,7 +54,7 @@ public abstract class Entity {
 	 */
 	public boolean cell(Direction direction, Category category) {
 		Point adjaPoint = this.whereTo(direction);
-		adjaPoint.move(getX(), getY());
+		adjaPoint.move(adjaPoint.x + getX(), adjaPoint.y + getY());
 		Entity entity = this.model.getEntityAt(adjaPoint);
 		Category entCategory = entity.category;
 		if (entCategory == category)
