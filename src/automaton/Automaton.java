@@ -34,7 +34,7 @@ public class Automaton {
 		switch (whichAutomaton) {
 		case SNAKE:
 			currentState = State.WAIT;
-			transitions = snakeTransitionsTest();
+			transitions = snakeTransitions();
 			break;
 		case APPLE:
 			currentState = State.WAIT;
@@ -48,46 +48,85 @@ public class Automaton {
 		}
 	}
 
+	/*
+	 * Version de l'automate choisi pour chaque type d'entités
+	 */
+	private List<Transition> snakeTransitions() {
+		return snakeTransitionsAbsolues();
+	}
+
+	private List<Transition> appleTransitions() {
+		return stayWaiting();
+	}
+
+	private List<Transition> blockTransitions() {
+		return stayWaiting();
+	}
+
+	/*
+	 * Fait un pas dans l'automate
+	 */
 	public void step() {
 		for (Iterator<Transition> iterator = transitions.iterator(); iterator.hasNext();) {
 			Transition transition = (Transition) iterator.next();
 			if (transition.start == currentState) {
 				if (transition.cond.eval(e)) {
 					currentState = transition.end;
-					transition.action.exec(e);
+					// si pas d'action, on exécute rien
+					if (transition.action != null) {
+						transition.action.exec(e);
+					}
 				}
 			}
 		}
 		throw new IllegalStateException("Aucune transition de l'état courant n'est valide");
 	}
 
-	private List<Transition> snakeTransitions() {
-		State waitState = State.WAIT;
-		State forwardState = State.FORWARD;
-		State deadState = State.DEAD;
+	// * * * * * * * * * Différentes versions d'automates de Snake * * * * * * * * *
 
+	/*
+	 * Premier automate basique de snake avec des directions relatives
+	 */
+	private List<Transition> snakeTransitionsRelatives() {
+		// Création de la liste des transitions
 		List<Transition> transitions = new LinkedList<Transition>();
 
+		// Définition de variables pour les États
+		State waitState = State.WAIT;
+		State forwardState = State.FORWARD;
+		// State deadState = State.DEAD;
+
+		// Définition de variables pour les Directions
 		Direction forward = Direction.FORWARD;
+
+		// Définition de variables pour les Catégories
 		Category voidCategory = Category.VOID;
-		Category obstacle = Category.OBSTACLE;
+		// Category obstacle = Category.OBSTACLE;
 
 		transitions.add(new Transition(waitState, new Cell(forward, voidCategory), new Move(forward), forwardState));
 		transitions.add(new Transition(forwardState, new Cell(forward, voidCategory), new Move(forward), forwardState));
 		transitions.add(new Transition(forwardState, new Cell(forward, voidCategory), new Move(forward), waitState));
 		return transitions;
 	}
-	
-	private List<Transition> snakeTransitionsTest() {
-		State waitState = State.WAIT;
-		State forwardState = State.FORWARD;
-		State deadState = State.DEAD;
 
+	/*
+	 * Premier automate basique de snake avec des directions absolues
+	 */
+	private List<Transition> snakeTransitionsAbsolues() {
+		// Création de la liste des transitions
 		List<Transition> transitions = new LinkedList<Transition>();
 
+		// Définition de variables pour les États
+		State waitState = State.WAIT;
+		State forwardState = State.FORWARD;
+		// State deadState = State.DEAD;
+
+		// Définition de variables pour les Directions
 		Direction north = Direction.N;
+
+		// Définition de variables pour les Catégories
 		Category voidCategory = Category.VOID;
-		Category obstacle = Category.OBSTACLE;
+		// Category obstacle = Category.OBSTACLE;
 
 		transitions.add(new Transition(waitState, new Cell(north, voidCategory), new Move(north), forwardState));
 		transitions.add(new Transition(forwardState, new Cell(north, voidCategory), new Move(north), forwardState));
@@ -95,20 +134,25 @@ public class Automaton {
 		return transitions;
 	}
 
-	private List<Transition> snakeTransitionsEssai() {
-		// Instanciation unique des États
+	/*
+	 * Automate de snake plus complet qui évite les obstacles et meurt si il ne peut
+	 * aller nulle part
+	 */
+	private List<Transition> snakeTransitionsComplet() {
+		// Création de la liste des transitions
+		List<Transition> transitions = new LinkedList<Transition>();
+
+		// Définition de variables pour les États
 		State waitState = State.WAIT;
 		State forwardState = State.FORWARD;
 		State deadState = State.DEAD;
 
-		List<Transition> transitions = new LinkedList<Transition>();
-
-		// Instanciation unique des Directions
+		// Définition de variables pour les Directions
 		Direction forward = Direction.FORWARD;
 		Direction right = Direction.RIGHT;
 		Direction left = Direction.LEFT;
 
-		// Instanciation unique des Catégories
+		// Définition de variables pour les Catégories
 		Category voidCategory = Category.VOID;
 		Category obstacle = Category.OBSTACLE;
 
@@ -138,12 +182,56 @@ public class Automaton {
 		return transitions;
 	}
 
-	private List<Transition> appleTransitions() {
-		return null;
+	// * * * * * * * * * Différentes versions d'automates de Apple * * * * * * * * *
+	// rien de spécial pour l'instant
+
+	// * * * * * * * * * Différentes versions d'automates de Block * * * * * * * * *
+
+	/*
+	 * Si les 4 blocks autour sont vides, le block descend d'une case ("tombe")
+	 */
+	private List<Transition> blockTransitionsFall() {
+		// Création de la liste des transitions
+		List<Transition> transitions = new LinkedList<Transition>();
+
+		// Définition de variables pour les États
+		State waitState = State.WAIT;
+
+		// Définition de variables pour les Directions
+		Direction south = Direction.S;
+
+		// Définition de variables pour les Catégories
+
+		// Si les 4 blocks autour sont vides, le block descend d'une case ("tombe")
+		transitions.add(new Transition(waitState, areFourDirectionsFree(), new Move(south), waitState));
+
+		return transitions;
 	}
 
-	private List<Transition> blockTransitions() {
-		return null;
+	// * * * * * * * * * * * * Automates généraux * * * * * * * * * * * *
+	/*
+	 * Garde l'automate en état WAIT, sans rien faire
+	 */
+	private List<Transition> stayWaiting() {
+		List<Transition> transitions = new LinkedList<Transition>();
+		transitions.add(new Transition(State.WAIT, new TrueCondition(), null, State.WAIT));
+		return transitions;
+	}
+
+	// * * * * * * * * * * * * Fonctions Utiles * * * * * * * * * * * *
+
+	/*
+	 * Retourne la conditions résultante de la Conjonction de Cell(Direction,Void)
+	 * sur les 4 points cardinaux
+	 */
+	private Condition areFourDirectionsFree() {
+		Condition isNorthFreeCondition = new Cell(Direction.N, Category.VOID);
+		Condition isSouthFreeCondition = new Cell(Direction.S, Category.VOID);
+		Condition isEastFreeCondition = new Cell(Direction.E, Category.VOID);
+		Condition isWestFreeCondition = new Cell(Direction.W, Category.VOID);
+
+		return new Conjonction(new Conjonction(isNorthFreeCondition, isSouthFreeCondition),
+				new Conjonction(isEastFreeCondition, isWestFreeCondition));
 	}
 
 }
