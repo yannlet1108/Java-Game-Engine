@@ -13,9 +13,6 @@ public class Snake extends Entity {
 	public Snake(Point position, Direction direction, Model model) {
 		super(position, direction, model);
 		pointsList = new LinkedList<Point>();
-		Point firstPoint = new Point(position);
-		pointsList.add(firstPoint);
-		model.setEntityAt(firstPoint, this);
 		automaton = new Automaton(this, Automaton.SNAKE);
 	}
 
@@ -41,7 +38,7 @@ public class Snake extends Entity {
 	 */
 	@Override
 	public void move(Direction newDirect) {
-		Point lastPoint = pointsList.remove(this.getLength());
+		Point lastPoint = pointsList.remove(this.getLength() - 1);
 		model.setEntityAt(lastPoint, null);
 
 		Point firstPoint = pointsList.get(0);
@@ -65,9 +62,13 @@ public class Snake extends Entity {
 	public void explode() {
 		this.model.removeEntity(this);
 		Iterator<Point> iterator = pointsList.iterator();
-		while (iterator.hasNext()) {
-			Point currentPoint = iterator.next();
-			model.setEntityAt(currentPoint, null);
+		if (iterator.hasNext()) {
+			Point currentPoint = iterator.next(); // On commence par le 2éme point car le 1er est déjà supprimer en
+													// removeEntity(this)
+			while (iterator.hasNext()) {
+				currentPoint = iterator.next();
+				model.setEntityAt(currentPoint, null);
+			}
 		}
 	}
 
