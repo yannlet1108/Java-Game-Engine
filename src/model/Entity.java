@@ -87,22 +87,24 @@ public abstract class Entity {
 		int borderPointY = this.model.getBoardHeight();
 		int borderPointX = this.model.getBoardWidth();
 
+		Direction absoluteDirection = Direction.relativeToAbsolute(direction, newDirect);
+
 		Point theMove = new Point(0, 0);
-		if (newDirect == Direction.N && firstPosition.y > 0)
+		if (absoluteDirection == Direction.N && firstPosition.y > 0)
 			theMove.move(0, -1);
-		else if (newDirect == Direction.S && firstPosition.y < borderPointY)
+		else if (absoluteDirection == Direction.S && firstPosition.y < borderPointY)
 			theMove.move(0, 1);
-		else if (newDirect == Direction.E && firstPosition.x < borderPointX)
+		else if (absoluteDirection == Direction.E && firstPosition.x < borderPointX)
 			theMove.move(1, 0);
-		else if (newDirect == Direction.W && firstPosition.x > 0)
+		else if (absoluteDirection == Direction.W && firstPosition.x > 0)
 			theMove.move(-1, 0);
-		else if (newDirect == Direction.NE && firstPosition.y > 0 && firstPosition.x < borderPointX)
+		else if (absoluteDirection == Direction.NE && firstPosition.y > 0 && firstPosition.x < borderPointX)
 			theMove.move(1, -1);
-		else if (newDirect == Direction.NW && firstPosition.y > 0 && firstPosition.x > 0)
+		else if (absoluteDirection == Direction.NW && firstPosition.y > 0 && firstPosition.x > 0)
 			theMove.move(-1, -1);
-		else if (newDirect == Direction.SW && firstPosition.y < borderPointY && firstPosition.x > 0)
+		else if (absoluteDirection == Direction.SW && firstPosition.y < borderPointY && firstPosition.x > 0)
 			theMove.move(-1, 1);
-		else if (newDirect == Direction.SE && firstPosition.y < borderPointY && firstPosition.x < borderPointX)
+		else if (absoluteDirection == Direction.SE && firstPosition.y < borderPointY && firstPosition.x < borderPointX)
 			theMove.move(1, 1);
 		else
 			throw new RuntimeException("Direction Unknown or border reached");
