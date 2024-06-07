@@ -12,6 +12,7 @@ public class Snake extends Entity {
 
 	public Snake(Point position, Direction direction, Model model) {
 		super(position, direction, model);
+		this.category = Category.SNAKE;
 		pointsList = new LinkedList<Point>();
 		automaton = new Automaton(this, Automaton.SNAKE);
 	}
