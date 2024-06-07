@@ -34,6 +34,13 @@ public class Model {
 	Entity getEntityAt(Point position) {
 		return board.getEntityAt(position.y,position.x);
 	}
+	
+	Category getCategoryAt(Point position) {
+		Entity e = getEntityAt(position);
+		if(e == null)
+			return Category.VOID;
+		return e.category;
+	}
 
 	void setEntityAt(Point position, Entity e) {
 		board.setEntityAt(position.y, position.x, e);

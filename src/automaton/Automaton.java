@@ -75,6 +75,7 @@ public class Automaton {
 					// si pas d'action, on exécute rien
 					if (transition.action != null) {
 						transition.action.exec(e);
+						return;
 					}
 				}
 			}
@@ -126,11 +127,11 @@ public class Automaton {
 
 		// Définition de variables pour les Catégories
 		Category voidCategory = Category.VOID;
-		// Category obstacle = Category.OBSTACLE;
+		Category obstacle = Category.OBSTACLE;
 
 		transitions.add(new Transition(waitState, new Cell(north, voidCategory), new Move(north), forwardState));
 		transitions.add(new Transition(forwardState, new Cell(north, voidCategory), new Move(north), forwardState));
-		transitions.add(new Transition(forwardState, new Cell(north, voidCategory), new Move(north), waitState));
+		transitions.add(new Transition(forwardState, new Cell(north, obstacle), new Move(north), waitState));
 		return transitions;
 	}
 
