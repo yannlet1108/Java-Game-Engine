@@ -5,6 +5,7 @@ Groupe 7
 - Jeu de survie/exploration sous marin 
 - Vue de coté
 - Jeu à deux joueurs en coopération (relié par une corde pour ne pas qu'ils s'éloignent trop ?)
+- Terrain généré aléatoirement mais fini
 - Systeme d'air, quantité d'oxygène limitée
 - Deux quantités d'oxygène : une pour le gilet, une pour les bouteilles
 - Systeme de flottabilité : 
@@ -16,8 +17,15 @@ Groupe 7
 - Mort si plus d'oxygène ou si plus de point de vie
 - Victoire ? (à définir)
 
+### Idée pour la physique
+--- 
+- Densité
+- Viscosité
+- 
+---
 
-## 2eme Jeu
+
+## 2eme Jeu (A REVOIR)
 - Jeu de duel
 - Vue de dessus
 - Dans une arène, avec des obstacles présents sur la carte
