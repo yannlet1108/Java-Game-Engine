@@ -12,7 +12,7 @@ public class Tests {
 	public static void main(String[] args) {
 
 		Model model = new Model(10);
-		Point pos = new Point(0, 0);
+		Point pos = new Point(5, 5);
 		Entity snake = new Snake(pos, Direction.N, model);
 
 		printStep(snake);
