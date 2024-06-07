@@ -28,8 +28,8 @@ public class Snake extends Entity {
 	public int getLength() {
 		return pointsList.size();
 	}
-	
-	/* retourne la position de la tête de Snake*/
+
+	/* retourne la position de la tête de Snake */
 	@Override
 	public Point getPosition() {
 		return this.pointsList.get(0).getLocation();
@@ -91,5 +91,4 @@ public class Snake extends Entity {
 
 	}
 
-	
 }

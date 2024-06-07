@@ -7,6 +7,7 @@ import automaton.Automaton;
 public abstract class Entity {
 	Point position;
 	Direction direction;
+	Category category;
 	Model model;
 	Automaton automaton;
 
@@ -30,8 +31,15 @@ public abstract class Entity {
 		return position;
 	}
 
+	/*
+	 * Prends comme paramètre une direction et move l'entité dans cette direction.
+	 * La classe Snake a sa propre implémentation! Author : Moataz ERRAMI
+	 */
 	public void move(Direction direction) {
-		throw new RuntimeException("Not Yet Implemented");
+		Point toMovePoint = this.whereTo(direction);
+		this.model.setEntityAt(position, null);
+		this.position.move(toMovePoint.x, toMovePoint.y);
+		this.model.setEntityAt(position, this);
 	}
 
 	public abstract void egg();
@@ -40,8 +48,18 @@ public abstract class Entity {
 
 	public abstract void explode();
 
+	/*
+	 * Retourne True Si la case dans la direction donnée en paramètre a une entité
+	 * de catégorie category, False sinon. Author : Moataz
+	 */
 	public boolean cell(Direction direction, Category category) {
-		throw new RuntimeException("Not Yet Implemented");
+		Point adjaPoint = this.whereTo(direction);
+		adjaPoint.move(getX(), getY());
+		Entity entity = this.model.getEntityAt(adjaPoint);
+		Category entCategory = entity.category;
+		if (entCategory == category)
+			return true;
+		return false;
 	}
 
 	public Direction getDirection() {
