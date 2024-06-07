@@ -77,6 +77,8 @@ public class SpriteBank {
 			case W:
 				x_ = new int[] {viewpoint.x, viewpoint.x+m_view.getCellSize(), viewpoint.x+m_view.getCellSize()};
 				y_ = new int[] {viewpoint.y+m_view.getCellSize()/2, viewpoint.y, viewpoint.y+m_view.getCellSize()};
+			default:
+				throw new RuntimeException("Not implemented");
 			}
 			Polygon triangle = new Polygon(x_, y_, 3);
 			g.fillPolygon(triangle);
