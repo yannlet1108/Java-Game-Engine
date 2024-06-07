@@ -16,6 +16,12 @@ public class Tests {
 		Entity snake = new Snake(pos, Direction.N, model);
 
 		printStep(snake);
+		printStep(snake);
+		printStep(snake);
+		printStep(snake);
+		printStep(snake);
+		printStep(snake);
+
 
 	}
 

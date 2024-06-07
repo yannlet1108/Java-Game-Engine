@@ -44,6 +44,10 @@ public abstract class Entity {
 		this.position.move(toMovePoint.x + getX(), toMovePoint.y + getY());
 		this.model.setEntityAt(position, this);
 	}
+	
+	public void move() {
+		move(Direction.FORWARD);
+	}
 
 	public abstract void egg();
 
@@ -58,8 +62,7 @@ public abstract class Entity {
 	public boolean cell(Direction direction, Category category) {
 		Point adjaPoint = this.whereTo(direction);
 		adjaPoint.move(adjaPoint.x + getX(), adjaPoint.y + getY());
-		Entity entity = this.model.getEntityAt(adjaPoint);
-		Category entCategory = entity.category;
+		Category entCategory = model.getCategoryAt(adjaPoint);
 		if (entCategory == category)
 			return true;
 		return false;
@@ -87,26 +90,25 @@ public abstract class Entity {
 		int borderPointY = this.model.getBoardHeight();
 		int borderPointX = this.model.getBoardWidth();
 
-		Point theMove = new Point(0, 0);
-		if (newDirect == Direction.N && firstPosition.y > 0)
-			theMove.move(0, -1);
-		else if (newDirect == Direction.S && firstPosition.y < borderPointY)
-			theMove.move(0, 1);
-		else if (newDirect == Direction.E && firstPosition.x < borderPointX)
-			theMove.move(1, 0);
-		else if (newDirect == Direction.W && firstPosition.x > 0)
-			theMove.move(-1, 0);
-		else if (newDirect == Direction.NE && firstPosition.y > 0 && firstPosition.x < borderPointX)
-			theMove.move(1, -1);
-		else if (newDirect == Direction.NW && firstPosition.y > 0 && firstPosition.x > 0)
-			theMove.move(-1, -1);
-		else if (newDirect == Direction.SW && firstPosition.y < borderPointY && firstPosition.x > 0)
-			theMove.move(-1, 1);
-		else if (newDirect == Direction.SE && firstPosition.y < borderPointY && firstPosition.x < borderPointX)
-			theMove.move(1, 1);
-		else
-			throw new RuntimeException("Direction Unknown or border reached");
+		Direction absoluteDirection = Direction.relativeToAbsolute(direction, newDirect);
 
+		Point theMove = new Point(0, 0);
+		if (absoluteDirection == Direction.N && firstPosition.y > 0)
+			theMove.move(0, -1);
+		else if (absoluteDirection == Direction.S && firstPosition.y < borderPointY)
+			theMove.move(0, 1);
+		else if (absoluteDirection == Direction.E && firstPosition.x < borderPointX)
+			theMove.move(1, 0);
+		else if (absoluteDirection == Direction.W && firstPosition.x > 0)
+			theMove.move(-1, 0);
+		else if (absoluteDirection == Direction.NE && firstPosition.y > 0 && firstPosition.x < borderPointX)
+			theMove.move(1, -1);
+		else if (absoluteDirection == Direction.NW && firstPosition.y > 0 && firstPosition.x > 0)
+			theMove.move(-1, -1);
+		else if (absoluteDirection == Direction.SW && firstPosition.y < borderPointY && firstPosition.x > 0)
+			theMove.move(-1, 1);
+		else if (absoluteDirection == Direction.SE && firstPosition.y < borderPointY && firstPosition.x < borderPointX)
+			theMove.move(1, 1);
 		return theMove;
 	}
 }

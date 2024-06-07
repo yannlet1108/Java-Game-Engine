@@ -14,6 +14,7 @@ public class Snake extends Entity {
 		super(position, direction, model);
 		this.category = Category.SNAKE;
 		pointsList = new LinkedList<Point>();
+		pointsList.add(position);
 		automaton = new Automaton(this, Automaton.SNAKE);
 	}
 
@@ -39,8 +40,6 @@ public class Snake extends Entity {
 	 */
 	@Override
 	public void move(Direction newDirect) {
-		Point lastPoint = pointsList.remove(this.getLength() - 1);
-		model.setEntityAt(lastPoint, null);
 
 		Point firstPoint = pointsList.get(0);
 
@@ -50,10 +49,13 @@ public class Snake extends Entity {
 		if (theMove.x == 0 && theMove.y == 0)
 			throw new RuntimeException("Something Went wrong, this should not be reached");
 
-		lastPoint = new Point(firstPoint.x + theMove.x, firstPoint.y + firstPoint.y);
-		pointsList.add(0, lastPoint);
-		model.setEntityAt(lastPoint, this);
+		Point newHead = new Point(firstPoint.x + theMove.x, firstPoint.y + theMove.y);
+		pointsList.add(0, newHead);
+		model.setEntityAt(newHead, this);
+		position = newHead;
 
+		Point lastPoint = pointsList.remove(this.getLength() - 1);
+		model.setEntityAt(lastPoint, null);
 	}
 
 	/*
