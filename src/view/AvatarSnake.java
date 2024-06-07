@@ -18,7 +18,7 @@ public class AvatarSnake extends Avatar {
 	public void paint(Graphics g) {
 		Iterator<Point> pointsIterator = ((Snake)instanceEntity).getPointsIterator();
 		Point currentPoint = pointsIterator.next();
-		m_view.paintShape(g, 3, Color.ORANGE, currentPoint.x, currentPoint.y);
+		m_view.paintShape(g, 3, Color.ORANGE, currentPoint.x, currentPoint.y,instanceEntity.getDirection());
 		while (pointsIterator.hasNext()) {
 			currentPoint = pointsIterator.next();
 			m_view.paintShape(g, 1, Color.ORANGE, currentPoint.x, currentPoint.y);

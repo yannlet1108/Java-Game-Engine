@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 
 import controller.Controller;
 import info3.game.graphics.GameCanvas;
+import model.Direction;
 import model.Entity;
 import model.Model;
 
@@ -266,6 +267,9 @@ public class View {
 	 */
 	public void paintShape(Graphics g, int index, Color c, int x, int y) {
 		bank.paintShape(g, index, c, x, y);
+	}
+	public void paintShape(Graphics g, int index, Color c, int x, int y, Direction dir) {
+		bank.paintShape(g, index, c, x, y, dir);
 	}
 
 	/**
