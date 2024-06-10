@@ -4,7 +4,7 @@ Groupe 7
 ## 1) Gameplay
 
 ### 1er Jeu : "Divers"
-- Jeu de survie/exploration sous-marin
+- Jeu de survie/exploration sous-marine
 - 2 joueurs indépendants en coopération
 
 #### But du jeu :
@@ -33,7 +33,7 @@ Détruire la montgolfiere du joueur adverse en lui tirant dessus avec des projec
 - Vue de côté
 - Les montgolfières peuvent modifier leur densité (chauffage du ballon)
 - Les mongolfières tirent des projectiles
-- [facultatif] Des oiseaux se déplacent dans le ciel et peuvent s'écraser sur le ballon
+- [facultatif] Des oiseaux se déplacent dans le ciel et peuvent s'écraser sur le ballon (lui infligeant des dégâts). Leur agressivité dépend du type d'oiseau (moineaux, aigles, ...)
 
 ## 2) Point commun
 - Les deux jeux sont en vue de côté
