@@ -69,7 +69,7 @@ public class Automaton {
 
 		List<Transition> transitions = new LinkedList<Transition>();
 
-		Direction forward = new Direction(Direction.F);
+		Direction forward = Direction.FORWARD;
 		Category voidCategory = new Category(Category.V);
 
 		transitions.add(new Transition(waitState, new Cell(forward, voidCategory), new Move(forward), forwardState));
