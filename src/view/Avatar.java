@@ -1,7 +1,9 @@
 package view;
 
 import java.awt.Graphics;
+import java.awt.Point;
 
+import model.Direction;
 import model.Entity;
 
 /**
@@ -10,10 +12,12 @@ import model.Entity;
 public abstract class Avatar {
 
 	View m_view;
-
+	
 	protected Entity instanceEntity;
 
 	protected boolean isVisible;
+	
+	protected Point position;
 
 	/**
 	 * Cree un Avatar | ne peut pas etre instancie

@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import model.Entity;
@@ -12,6 +13,6 @@ public class AvatarApple extends Avatar {
 
 	@Override
 	public void paint(Graphics g) {
-		// m_view.paintShape(g, 1, Color.RED, e.getX(), e.getY());
+		m_view.paintShape(g, 1, Color.RED, instanceEntity.getX(), instanceEntity.getY());
 	}
 }
