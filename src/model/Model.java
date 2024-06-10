@@ -37,7 +37,8 @@ public class Model {
 		boardWidth = ModelCst.NB_CELL;
 		board = new Matrix(boardHeight, boardWidth);
 		entities = new LinkedList<Entity>();
-		new Snake(new Point(boardWidth/2,boardHeight/2), Direction.N, this);
+		new Snake(new Point(boardWidth / 2, boardHeight / 2), Direction.N, this);
+		new Apple(new Point(0,0), Direction.N, this);
 	}
 
 	/**
@@ -79,10 +80,14 @@ public class Model {
 	}
 
 	Category getCategoryAt(Point position) {
-		Entity e = getEntityAt(position);
-		if (e == null)
-			return Category.VOID;
-		return e.category;
+		try {
+			Entity e = getEntityAt(position);
+			if (e == null)
+				return Category.VOID;
+			return e.category;
+		} catch (IndexOutOfBoundsException e) {
+			return Category.OBSTACLE;
+		}
 	}
 
 	/**
@@ -96,11 +101,15 @@ public class Model {
 
 	void removeEntity(Entity e) {
 		entities.remove(e);
-		board.setEntityAt(e.getY(), e.getY(), null);
+		board.setEntityAt(e.getX(), e.getY(), null);
 	}
 
 	void addEntity(Entity e) {
 		entities.add(e);
-		board.setEntityAt(e.getY(), e.getY(), e);
+		board.setEntityAt(e.getX(), e.getY(), e);
+	}
+	
+	public boolean outOfBounds(int x, int y) {
+		return x < 0 || x > boardWidth || y < 0 || y > boardHeight;
 	}
 }
