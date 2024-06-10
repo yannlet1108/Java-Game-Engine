@@ -33,7 +33,7 @@ public class Automaton {
 	private void load(int whichAutomaton) {
 		switch (whichAutomaton) {
 		case SNAKE:
-			currentState = State.WAIT;
+			currentState = State.FORWARD;
 			transitions = snakeTransitions();
 			break;
 		case APPLE:
@@ -75,8 +75,8 @@ public class Automaton {
 					// si pas d'action, on exécute rien
 					if (transition.action != null) {
 						transition.action.exec(e);
-						return;
 					}
+					return;
 				}
 			}
 		}
@@ -102,11 +102,12 @@ public class Automaton {
 
 		// Définition de variables pour les Catégories
 		Category voidCategory = Category.VOID;
-		// Category obstacle = Category.OBSTACLE;
+		Category obstacle = Category.OBSTACLE;
 
-		transitions.add(new Transition(waitState, new Cell(forward, voidCategory), new Move(forward), forwardState));
 		transitions.add(new Transition(forwardState, new Cell(forward, voidCategory), new Move(forward), forwardState));
-		transitions.add(new Transition(forwardState, new Cell(forward, voidCategory), new Move(forward), waitState));
+		transitions.add(new Transition(forwardState, new Cell(forward, obstacle), null, waitState));
+		transitions.add(new Transition(waitState, new TrueCondition(), null, waitState));
+
 		return transitions;
 	}
 
@@ -120,18 +121,21 @@ public class Automaton {
 		// Définition de variables pour les États
 		State waitState = State.WAIT;
 		State forwardState = State.FORWARD;
-		// State deadState = State.DEAD;
+		//State deadState = State.DEAD;
 
 		// Définition de variables pour les Directions
 		Direction north = Direction.N;
+		//Direction east = Direction.E;
+
 
 		// Définition de variables pour les Catégories
 		Category voidCategory = Category.VOID;
 		Category obstacle = Category.OBSTACLE;
 
-		transitions.add(new Transition(waitState, new Cell(north, voidCategory), new Move(north), forwardState));
 		transitions.add(new Transition(forwardState, new Cell(north, voidCategory), new Move(north), forwardState));
-		transitions.add(new Transition(forwardState, new Cell(north, obstacle), new Move(north), waitState));
+		transitions.add(new Transition(forwardState, new Negation(new Cell(north, voidCategory)), null, waitState));
+		transitions.add(new Transition(waitState, new TrueCondition(), null, waitState));
+
 		return transitions;
 	}
 
@@ -221,6 +225,18 @@ public class Automaton {
 
 	// * * * * * * * * * * * * Fonctions Utiles * * * * * * * * * * * *
 
+	
+	/*
+	 * Return False si on ne peut ni aller tout droit, ni à droite, ni à gaauche
+	 */
+	private Condition isAMovePossible() {
+		Condition isFrontFreeCondition = new Cell(Direction.FORWARD, Category.VOID);
+		Condition isRightFreeCondition = new Cell(Direction.RIGHT, Category.VOID);
+		Condition isLeftFreeCondition = new Cell(Direction.LEFT, Category.VOID);
+
+		return new Disjonction(new Disjonction(isFrontFreeCondition, isRightFreeCondition), isLeftFreeCondition);
+	}
+	
 	/*
 	 * Retourne la conditions résultante de la Conjonction de Cell(Direction,Void)
 	 * sur les 4 points cardinaux
