@@ -38,6 +38,8 @@ Détruire la montgolfiere du joueur adverse en lui tirant dessus avec des projec
 ## 2) Point commun
 - Les deux jeux sont en vue de côté
 - Les deux jeux ont un système de densité
+- Certains automates pourront etre utilisé dans les deux jeux
+- Une partie du code des entités en commun
   
 ## 3) MVC
 ### Moteur
