@@ -121,18 +121,19 @@ public class Automaton {
 		// Définition de variables pour les États
 		State waitState = State.WAIT;
 		State forwardState = State.FORWARD;
-		//State deadState = State.DEAD;
+		// State deadState = State.DEAD;
 
 		// Définition de variables pour les Directions
 		Direction north = Direction.N;
-		//Direction east = Direction.E;
-
+		// Direction east = Direction.E;
 
 		// Définition de variables pour les Catégories
 		Category voidCategory = Category.VOID;
 		Category obstacle = Category.OBSTACLE;
 
 		transitions.add(new Transition(forwardState, new Cell(north, voidCategory), new Move(north), forwardState));
+		// transitions.add(new Transition(forwardState, new Cell(north, obstacle), null,
+		// waitState));
 		transitions.add(new Transition(forwardState, new Negation(new Cell(north, voidCategory)), null, waitState));
 		transitions.add(new Transition(waitState, new TrueCondition(), null, waitState));
 
@@ -225,7 +226,6 @@ public class Automaton {
 
 	// * * * * * * * * * * * * Fonctions Utiles * * * * * * * * * * * *
 
-	
 	/*
 	 * Return False si on ne peut ni aller tout droit, ni à droite, ni à gaauche
 	 */
@@ -236,7 +236,7 @@ public class Automaton {
 
 		return new Disjonction(new Disjonction(isFrontFreeCondition, isRightFreeCondition), isLeftFreeCondition);
 	}
-	
+
 	/*
 	 * Retourne la conditions résultante de la Conjonction de Cell(Direction,Void)
 	 * sur les 4 points cardinaux

@@ -32,7 +32,7 @@ public class Tests {
 	private static void printStep(Entity e) {
 		System.out.println("Avant le pas, le serpent est aux coordonnées suivantes : " + e.getX() + "," + e.getY());
 		e.step();
-		System.out.println("Après le pas, le serpent est aux coordonnées suivantes : " + e.getX() + "," + e.getY());
+		System.out.println("Après le pas, le serpent est aux coordonnées suivantes : " + e.getX() + "," + e.getY() + "\n");
 	}
 
 }
