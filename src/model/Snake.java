@@ -10,6 +10,10 @@ import automaton.Automaton;
 public class Snake extends Entity {
 	List<Point> pointsList;
 
+	/**
+	 * @param position
+	 * @param direction
+	 */
 	public Snake(Point position, Direction direction, Model model) {
 		super(position, direction, model);
 		this.category = Category.SNAKE;
@@ -18,12 +22,16 @@ public class Snake extends Entity {
 		automaton = new Automaton(this, Automaton.SNAKE);
 	}
 
-	/* retourne la liste des points de snake */
-	public List<Point> getPointsList() {
-		return pointsList;
+	/**
+	 * @return un iterateur sur la liste de points du snake
+	 */
+	public Iterator<Point> getPointsIterator() {
+		return pointsList.iterator();
 	}
 
-	/* retourne la longueur de snake */
+	/**
+	 * @return la longueur du snake
+	 */
 	public int getLength() {
 		return pointsList.size();
 	}
@@ -79,8 +87,9 @@ public class Snake extends Entity {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 
-	/*
-	 * ajoute un point devant la tête de snake. Author : Moataz ERRAMI
+	/**
+	 * Supprime l'entité de devant et ajoute un point devant la tête de snake.
+	 * Author : Moataz ERRAMI
 	 */
 	public void pick() {
 		Direction thisDirection = this.getDirection();
@@ -89,9 +98,9 @@ public class Snake extends Entity {
 		if (theMove.x == 0 && theMove.y == 0)
 			throw new RuntimeException("Something Went wrong, this should not be reached");
 
-		Point nuePoint = new Point(firstPoint.x + theMove.x, firstPoint.y + firstPoint.y);
-		pointsList.add(nuePoint);
-		model.setEntityAt(nuePoint, this);
+		Point newPoint = new Point(firstPoint.x + theMove.x, firstPoint.y + firstPoint.y);
+		pointsList.add(newPoint);
+		model.setEntityAt(newPoint, this);
 
 	}
 

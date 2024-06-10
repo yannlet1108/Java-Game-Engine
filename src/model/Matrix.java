@@ -1,30 +1,44 @@
 package model;
 
+/**
+ * @implNote TODO
+ */
 public class Matrix {
-	Entity[][] prvMatrix;
+	private Entity[][] Matrix;
 
-	/*
-	 * Crée une matrice Paramétres : numberOfColumns, numberOfRows. Retourne une
-	 * matrice de numberOfRows lignes et numberOfColumns colonnes Author : Moataz
-	 * ERRAMI :)
+	/**
+	 * Crée une matrice à la taille donnée
+	 * 
+	 * @param numberOfColumns
+	 * @param numbrOfRows 
+	 * @return la matrice crée
+	 * @author Moataz ERRAMI
 	 */
 	public Matrix(int numberOfColumns, int numberOfRows) {
-		prvMatrix = new Entity[numberOfRows][numberOfColumns];
+		Matrix = new Entity[numberOfRows][numberOfColumns];
 	}
 
-	/*
-	 * Paramétres : position x, position y, retourne l'entité à (x,y) Author :
-	 * Moataz ERRAMI :)
+	/**
+	 * Retourne l'entité à la position x,y
+	 * @param x
+	 * @param y
+	 * @return entité à la position x,y
+	 * @author Moataz ERRAMI
 	 */
 	public Entity getEntityAt(int x, int y) {
-		return prvMatrix[x][y];
+		return Matrix[x][y];
 	}
 
-	/*
-	 * Paramétres : position x, position y, entité e, fixer l'entité e à (x,y)
-	 * Author : Moataz ERRAMI :)
+
+	/**
+	 * Met à jour l'entité à la poisition (x,y)
+	 * @param x
+	 * @param y
+	 * @param e
+	 * 
+	 * @author : Moataz ERRAMI
 	 */
 	public void setEntityAt(int x, int y, Entity e) {
-		prvMatrix[x][y] = e;
+		Matrix[x][y] = e;
 	}
 }

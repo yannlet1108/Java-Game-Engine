@@ -11,7 +11,7 @@ public class Tests {
 
 	public static void main(String[] args) {
 
-		Model model = new Model(10);
+		Model model = new Model(null, null);
 		Point pos = new Point(5, 5);
 		Entity snake = new Snake(pos, Direction.N, model);
 

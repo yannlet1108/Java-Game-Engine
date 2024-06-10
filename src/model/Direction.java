@@ -17,6 +17,7 @@ public enum Direction {
 		default:
 			return relativeDirection;
 		}
+
 	}
 
 	public static Direction oppositeDirection(Direction direction) {

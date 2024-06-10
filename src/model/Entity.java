@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.Point;
-
 import automaton.Automaton;
 
 public abstract class Entity {
@@ -11,20 +10,32 @@ public abstract class Entity {
 	Model model;
 	Automaton automaton;
 
-	/*
-	 * TO DO : initialisation de la catégorie dans le tableau
+	/**
+	 * @param position
+	 * @param direction
+	 * @param model
 	 */
 	public Entity(Point position, Direction direction, Model model) {
-		this.model = model;
 		this.position = position;
 		this.direction = direction;
+		this.model = model;
 		model.addEntity(this);
 	}
 
+	/**
+	 * Retourne la coordonnee X de l'entite dans la simulation
+	 * 
+	 * @return Coordonnee X
+	 */
 	public int getX() {
 		return position.x;
 	}
 
+	/**
+	 * Retourne la coordonnee Y de l'entite dans la simulation
+	 * 
+	 * @return Coordonnee Y
+	 */
 	public int getY() {
 		return position.y;
 
@@ -34,9 +45,11 @@ public abstract class Entity {
 		return position;
 	}
 
-	/*
-	 * Prends comme paramètre une direction et move l'entité dans cette direction.
-	 * La classe Snake a sa propre implémentation! Author : Moataz ERRAMI
+	/**
+	 * Déplacement par défault d'une entité
+	 * 
+	 * @param direction
+	 * @author Moataz ERRAMI
 	 */
 	public void move(Direction direction) {
 		Point toMovePoint = this.whereTo(direction);
@@ -44,20 +57,31 @@ public abstract class Entity {
 		this.position.move(toMovePoint.x + getX(), toMovePoint.y + getY());
 		this.model.setEntityAt(position, this);
 	}
-	
+
 	public void move() {
 		move(Direction.FORWARD);
 	}
 
 	public abstract void egg();
 
+	/**
+	 * Execute l'action Pick comme definit par l'entite
+	 */
 	public abstract void pick();
 
+	/**
+	 * Execute l'action Explode comme definit par l'entite
+	 */
 	public abstract void explode();
 
-	/*
+	/**
 	 * Retourne True Si la case dans la direction donnée en paramètre a une entité
-	 * de catégorie category, False sinon. Author : Moataz
+	 * de catégorie category, False sinon
+	 * 
+	 * @param direction
+	 * @param category
+	 * @return
+	 * @author Moataz ERRAMI
 	 */
 	public boolean cell(Direction direction, Category category) {
 		Point adjaPoint = this.whereTo(direction);
@@ -68,21 +92,33 @@ public abstract class Entity {
 		return false;
 	}
 
+	/**
+	 * @return la direction de l'entité
+	 */
 	public Direction getDirection() {
 		return direction;
 	}
 
+	/**
+	 * Set la direction de l'entité
+	 * 
+	 * @param direction
+	 */
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
 
+	/**
+	 * Met a jour l'etat de l'entite comme definit par son automate
+	 */
 	public void step() {
 		automaton.step();
 	}
 
-	/*
-	 * transforme la direction en un "vecteur de translation" (pas vraiment elle
-	 * rend un point qui est utilisé comme vecteur. Author : Moataz ERRAMI
+	/**
+	 * transforme la direction en un "vecteur de translation"
+	 * 
+	 * @author Moataz ERRAMI
 	 */
 	public Point whereTo(Direction newDirect) {
 		Point firstPosition = this.getPosition();

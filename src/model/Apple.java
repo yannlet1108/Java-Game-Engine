@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.Point;
-
 import automaton.Automaton;
 
 public class Apple extends Entity {

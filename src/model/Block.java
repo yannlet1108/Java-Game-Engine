@@ -27,5 +27,4 @@ public class Block extends Entity {
 	public void explode() {
 		this.model.removeEntity(this);
 	}
-
 }

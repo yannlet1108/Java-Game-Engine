@@ -8,6 +8,11 @@ import model.Entity;
 import model.Direction;
 import model.Category;
 
+/**
+ * Classe de generation et de gestion des automates de controle des entite.
+ * 
+ * @implNote TODO Penser a faire un fichier a part pour les variables globale
+ */
 public class Automaton {
 
 	private State currentState;
@@ -19,17 +24,23 @@ public class Automaton {
 	public static final int APPLE = 1;
 	public static final int BLOCK = 2;
 
-	/*
-	 * Constructeur d'Automate
+	/**
+	 * Cree l'automate en fonction du type d'entite.
 	 * 
-	 * @param : L'entité à laquelle l'automate est associé et Le type d'automate
-	 * voulu (comportement voulu pour cette entité)
+	 * @param e              : Entite proprietaire de l'automate
+	 * @param whichAutomaton : Numero de l'automate defini
 	 */
 	public Automaton(Entity e, int whichAutomaton) {
 		this.e = e;
 		load(whichAutomaton);
 	}
 
+	/**
+	 * Charge les transitions de l'automate selectionne au chargement et
+	 * l'initialise.
+	 * 
+	 * @param whichAutomaton : Numero de l'automate defini
+	 */
 	private void load(int whichAutomaton) {
 		switch (whichAutomaton) {
 		case SNAKE:
@@ -48,17 +59,27 @@ public class Automaton {
 		}
 	}
 
-	/*
+	/**
 	 * Version de l'automate choisi pour chaque type d'entités
 	 */
 	private List<Transition> snakeTransitions() {
 		return snakeTransitionsAbsolues();
 	}
 
+	/**
+	 * Charge les transitions liee aux entites de type apple
+	 * 
+	 * @return : Liste des transitions
+	 */
 	private List<Transition> appleTransitions() {
 		return stayWaiting();
 	}
 
+	/**
+	 * Charge les transitions liee aux entites de type block
+	 * 
+	 * @return : Liste des transitions
+	 */
 	private List<Transition> blockTransitions() {
 		return stayWaiting();
 	}
