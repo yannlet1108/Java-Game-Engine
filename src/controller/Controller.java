@@ -121,9 +121,11 @@ public class Controller implements GameCanvasListener {
 	 */
 	@Override
 	public void tick(long elapsed) {
-		m_view.tick(elapsed);
+		if (m_view != null)
+			m_view.tick(elapsed);
 		if ((elapsed - tick) >= 1000) {
-			m_model.step();
+			if (m_model != null)
+				m_model.step();
 			tick = elapsed;
 		}
 	}
@@ -134,7 +136,8 @@ public class Controller implements GameCanvasListener {
 	 */
 	@Override
 	public void paint(Graphics g) {
-		m_view.paint(g);
+		if (m_view != null)
+			m_view.paint(g);
 	}
 
 	@Override
