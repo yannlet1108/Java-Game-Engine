@@ -1,13 +1,7 @@
 /bin/
-<<<<<<< HEAD
 .classpath
 .project
 /.settings/
 /.apt_generated/
-=======
 /.git/
-/.settings/
-.classpath
-.project
->>>>>>> origin/master
 /.metadata/
