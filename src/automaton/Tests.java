@@ -2,16 +2,18 @@ package automaton;
 
 import java.awt.Point;
 
+import controller.Controller;
 import model.Direction;
 import model.Entity;
 import model.Model;
 import model.Snake;
+import view.View;
 
 public class Tests {
 
 	public static void main(String[] args) {
-
-		Model model = new Model(null, null);
+		Controller controller = new Controller();
+		Model model = new Model(controller, new View(controller));
 		Point pos = new Point(5, 5);
 		Entity snake = new Snake(pos, Direction.N, model);
 
