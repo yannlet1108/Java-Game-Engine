@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import automaton.Automaton;
+import view.AvatarSnake;
 
 public class Snake extends Entity {
 	List<Point> pointsList;
@@ -20,6 +21,7 @@ public class Snake extends Entity {
 		pointsList = new LinkedList<Point>();
 		pointsList.add(position);
 		automaton = new Automaton(this, Automaton.SNAKE);
+		model.m_view.store(new AvatarSnake(model.m_view, this));
 	}
 
 	/**

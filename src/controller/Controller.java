@@ -123,11 +123,12 @@ public class Controller implements GameCanvasListener {
 	public void tick(long elapsed) {
 		if (m_view != null)
 			m_view.tick(elapsed);
-		if ((elapsed - tick) >= 1000) {
+		if (tick >= 1000) {
 			if (m_model != null)
 				m_model.step();
-			tick = elapsed;
+			tick = 0;
 		}
+		tick += elapsed;
 	}
 
 	/**

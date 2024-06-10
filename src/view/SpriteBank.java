@@ -37,17 +37,17 @@ public class SpriteBank {
 	 */
 	public void paintShape(Graphics g, int index, Color c, int x, int y) {
 		g.setColor(c);
-		Point viewpoint= m_view.playGroundtoWindow(m_view.modelToPlayground(new Point(x,y)));
+		Point viewpoint = m_view.playGroundtoWindow(m_view.modelToPlayground(new Point(x, y)));
 		switch (index) {
 		case 0:
-			g.fillRect(viewpoint.x, viewpoint.y,m_view.getCellSize(),m_view.getCellSize());
+			g.fillRect(viewpoint.x, viewpoint.y, m_view.getCellSize(), m_view.getCellSize());
 			break;
 		case 1:
 			g.fillOval(viewpoint.x, viewpoint.y, m_view.getCellSize(), m_view.getCellSize());
-		break;
+			break;
 		case 2:
-			int x_[] = {viewpoint.x+m_view.getCellSize()/2, viewpoint.x, viewpoint.x+m_view.getCellSize() };
-			int y_[] = {viewpoint.y, viewpoint.y+m_view.getCellSize(), m_view.getCellSize() };
+			int x_[] = { viewpoint.x + m_view.getCellSize() / 2, viewpoint.x, viewpoint.x + m_view.getCellSize() };
+			int y_[] = { viewpoint.y, viewpoint.y + m_view.getCellSize(), viewpoint.y + m_view.getCellSize() };
 			Polygon triangle = new Polygon(x_, y_, 3);
 			g.fillPolygon(triangle);
 			break;
@@ -55,38 +55,41 @@ public class SpriteBank {
 			throw new RuntimeException("Not yet implemented");
 		}
 	}
+
 	public void paintShape(Graphics g, int index, Color c, int x, int y, Direction dir) {
 		g.setColor(c);
-		Point viewpoint= m_view.playGroundtoWindow(m_view.modelToPlayground(new Point(x,y)));
-		if(index==2) {		
+		Point viewpoint = m_view.playGroundtoWindow(m_view.modelToPlayground(new Point(x, y)));
+		if (index == 2) {
 			int x_[];
 			int y_[];
 			switch (dir) {
 			case N:
-				x_ = new int[]{viewpoint.x+m_view.getCellSize()/2, viewpoint.x, viewpoint.x+m_view.getCellSize() };
-				y_ = new int[]{viewpoint.y, viewpoint.y+m_view.getCellSize(), m_view.getCellSize() };
+				x_ = new int[] { viewpoint.x + m_view.getCellSize() / 2, viewpoint.x,
+						viewpoint.x + m_view.getCellSize() };
+				y_ = new int[] { viewpoint.y, viewpoint.y + m_view.getCellSize(), viewpoint.y + m_view.getCellSize() };
 				break;
 			case S:
-				x_ = new int[]{viewpoint.x+m_view.getCellSize()/2, viewpoint.x, viewpoint.x+m_view.getCellSize() };
-				y_ = new int[]{viewpoint.y+m_view.getCellSize(), viewpoint.y, viewpoint.y};
+				x_ = new int[] { viewpoint.x + m_view.getCellSize() / 2, viewpoint.x,
+						viewpoint.x + m_view.getCellSize() };
+				y_ = new int[] { viewpoint.y + m_view.getCellSize(), viewpoint.y, viewpoint.y };
 				break;
 			case E:
-				x_ = new int[]{viewpoint.x , viewpoint.x, viewpoint.x+m_view.getCellSize()};
-				y_ = new int[]{viewpoint.y , viewpoint.y+m_view.getCellSize(), viewpoint.y+m_view.getCellSize()/2};
+				x_ = new int[] { viewpoint.x, viewpoint.x, viewpoint.x + m_view.getCellSize() };
+				y_ = new int[] { viewpoint.y, viewpoint.y + m_view.getCellSize(),
+						viewpoint.y + m_view.getCellSize() / 2 };
 				break;
 			case W:
-				x_ = new int[] {viewpoint.x, viewpoint.x+m_view.getCellSize(), viewpoint.x+m_view.getCellSize()};
-				y_ = new int[] {viewpoint.y+m_view.getCellSize()/2, viewpoint.y, viewpoint.y+m_view.getCellSize()};
+				x_ = new int[] { viewpoint.x, viewpoint.x + m_view.getCellSize(), viewpoint.x + m_view.getCellSize() };
+				y_ = new int[] { viewpoint.y + m_view.getCellSize() / 2, viewpoint.y,
+						viewpoint.y + m_view.getCellSize() };
 			default:
 				throw new RuntimeException("Not implemented");
 			}
 			Polygon triangle = new Polygon(x_, y_, 3);
 			g.fillPolygon(triangle);
-		}
-		else {
+		} else {
 			paintShape(g, index, c, x, y);
 		}
 	}
-
 
 }

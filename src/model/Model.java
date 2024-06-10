@@ -37,6 +37,7 @@ public class Model {
 		boardWidth = ModelCst.NB_CELL;
 		board = new Matrix(boardHeight, boardWidth);
 		entities = new LinkedList<Entity>();
+		new Snake(new Point(boardWidth/2,boardHeight/2), Direction.N, this);
 	}
 
 	/**
