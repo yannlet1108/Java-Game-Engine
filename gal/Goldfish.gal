@@ -1,0 +1,13 @@
+Goldfish(Forward){
+	* (Forward):
+	| Cell(F,V) ? Move :(Forward)
+	| Cell(F,A) ? Hit :(Flee)
+	| True ? 98% Wait / 2% Egg :(Forward)
+	
+	* (Flee):
+	| Cell(F,A) ? Move(B) :(Forward)
+	| Cell(L,A) ? Move(R) :(Forward)
+	| Cell(B,A) ? Move(F) :(Forward)
+	| Cell(R,A) ? Move(L) :(Forward)
+	| True ? :(Forward)	
+}
