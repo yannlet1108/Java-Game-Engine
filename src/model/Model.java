@@ -3,6 +3,7 @@ package model;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.text.Position;
@@ -68,5 +69,14 @@ public class Model {
 	 */
 	private Point2D getWorldCenter() {
 		return new Point2D.Double(worldWidth / 2, worldHeight / 2);
+	}
+
+	/**
+	 * 
+	 * @return Iterateur sur les entitées de model.
+	 */
+	public Iterator<Entity> entitiesIterator() {
+		Iterator<Entity> iter = this.entities.iterator();
+		return iter;
 	}
 }
