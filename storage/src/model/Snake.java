@@ -53,11 +53,8 @@ public class Snake extends Entity {
 
 		Point firstPoint = pointsList.get(0);
 
-		this.setDirection(newDirect);
 
 		Point theMove = this.whereTo(newDirect);
-		if (theMove.x == 0 && theMove.y == 0)
-			throw new RuntimeException("Something Went wrong, this should not be reached");
 
 		Point newHead = new Point(firstPoint.x + theMove.x, firstPoint.y + theMove.y);
 		pointsList.add(0, newHead);
@@ -66,6 +63,8 @@ public class Snake extends Entity {
 
 		Point lastPoint = pointsList.remove(this.getLength() - 1);
 		model.setEntityAt(lastPoint, null);
+		
+		this.setDirection(Direction.relativeToAbsolute(direction, newDirect));
 	}
 
 	/*
@@ -97,8 +96,6 @@ public class Snake extends Entity {
 		Direction thisDirection = this.getDirection();
 		Point firstPoint = pointsList.get(0);
 		Point theMove = this.whereTo(thisDirection);
-		if (theMove.x == 0 && theMove.y == 0)
-			throw new RuntimeException("Something Went wrong, this should not be reached");
 
 		Point newPoint = new Point(firstPoint.x + theMove.x, firstPoint.y + firstPoint.y);
 		pointsList.add(newPoint);

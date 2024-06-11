@@ -82,6 +82,7 @@ public class SpriteBank {
 				x_ = new int[] { viewpoint.x, viewpoint.x + m_view.getCellSize(), viewpoint.x + m_view.getCellSize() };
 				y_ = new int[] { viewpoint.y + m_view.getCellSize() / 2, viewpoint.y,
 						viewpoint.y + m_view.getCellSize() };
+				break;
 			default:
 				throw new RuntimeException("Not implemented");
 			}

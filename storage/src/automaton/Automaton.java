@@ -63,7 +63,7 @@ public class Automaton {
 	 * Version de l'automate choisi pour chaque type d'entités
 	 */
 	private List<Transition> snakeTransitions() {
-		return snakeTransitionsAbsolues();
+		return snakeTransitionsAroundTheMap();
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class Automaton {
 		return stayWaiting();
 	}
 
-	/*
+	/**
 	 * Fait un pas dans l'automate
 	 */
 	public void step() {
@@ -97,6 +97,8 @@ public class Automaton {
 					if (transition.action != null) {
 						transition.action.exec(e);
 					}
+					System.out.println("Après le pas, le serpent est aux coordonnées suivantes : " + e.getX() + ","
+							+ e.getY() + "\n");
 					return;
 				}
 			}
@@ -106,7 +108,7 @@ public class Automaton {
 
 	// * * * * * * * * * Différentes versions d'automates de Snake * * * * * * * * *
 
-	/*
+	/**
 	 * Premier automate basique de snake avec des directions relatives
 	 */
 	private List<Transition> snakeTransitionsRelatives() {
@@ -132,7 +134,7 @@ public class Automaton {
 		return transitions;
 	}
 
-	/*
+	/**
 	 * Premier automate basique de snake avec des directions absolues
 	 */
 	private List<Transition> snakeTransitionsAbsolues() {
@@ -161,7 +163,42 @@ public class Automaton {
 		return transitions;
 	}
 
-	/*
+	/**
+	 * Automate de snake qui fait le tour du terrain
+	 */
+	private List<Transition> snakeTransitionsAroundTheMap() {
+		// Création de la liste des transitions
+		List<Transition> transitions = new LinkedList<Transition>();
+
+		// Définition de variables pour les États
+		State waitState = State.WAIT;
+		State forwardState = State.FORWARD;
+		// State deadState = State.DEAD;
+
+		// Définition de variables pour les Directions
+		Direction forward = Direction.FORWARD;
+		Direction right = Direction.RIGHT;
+		// Direction left = Direction.LEFT;
+
+		// Définition de variables pour les Catégories
+		Category voidCategory = Category.VOID;
+		Category obstableCategory = Category.OBSTACLE;
+
+		// Condition
+		Condition mustTurnRightCondition = new Conjonction(new Cell(forward, obstableCategory),
+				new Cell(right, voidCategory));
+
+		transitions.add(new Transition(forwardState, new Negation( new Cell(forward, obstableCategory)), new Move(forward), forwardState));
+		transitions.add(new Transition(forwardState, mustTurnRightCondition, new Move(right), forwardState));
+		// transitions.add(new Transition(forwardState, new TrueCondition(), null,
+		// waitState));
+		// transitions.add(new Transition(waitState, new TrueCondition(), null,
+		// waitState));
+
+		return transitions;
+	}
+
+	/**
 	 * Automate de snake plus complet qui évite les obstacles et meurt si il ne peut
 	 * aller nulle part
 	 */
@@ -214,7 +251,7 @@ public class Automaton {
 
 	// * * * * * * * * * Différentes versions d'automates de Block * * * * * * * * *
 
-	/*
+	/**
 	 * Si les 4 blocks autour sont vides, le block descend d'une case ("tombe")
 	 */
 	private List<Transition> blockTransitionsFall() {
@@ -236,7 +273,7 @@ public class Automaton {
 	}
 
 	// * * * * * * * * * * * * Automates généraux * * * * * * * * * * * *
-	/*
+	/**
 	 * Garde l'automate en état WAIT, sans rien faire
 	 */
 	private List<Transition> stayWaiting() {
@@ -247,7 +284,7 @@ public class Automaton {
 
 	// * * * * * * * * * * * * Fonctions Utiles * * * * * * * * * * * *
 
-	/*
+	/**
 	 * Return False si on ne peut ni aller tout droit, ni à droite, ni à gaauche
 	 */
 	private Condition isAMovePossible() {
@@ -258,7 +295,7 @@ public class Automaton {
 		return new Disjonction(new Disjonction(isFrontFreeCondition, isRightFreeCondition), isLeftFreeCondition);
 	}
 
-	/*
+	/**
 	 * Retourne la conditions résultante de la Conjonction de Cell(Direction,Void)
 	 * sur les 4 points cardinaux
 	 */

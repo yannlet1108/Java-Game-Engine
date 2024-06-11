@@ -129,21 +129,21 @@ public abstract class Entity {
 		Direction absoluteDirection = Direction.relativeToAbsolute(direction, newDirect);
 
 		Point theMove = new Point(0, 0);
-		if (absoluteDirection == Direction.N && firstPosition.y > 0)
+		if (absoluteDirection == Direction.N)
 			theMove.move(0, -1);
-		else if (absoluteDirection == Direction.S && firstPosition.y < borderPointY)
+		else if (absoluteDirection == Direction.S)
 			theMove.move(0, 1);
-		else if (absoluteDirection == Direction.E && firstPosition.x < borderPointX)
+		else if (absoluteDirection == Direction.E)
 			theMove.move(1, 0);
-		else if (absoluteDirection == Direction.W && firstPosition.x > 0)
+		else if (absoluteDirection == Direction.W)
 			theMove.move(-1, 0);
-		else if (absoluteDirection == Direction.NE && firstPosition.y > 0 && firstPosition.x < borderPointX)
+		else if (absoluteDirection == Direction.NE)
 			theMove.move(1, -1);
-		else if (absoluteDirection == Direction.NW && firstPosition.y > 0 && firstPosition.x > 0)
+		else if (absoluteDirection == Direction.NW)
 			theMove.move(-1, -1);
-		else if (absoluteDirection == Direction.SW && firstPosition.y < borderPointY && firstPosition.x > 0)
+		else if (absoluteDirection == Direction.SW)
 			theMove.move(-1, 1);
-		else if (absoluteDirection == Direction.SE && firstPosition.y < borderPointY && firstPosition.x < borderPointX)
+		else if (absoluteDirection == Direction.SE)
 			theMove.move(1, 1);
 		return theMove;
 	}
