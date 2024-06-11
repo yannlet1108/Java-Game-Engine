@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import java.util.*;
 
 import info3.game.graphics.GameCanvasListener;
-import model.Model;
 import view.View;
 
 /**
@@ -19,7 +18,7 @@ public class Controller implements GameCanvasListener {
 
 	Controller m_controller;
 	View m_view;
-	Model m_model;
+	//Model m_model;
 	private long tick;
 	List<Integer> keyList;
 
@@ -29,7 +28,7 @@ public class Controller implements GameCanvasListener {
 	public Controller() {
 		m_controller = this;
 		m_view = new View(this);
-		m_model = new Model(this, m_view);
+		//m_model = new Model(this, m_view);
 		this.tick = 0;
 		this.keyList = new LinkedList<Integer>();
 	}
@@ -124,8 +123,8 @@ public class Controller implements GameCanvasListener {
 		if (m_view != null)
 			m_view.tick(elapsed);
 		if (tick >= 100) {
-			if (m_model != null)
-				m_model.step();
+			//if (m_model != null)
+			//	m_model.step();
 			tick = 0;
 		}
 		tick += elapsed;
