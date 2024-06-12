@@ -3,7 +3,7 @@ package model;
 public class PhysicsTest {
 	public static void main(String[] args) throws InterruptedException {
 		Model model = new Model(null, null);
-		Entity playerEntity = new Player(model.getWorldCenter(), Direction.E, model);
+		Entity playerEntity = new Player(model.getWorldCenter(), Direction.E, model, 100);
 		model.addEntity(playerEntity);
 
 		while (true) {

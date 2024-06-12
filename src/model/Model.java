@@ -18,6 +18,7 @@ public class Model {
 	private double viscosity;
 
 	private Collection<Entity> entities;
+	private Collection<Player> players;
 
 	/**
 	 * Initialise la simulation en creant les entites d'origine et en definisant
@@ -29,13 +30,14 @@ public class Model {
 	public Model(Controller m_controller, View m_view) {
 		this.m_controller = m_controller;
 		this.m_view = m_view;
-		// m_view.setModel(this);
 		worldHeight = ModelConstants.WORLD_HEIGHT;
 		worldWidth = ModelConstants.WORLD_WIDTH;
 		density = ModelConstants.WORLD_DENSITY;
 		viscosity = ModelConstants.WORLD_VISCOSITY;
 		entities = new LinkedList<Entity>();
-		new Player(getWorldCenter(), Direction.E, this);
+		players = new LinkedList<Player>();
+		Player P = new Player(getWorldCenter(), Direction.E, this, 100);
+		//m_view.setModel(this);
 	}
 
 	/**
@@ -82,12 +84,58 @@ public class Model {
 		return density;
 	}
 
+	/**
+	 * Ajoute une entitée dans la collection des entitées
+	 * 
+	 * @param enitity e
+	 */
 	void addEntity(Entity e) {
 		entities.add(e);
 	}
 	
 	void removeEntity(Entity e) {
 		entities.remove(e);
+	}
+
+	/**
+	 * 
+	 * @return la collection des players
+	 */
+	public Iterator<Point2D> getPlayersPos() {
+		LinkedList<Point2D> thePoints = new LinkedList<Point2D>();
+		Iterator<Player> iterPlayer = players.iterator();
+		Player play;
+		while(iterPlayer.hasNext()) {
+			play = iterPlayer.next();
+			thePoints.add(play.getPosition()); 
+		}
+		return thePoints.iterator();
+	}
+
+	/**
+	 * Ajoute un player dans la collection des players
+	 * 
+	 * @param Player P
+	 */
+	public void addPlayers(Player P) {
+		players.add(P);
+	}
+
+	/**
+	 * retournant le centre de la simu (centre du player au début, centre entre les
+	 * deux player au début)
+	 * 
+	 * @return
+	 */
+	public Point2D getSimCenter() {
+		throw new RuntimeException("Not Yet Implemented");
+	}
+
+	/**
+	 * @return la distance de simu (entre les deux joueurs)
+	 */
+	public int getSimDist() {
+		throw new RuntimeException("Not Yet Implemented");
 	}
 
 	/**
