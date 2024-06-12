@@ -19,7 +19,7 @@ public class PlayerAvatar extends Avatar {
 
 	@Override
 	void paint(Graphics g) {
-		m_view.getBank().debugCollisions(g, ViewCst.DEBUG_PLAYER, e.getCollisionBox());
+		m_view.getBank().debugCollisions(g, ViewCst.DEBUG_PLAYER, e.get...);
 	}
 
 }

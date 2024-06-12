@@ -2,7 +2,8 @@ package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -31,7 +32,8 @@ public class SpriteBank {
 	 */
 	void debugCollisions(Graphics g, Color c, Rectangle2D collisionBox) {
 		g.setColor(c);
-		g.drawRect((int) collisionBox.getX(), (int) collisionBox.getY(), (int) collisionBox.getWidth(),
-				(int) collisionBox.getHeight());
+		Point origin = m_view.getViewport().toViewport(new Point2D.Double(collisionBox.getX(), collisionBox.getY()));
+		g.drawRect(origin.x, origin.y, (int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
+				(int) (collisionBox.getHeight() * m_view.getViewport().getScale()));
 	}
 }

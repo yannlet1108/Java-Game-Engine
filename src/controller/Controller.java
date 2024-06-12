@@ -10,33 +10,33 @@ import info3.game.graphics.GameCanvasListener;
 import view.View;
 
 /**
- * Classe liant l'integralite des packages. Initialise les objets necessaire au
+ * Classe liant l'integralité des packages. Initialise les objets nécessaire au
  * fonctionnement du jeu. Contient les listeners sur la souris et le clavier.
- * Contient les listeners sur le GameCanvas.
+ * Contient les listeners sur le canvas
  */
 public class Controller implements GameCanvasListener {
 
 	Controller m_controller;
 	View m_view;
-	//Model m_model;
-	private long tick;
-	List<Integer> keyList;
+	// Model m_model;
+	// private long tick;
+	private List<Integer> keyList;
 
 	/**
-	 * Cree une instance du Controller. Initialise la view et le model.
+	 * Crée une instance du controller. Initialise la view et le model
 	 */
-	public Controller() {
+	private Controller() {
 		m_controller = this;
 		m_view = new View(this);
-		//m_model = new Model(this, m_view);
-		this.tick = 0;
+		// m_model = new Model(this, m_view);
+		// this.tick = 0;
 		this.keyList = new LinkedList<Integer>();
 	}
 
 	/**
-	 * Cree une instance du Controller et la retourne
+	 * Crée une instance du controller et la retourne
 	 * 
-	 * @return Nouvelle instance de Controller
+	 * @return nouvelle instance de controller
 	 */
 	public static Controller getInstance() {
 		return new Controller();
@@ -109,30 +109,33 @@ public class Controller implements GameCanvasListener {
 	}
 
 	/**
-	 * Listener appelle lors de l'ouverture d'une nouvelle fenetre graphique.
+	 * Listener appellé lors de l'ouverture d'une nouvelle fenêtre graphique
 	 */
 	@Override
 	public void windowOpened() {
 	}
 
 	/**
-	 * Listener appelle a chaque tick de jeu.
+	 * Listener appellé à chaque tick de jeu. Exécute les ticks du model et de la
+	 * view
+	 * 
+	 * @param elapsed : Temps écoulé depuis le dernier tick en ms
 	 */
 	@Override
 	public void tick(long elapsed) {
 		if (m_view != null)
 			m_view.tick(elapsed);
-		if (tick >= 100) {
-			//if (m_model != null)
-			//	m_model.step();
-			tick = 0;
-		}
-		tick += elapsed;
+		// if (tick >= 100) {
+		// if (m_model != null)
+		// m_model.step();
+		// tick = 0;
+		// }
+		// tick += elapsed;
 	}
 
 	/**
-	 * Listener appelle lors de la mise a jour du contenu de la fenetre graphique.
-	 * Depend du nombre de FPS defini dans GameCanvas
+	 * Listener appellé lors de la mise à jour du contenu de la fenêtre graphique.
+	 * Depend du nombre de FPS defini dans canvas
 	 */
 	@Override
 	public void paint(Graphics g) {
