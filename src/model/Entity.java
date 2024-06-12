@@ -26,6 +26,7 @@ public abstract class Entity {
 		this.position = position;
 		this.direction = direction;
 		this.model = model;
+		this.model.addEntity(this);
 		this.healthPoint = healthPoint;
 		force = new Vector();
 		speed = new Vector();
@@ -53,6 +54,12 @@ public abstract class Entity {
 	public Point2D getPosition() {
 		return position;
 	}
+	
+	protected void setAvatar() {
+		throw new RuntimeException("Not Yet Implemented");
+	}
+	
+	abstract void getHitbox();
 
 	/**
 	 * Déplacement par défault d'une entité

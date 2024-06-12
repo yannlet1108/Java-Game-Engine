@@ -8,6 +8,7 @@ public class Player extends Entity {
 		super(position, direction, model, healthPoint);
 		category = Category.PLAYER;
 		density = ModelConstants.PLAYER_DENSITY;
+		model.addPlayers(this);
 	}
 
 	@Override
@@ -23,6 +24,12 @@ public class Player extends Entity {
 	@Override
 	public void explode() {
 		throw new RuntimeException("Not Yet Implemented");
+	}
+
+	@Override
+	void getHitbox() {
+		throw new RuntimeException("Not Yet Implemented");
+		
 	}
 
 }
