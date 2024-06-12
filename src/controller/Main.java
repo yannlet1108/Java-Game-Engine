@@ -2,10 +2,10 @@ package controller;
 
 public class Main {
 	/**
-	 * Cree et lance l'instance du Controller. L'affichage garantie le bon
-	 * deroulement de la creation et de l'initialisation de l'instance.
+	 * Crée et lance l'instance du Controller. L'affichage garantie le bon
+	 * déroulement de la création et de l'initialisation de l'instance
 	 * 
-	 * @param args : Parametres du programme principal
+	 * @param args : Paramètres du programme principal
 	 */
 	public static void main(String args[]) {
 		try {
