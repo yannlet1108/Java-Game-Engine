@@ -1,9 +1,9 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class View {
 		m_canvas = new GameCanvas(m_controller);
 
 		System.out.println("  - creating frame...");
-		Dimension d = new Dimension(ViewCst.WIDTH, ViewCst.HEIGHT);
+		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		m_frame = m_canvas.createFrame(d);
 		System.out.println("  - setting up the frame...");
 		setupFrame();
@@ -91,7 +91,7 @@ public class View {
 			txt = txt + fps + " fps   ";
 			m_text.setText(txt);
 		}
-		if(m_model != null)
+		if (m_model != null)
 			viewport.updateViewport(m_model.getSimCenter(), 1);
 	}
 
@@ -102,6 +102,9 @@ public class View {
 		avatarStorage = new LinkedList<Avatar>();
 	}
 
+	/**
+	 * Initialise le viewport
+	 */
 	private void initViewport() {
 		this.viewport = new Viewport(m_canvas);
 	}
@@ -138,6 +141,7 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	public void paint(Graphics g) {
+		viewport.resize();
 		fillBackground(g);
 		Iterator<Avatar> avatarIterator = getAvatarIterator();
 		while (avatarIterator.hasNext()) {
@@ -145,6 +149,11 @@ public class View {
 		}
 	}
 
+	/**
+	 * Remplit le background a chaque repaint
+	 * 
+	 * @param g : instance graphique du canvas
+	 */
 	private void fillBackground(Graphics g) {
 		g.setColor(ViewCst.BACKGROUND_DEFAULT);
 		g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
@@ -177,10 +186,20 @@ public class View {
 		return avatarStorage.iterator();
 	}
 
+	/**
+	 * Renvois la banque d'avatar
+	 * 
+	 * @return banque d'avatar
+	 */
 	SpriteBank getBank() {
 		return bank;
 	}
 
+	/**
+	 * Renvois le viewport actuel
+	 * 
+	 * @return viewport
+	 */
 	Viewport getViewport() {
 		return viewport;
 	}
