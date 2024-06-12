@@ -1,3 +1,19 @@
+### Mardi 11 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Tout le groupe | Etablir les specs du projet | Done |
+| Tout le groupe | Etablir un planning | Done |
+| Matthieu, Yann | Modification du contrat pour correspondre aux demandes (automate en gal et fichiers de configuration) | In progress |
+| Gwendal, Moataz | Programmer le modele | In progress |
+| Yohan, Axel | Programmer la view | In progress |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Tester le modele | Elevé | Gwendal, Moataz |
+| Programmer la view (Avatar, fenetre) | Elevé | Yohan, Axel |
+| Continuer les automates | Elevé | Yann |
+
 ### Lundi 10 juin
 | Nom | Tache | Etat |
 |:-:|---|:-:|
@@ -5,12 +21,15 @@
 | Axel, Gwendal | Merge final du jeu Snake | Done |
 | Axel | Restructuration du dépot git | Done |
 
-####Taches programmés
+#### Taches programmés
 
 | Tache | Priorité | Participants |
 | --- | :-: | :-: |
 | Etablir les specs du projet | Elevé | Tout le groupe |
 | Etablir un planning | Elevé | Tout le groupe |
+
+---
+
 
 ### Vendredi 07 juin
 | Nom | Tache | Etat |
@@ -19,7 +38,7 @@
 | Axel, Yohan | Test de la view | Done |
 | Matthieu | Début de rédaction du contrat | Done |
 
-####Taches programmés
+#### Taches programmés
 
 | Tache | Priorité | Participants |
 | --- | :-: | :-: |
@@ -35,7 +54,7 @@
 | Gwendal, Moataz | Première implémentation du model | In progress |
 | Yann | Première implémentation des automates | Done |
 
-####Taches programmés
+#### Taches programmés
 
 | Tache | Priorité | Participants |
 | --- | :-: | :-: |
@@ -53,7 +72,7 @@
 | Yann | Première implémentation des automates | In progress |
 | Yohan | Amélioration de l'affichage de debug de la view | In progress |
 
-####Taches programmés
+#### Taches programmés
 
 | Tache | Priorité | Participants |
 | --- | :-: | :-: |
