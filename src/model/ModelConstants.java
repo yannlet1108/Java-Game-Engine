@@ -11,5 +11,4 @@ public class ModelConstants {
 
 	public static double WORLD_DENSITY = 1;
 	public static double WORLD_VISCOSITY = 0.2;
-	public static double PLAYER_DENSITY = 10;
 }
