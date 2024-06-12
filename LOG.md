@@ -1,3 +1,36 @@
+### Mercredi 12 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Matthieu, Moataz | Fonctionnalités du modèle (point de vie, Cell) | En cours |
+| Yann | Automate en gal et compréhension du parser | En cours |
+| Gwendal | Moteur physique | En cours |
+| Axel, Yohan | Vue dynamique | En cours |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Fonction hit | Moyen | Matthieu |
+| Continuer les automates et le parser| Moyen | Yann |
+| Continuer la vue dynamique | Moyen | Axel, Yohan |
+| Ajouter des fonctionnalités au model | Moyen | Moataz |
+| Moteur physique | Elevé | Gwendal |
+
+### Mardi 11 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Tout le groupe | Etablir les specs du projet | Done |
+| Tout le groupe | Etablir un planning | Done |
+| Matthieu, Yann | Modification du contrat pour correspondre aux demandes (automate en gal et fichiers de configuration) | In progress |
+| Gwendal, Moataz | Programmer le modele | In progress |
+| Yohan, Axel | Programmer la view | In progress |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Tester le modele | Elevé | Gwendal, Moataz |
+| Programmer la view (Avatar, fenetre) | Moyen | Yohan, Axel |
+| Continuer les automates | Faible | Yann |
+
 ### Lundi 10 juin
 | Nom | Tache | Etat |
 |:-:|---|:-:|
@@ -5,12 +38,15 @@
 | Axel, Gwendal | Merge final du jeu Snake | Done |
 | Axel | Restructuration du dépot git | Done |
 
-####Taches programmés
+#### Taches programmés
 
 | Tache | Priorité | Participants |
 | --- | :-: | :-: |
 | Etablir les specs du projet | Elevé | Tout le groupe |
 | Etablir un planning | Elevé | Tout le groupe |
+
+---
+
 
 ### Vendredi 07 juin
 | Nom | Tache | Etat |
@@ -19,7 +55,7 @@
 | Axel, Yohan | Test de la view | Done |
 | Matthieu | Début de rédaction du contrat | Done |
 
-####Taches programmés
+#### Taches programmés
 
 | Tache | Priorité | Participants |
 | --- | :-: | :-: |
@@ -35,11 +71,11 @@
 | Gwendal, Moataz | Première implémentation du model | In progress |
 | Yann | Première implémentation des automates | Done |
 
-####Taches programmés
+#### Taches programmés
 
 | Tache | Priorité | Participants |
 | --- | :-: | :-: |
-| Tester les automates | Elevé | Yann |
+| Tester les automates | Moyen | Yann |
 | Tester le modele | Elevé | Gwendal, Moataz |
 | Tester la view | Elevé | Axel, Yohan |
 
@@ -53,7 +89,7 @@
 | Yann | Première implémentation des automates | In progress |
 | Yohan | Amélioration de l'affichage de debug de la view | In progress |
 
-####Taches programmés
+#### Taches programmés
 
 | Tache | Priorité | Participants |
 | --- | :-: | :-: |
