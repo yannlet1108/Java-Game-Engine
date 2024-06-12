@@ -2,16 +2,23 @@ package model;
 
 import java.awt.geom.Point2D;
 
+/**
+ * Classe regroupant les méthodes communes et champs communs a toutes les
+ * entités
+ */
 public abstract class Entity {
-	Point2D position;
-	Direction direction;
-	Category category;
-	Model model;
+
+	protected Point2D position;
+	protected Direction direction;
+	protected Category category;
+	protected Model model;
 
 	/**
-	 * @param position
-	 * @param direction
-	 * @param model
+	 * Crée une entité
+	 * 
+	 * @param position  : position de l'entité dans la simulation
+	 * @param direction : direction de l'ntité dans la simulation
+	 * @param model     : instance courante du model
 	 */
 	public Entity(Point2D position, Direction direction, Model model) {
 		this.position = position;
@@ -38,6 +45,11 @@ public abstract class Entity {
 
 	}
 
+	/**
+	 * Retourne la position complète de l'entité
+	 * 
+	 * @return point ou se situe l'entité
+	 */
 	public Point2D getPosition() {
 		return position;
 	}

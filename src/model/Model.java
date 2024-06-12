@@ -9,17 +9,22 @@ import javax.swing.text.Position;
 
 import controller.Controller;
 
+/**
+ * Classe principale du model. S'occupe de créer et gérer les entités dans la
+ * simulation et de les soumettre à la physique
+ */
 public class Model {
-	Controller m_controller;
-	View m_view;
+
+	private Controller m_controller;
+	private View m_view;
 
 	private double worldHeight;
 	private double worldWidth;
 	private Collection<Entity> entities;
 
 	/**
-	 * Initialise la simulation en creant les entites d'origine et en definisant
-	 * leur etat d'initialisation.
+	 * Initialise la simulation en créant les entités d'origine et en definisant
+	 * leurs état d'initialisation.
 	 * 
 	 * @param m_controller Instance courante du Controller
 	 * @param m_view       Instance courante de l'affichage
@@ -28,9 +33,10 @@ public class Model {
 		this.m_controller = m_controller;
 		this.m_view = m_view;
 		m_view.setModel(this);
-		worldHeight = ModelConstants.WORLD_HEIGHT;
-		worldWidth = ModelConstants.WORLD_WIDTH;
+		worldHeight = ModelCst.WORLD_HEIGHT;
+		worldWidth = ModelCst.WORLD_WIDTH;
 		entities = new LinkedList<Entity>();
+
 		new Player(getWorldCenter(), Direction.E, this);
 	}
 
@@ -53,7 +59,7 @@ public class Model {
 	}
 
 	/**
-	 * Actualise l'etat des entites en fonction de leur l'environnement et de leur
+	 * Actualise l'etat des entités en fonction de leur l'environnement et de leur
 	 * automate associe.
 	 */
 	public void step() {
@@ -63,6 +69,7 @@ public class Model {
 	}
 
 	/**
+	 * Retourne les coordonnées du centre de la simulation
 	 * 
 	 * @return les coordonées du centre de la map
 	 */
