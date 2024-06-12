@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.geom.Point2D;
+import java.util.Iterator;
 
 public abstract class Entity {
 	private Point2D position;
@@ -81,10 +82,54 @@ public abstract class Entity {
 	 * 
 	 * @param direction
 	 * @param category
-	 * @return
+	 * @param rayon
+	 * @return true or false
 	 */
-	public boolean cell(Direction direction, Category category) {
-		throw new RuntimeException("Not Yet Implemented");
+	public boolean cell(Direction direction, Category category, int rayon) {
+		Entity entity;
+		Point2D currentPos = this.position;
+		double x = currentPos.getX();
+		double y = currentPos.getY();
+		Iterator<Entity> entityIter = this.model.entitiesIterator();
+
+		while (entityIter.hasNext()) {
+			entity = entityIter.next();
+			if (entity.category == category) {
+				if (direction == Direction.NE && entity.getX() > x && entity.getX() <= x + rayon && entity.getY() < y
+						&& entity.getY() >= y - rayon)
+					return true;
+				if (direction == Direction.NW && entity.getX() < x && entity.getX() >= x - rayon && entity.getY() < y
+						&& entity.getY() >= y - rayon)
+					return true;
+				if (direction == Direction.SW && entity.getX() < x && entity.getX() >= x - rayon && entity.getY() > y
+						&& entity.getY() <= y + rayon)
+					return true;
+				if (direction == Direction.SE && entity.getX() > x && entity.getX() <= x + rayon && entity.getY() > y
+						&& entity.getY() <= y + rayon)
+					return true;
+				if (direction == Direction.E && ((entity.getX() > x && entity.getX() <= x + rayon / 2
+						&& absolute(entity.getY() - y) < entity.getX() - x)
+						|| (entity.getX() <= x + rayon && entity.getX() >= x + rayon / 2
+								&& absolute(entity.getY() - y) < x + rayon - entity.getX())))
+					return true;
+				if (direction == Direction.W && ((entity.getX() < x && entity.getX() >= x - rayon / 2
+						&& absolute(entity.getY() - y) < x - entity.getX())
+						|| (entity.getX() >= x - rayon && entity.getX() <= x - rayon / 2
+								&& absolute(entity.getY() - y) < entity.getX() - (x - rayon))))
+					return true;
+				if (direction == Direction.N && ((entity.getY() < y && entity.getY() >= y - rayon / 2
+						&& absolute(entity.getX() - x) < y - entity.getY())
+						|| (entity.getY() >= y - rayon && entity.getY() <= y - rayon / 2
+								&& absolute(entity.getX() - x) < entity.getY() - (y - rayon))))
+					return true;
+				if (direction == Direction.S && ((entity.getY() > y && entity.getY() <= y + rayon / 2
+						&& absolute(entity.getX() - x) < entity.getY() - y)
+						|| (entity.getY() <= y + rayon && entity.getY() >= y + rayon / 2
+								&& absolute(entity.getX() - x) < y + rayon - entity.getY())))
+					return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -144,5 +189,12 @@ public abstract class Entity {
 
 	public Vector getSpeed() {
 		return speed;
+	}
+
+	private double absolute(double abs) {
+		if (abs >= 0)
+			return abs;
+		return -abs;
+
 	}
 }

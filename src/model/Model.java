@@ -2,6 +2,7 @@ package model;
 
 import java.awt.geom.Point2D;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import controller.Controller;
@@ -83,5 +84,14 @@ public class Model {
 
 	void addEntity(Entity e) {
 		entities.add(e);
+	}
+
+	/**
+	 * 
+	 * @return Iterateur sur les entitées de model.
+	 */
+	public Iterator<Entity> entitiesIterator() {
+		Iterator<Entity> iter = this.entities.iterator();
+		return iter;
 	}
 }
