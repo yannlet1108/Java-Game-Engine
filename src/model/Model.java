@@ -1,13 +1,11 @@
 package model;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import javax.swing.text.Position;
-
 import controller.Controller;
+import view.View;
 
 public class Model {
 	Controller m_controller;
@@ -15,6 +13,9 @@ public class Model {
 
 	private double worldHeight;
 	private double worldWidth;
+	private double density;
+	private double viscosity;
+
 	private Collection<Entity> entities;
 
 	/**
@@ -27,9 +28,11 @@ public class Model {
 	public Model(Controller m_controller, View m_view) {
 		this.m_controller = m_controller;
 		this.m_view = m_view;
-		m_view.setModel(this);
+		// m_view.setModel(this);
 		worldHeight = ModelConstants.WORLD_HEIGHT;
 		worldWidth = ModelConstants.WORLD_WIDTH;
+		density = ModelConstants.WORLD_DENSITY;
+		viscosity = ModelConstants.WORLD_VISCOSITY;
 		entities = new LinkedList<Entity>();
 		new Player(getWorldCenter(), Direction.E, this);
 	}
@@ -66,7 +69,19 @@ public class Model {
 	 * 
 	 * @return les coordonées du centre de la map
 	 */
-	private Point2D getWorldCenter() {
+	Point2D getWorldCenter() {
 		return new Point2D.Double(worldWidth / 2, worldHeight / 2);
+	}
+
+	public double getViscosity() {
+		return viscosity;
+	}
+
+	public double getDensity() {
+		return density;
+	}
+
+	void addEntity(Entity e) {
+		entities.add(e);
 	}
 }

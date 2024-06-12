@@ -1,0 +1,52 @@
+package model;
+
+import java.awt.geom.Point2D;
+import java.time.temporal.ChronoUnit;
+
+public class Vector {
+	private Point2D endPoint;
+
+	public Vector(double x, double y) {
+		endPoint = new Point2D.Double(x, y);
+	}
+
+	public Vector() {
+		endPoint = new Point2D.Double(0, 0);
+	}
+
+	public double getX() {
+		return endPoint.getX();
+	}
+
+	public double getY() {
+		return endPoint.getY();
+	}
+
+	public Vector scalarMultiplication(double a) {
+		return new Vector(getX() * a, getY() * a);
+	}
+
+	public Vector add(Vector v) {
+		return new Vector(getX() + v.getX(), getY() + v.getY());
+	}
+
+	public Point2D add(Point2D position) {
+		return new Point2D.Double(getX() + position.getX(), getY() + position.getY());
+	}
+
+	public double norm() {
+		return Math.sqrt(Math.pow(getX(), 2) + Math.pow(getY(), 2));
+	}
+
+	public Vector unitVector() {
+		double norm = norm();
+		if (norm == 0)
+			return new Vector();
+		return new Vector(getX() / norm, getY() / norm);
+	}
+
+	@Override
+	public String toString() {
+		return "(" + getX() + "," + getY() + ")";
+	}
+}
