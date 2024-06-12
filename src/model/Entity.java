@@ -75,9 +75,11 @@ public abstract class Entity {
 	public abstract void pick();
 
 	/**
-	 * Execute l'action Explode comme definit par l'entite
+	 * Supprime l'entite
 	 */
-	public abstract void explode();
+	public void explode() {
+		this.model.removeEntity(this);
+	}
 
 	/**
 	 * Retourne True Si la case dans la direction donnée en paramètre a une entité
@@ -209,7 +211,20 @@ public abstract class Entity {
 		this.healthPoint = healthPoint;
 	}
 
+	/**
+	 * Modifie la valeur des points de vie de l'entite
+	 * Si le nombre de point de vie descend en dessous de 0, l'entite est detruite
+	 * 
+	 * @param val
+	 */
 	public void modifyHealthPoint(int val) {
 		this.healthPoint += val;
+		if (this.healthPoint<=0) {
+			this.explode();
+		}
+	}
+	
+	public void getHit(int val) {
+		this.modifyHealthPoint(-val);
 	}
 }

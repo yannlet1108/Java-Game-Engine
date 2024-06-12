@@ -24,5 +24,4 @@ public class Player extends Entity {
 	public void explode() {
 		throw new RuntimeException("Not Yet Implemented");
 	}
-
 }
