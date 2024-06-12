@@ -35,7 +35,10 @@ public class Model {
 		density = ModelConstants.WORLD_DENSITY;
 		viscosity = ModelConstants.WORLD_VISCOSITY;
 		entities = new LinkedList<Entity>();
+		players = new LinkedList<Player>();
 		Player P = new Player(getWorldCenter(), Direction.E, this, 100);
+		entities.add(P);
+		players.add(P);
 		m_view.setModel(this);
 	}
 
@@ -96,8 +99,15 @@ public class Model {
 	 * 
 	 * @return la collection des players
 	 */
-	public Collection<Player> getPlayers() {
-		return players;
+	public Iterator<Point2D> getPlayersPos() {
+		LinkedList<Point2D> thePoints = new LinkedList<Point2D>();
+		Iterator<Player> iterPlayer = players.iterator();
+		Player play;
+		while(iterPlayer.hasNext()) {
+			play = iterPlayer.next();
+			thePoints.add(play.getPosition()); 
+		}
+		return thePoints.iterator();
 	}
 
 	/**
@@ -107,23 +117,6 @@ public class Model {
 	 */
 	public void addPlayers(Player P) {
 		players.add(P);
-	}
-
-	/**
-	 * retournant le centre de la simu (centre du player au début, centre entre les
-	 * deux player au début)
-	 * 
-	 * @return
-	 */
-	public Point2D getSimCenter() {
-		throw new RuntimeException("Not Yet Implemented");
-	}
-
-	/**
-	 * @return la distance de simu (entre les deux joueurs)
-	 */
-	public int getSimDist() {
-		throw new RuntimeException("Not Yet Implemented");
 	}
 
 	/**

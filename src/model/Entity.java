@@ -1,10 +1,13 @@
 package model;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
+import view.PlayerAvatar;
+
 public abstract class Entity {
-	private Point2D position;
+	private Rectangle2D hitbox;
 	private Direction direction;
 	protected Category category;
 	private Model model;
@@ -23,13 +26,14 @@ public abstract class Entity {
 	 * @param model
 	 */
 	public Entity(Point2D position, Direction direction, Model model, int healthPoint) {
-		this.position = position;
+		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH, PlayerConstants.PLAYER_HEIGHT);
 		this.direction = direction;
 		this.model = model;
 		this.model.addEntity(this);
 		this.healthPoint = healthPoint;
 		force = new Vector();
 		speed = new Vector();
+		model.m_view.store(new PlayerAvatar(model.m_view, this));
 	}
 
 	/**
@@ -38,7 +42,7 @@ public abstract class Entity {
 	 * @return Coordonnee X
 	 */
 	public double getX() {
-		return position.getX();
+		return hitbox.getX();
 	}
 
 	/**
@@ -47,19 +51,27 @@ public abstract class Entity {
 	 * @return Coordonnee Y
 	 */
 	public double getY() {
-		return position.getY();
+		return hitbox.getY();
 
 	}
 
 	public Point2D getPosition() {
-		return position;
+		return new Point2D.Double(hitbox.getCenterX(), hitbox.getCenterY());
 	}
 	
+	public void setPosition(Point2D position) {
+		hitbox.setRect(position.getX(), position.getY(), hitbox.getWidth(), hitbox.getHeight());
+	}
+
 	protected void setAvatar() {
 		throw new RuntimeException("Not Yet Implemented");
 	}
-	
-	abstract void getHitbox();
+
+	public Rectangle2D getHitbox() {
+		Rectangle2D hitbox = new Rectangle2D.Double();
+		hitbox.setRect(this.hitbox);
+		return hitbox;
+	}
 
 	/**
 	 * Déplacement par défault d'une entité
@@ -97,7 +109,8 @@ public abstract class Entity {
 	 */
 	public boolean cell(Direction direction, Category category, int rayon) {
 		Entity entity;
-		Point2D currentPos = this.position;
+
+		Point2D currentPos = getPosition();
 		double x = currentPos.getX();
 		double y = currentPos.getY();
 		Iterator<Entity> entityIter = this.model.entitiesIterator();
@@ -177,7 +190,7 @@ public abstract class Entity {
 		speed = speed.add(acceleration.scalarMultiplication(timeSeconds));
 
 		Vector movement = speed.scalarMultiplication(timeSeconds);
-		position = (movement.add(position));
+		setPosition(movement.add(getPosition()));
 	}
 
 	private Vector computeArchimedes() {

@@ -91,8 +91,6 @@ public class View {
 			txt = txt + fps + " fps   ";
 			m_text.setText(txt);
 		}
-		if (m_model != null)
-			viewport.updateViewport(m_model.getSimCenter(), 1);
 	}
 
 	/**
@@ -141,6 +139,8 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	public void paint(Graphics g) {
+		if (m_model != null)
+			viewport.updateViewport(m_model.getPlayersPos(), 1);
 		viewport.resize();
 		fillBackground(g);
 		Iterator<Avatar> avatarIterator = getAvatarIterator();
