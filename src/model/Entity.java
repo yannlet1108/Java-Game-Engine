@@ -64,7 +64,11 @@ public abstract class Entity {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 
-	abstract void getHitbox();
+	public Rectangle2D getHitbox() {
+		Rectangle2D hitbox = new Rectangle2D.Double();
+		hitbox.setRect(hitbox);
+		return hitbox;
+	}
 
 	/**
 	 * Déplacement par défault d'une entité
