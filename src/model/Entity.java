@@ -15,15 +15,18 @@ public abstract class Entity {
 	private double mass;
 	private double volume;
 
+	private int healthPoint;
+
 	/**
 	 * @param position
 	 * @param direction
 	 * @param model
 	 */
-	public Entity(Point2D position, Direction direction, Model model) {
+	public Entity(Point2D position, Direction direction, Model model, int healthPoint) {
 		this.position = position;
 		this.direction = direction;
 		this.model = model;
+		this.healthPoint = healthPoint;
 		force = new Vector();
 		speed = new Vector();
 	}
@@ -196,5 +199,17 @@ public abstract class Entity {
 			return abs;
 		return -abs;
 
+	}
+
+	public int getHealthPoint() {
+		return healthPoint;
+	}
+
+	public void setHealthPoint(int healthPoint) {
+		this.healthPoint = healthPoint;
+	}
+
+	public void modifyHealthPoint(int val) {
+		this.healthPoint += val;
 	}
 }
