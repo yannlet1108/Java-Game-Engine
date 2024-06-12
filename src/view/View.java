@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 
 import controller.Controller;
 import info3.game.graphics.GameCanvas;
+import model.Entity;
+import model.Model;
 
 /**
  * Classe principale de la view. S'occupe de relier la liste des avatars à la
@@ -20,7 +22,7 @@ import info3.game.graphics.GameCanvas;
  */
 public class View {
 
-	// private Model m_model;
+	private Model m_model;
 	private GameCanvas m_canvas;
 	private JFrame m_frame;
 	private JLabel m_text;
@@ -42,7 +44,7 @@ public class View {
 		m_canvas = new GameCanvas(m_controller);
 
 		System.out.println("  - creating frame...");
-		Dimension d = new Dimension(1024, 768);
+		Dimension d = new Dimension(ViewCst.WIDTH, ViewCst.HEIGHT);
 		m_frame = m_canvas.createFrame(d);
 		System.out.println("  - setting up the frame...");
 		setupFrame();
@@ -89,6 +91,8 @@ public class View {
 			txt = txt + fps + " fps   ";
 			m_text.setText(txt);
 		}
+		if(m_model != null)
+			viewport.updateViewport(m_model.getSimCenter(), 1);
 	}
 
 	/**
@@ -134,10 +138,25 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	public void paint(Graphics g) {
+		fillBackground(g);
 		Iterator<Avatar> avatarIterator = getAvatarIterator();
 		while (avatarIterator.hasNext()) {
 			avatarIterator.next().paint(g);
 		}
+	}
+
+	private void fillBackground(Graphics g) {
+		g.setColor(ViewCst.BACKGROUND_DEFAULT);
+		g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
+	}
+
+	/**
+	 * Enregistre l'instance courante du model
+	 * 
+	 * @param m_model : instance courante du model
+	 */
+	public void setModel(Model m_model) {
+		this.m_model = m_model;
 	}
 
 	/**

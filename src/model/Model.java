@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import javax.swing.text.Position;
 
 import controller.Controller;
+import view.View;
 
 /**
  * Classe principale du model. S'occupe de créer et gérer les entités dans la
@@ -22,6 +23,8 @@ public class Model {
 	private double worldWidth;
 	private Collection<Entity> entities;
 
+	private Player p;
+
 	/**
 	 * Initialise la simulation en créant les entités d'origine et en definisant
 	 * leurs état d'initialisation.
@@ -32,12 +35,17 @@ public class Model {
 	public Model(Controller m_controller, View m_view) {
 		this.m_controller = m_controller;
 		this.m_view = m_view;
-		m_view.setModel(this);
 		worldHeight = ModelCst.WORLD_HEIGHT;
 		worldWidth = ModelCst.WORLD_WIDTH;
 		entities = new LinkedList<Entity>();
 
-		new Player(getWorldCenter(), Direction.E, this);
+		p = new Player(getWorldCenter(), Direction.E, this);
+
+		m_view.setModel(this);
+	}
+
+	public Point2D getSimCenter() {
+		return p.getCenter();
 	}
 
 	/**
@@ -75,5 +83,9 @@ public class Model {
 	 */
 	private Point2D getWorldCenter() {
 		return new Point2D.Double(worldWidth / 2, worldHeight / 2);
+	}
+
+	View getView() {
+		return m_view;
 	}
 }

@@ -35,9 +35,9 @@ public class Viewport {
 	 * @return point dans le viewport
 	 */
 	Point toViewport(Point2D p) {
-		if (p.getX() < viewbox.x || p.getX() > viewbox.x + viewbox.height * reverseScale())
+		if (p.getX() < viewbox.x || p.getX() > viewbox.x + viewbox.width * reverseScale())
 			return null;
-		if (p.getY() < viewbox.y || p.getY() > viewbox.y + viewbox.width * reverseScale())
+		if (p.getY() < viewbox.y || p.getY() > viewbox.y + viewbox.height * reverseScale())
 			return null;
 		return new Point((int) ((p.getX() - viewbox.x) * reverseScale()),
 				(int) ((p.getY() - viewbox.y) * reverseScale()));
@@ -51,8 +51,8 @@ public class Viewport {
 	 */
 	void updateViewport(Point2D center, float scale) {
 		this.scale = scale;
-		viewbox.x = (int) (center.getX() - (viewbox.height / 2) * reverseScale());
-		viewbox.y = (int) (center.getY() - (viewbox.width / 2) * reverseScale());
+		viewbox.x = (int) (center.getX() - (viewbox.width / 2) * reverseScale());
+		viewbox.y = (int) (center.getY() - (viewbox.height / 2) * reverseScale());
 	}
 
 	/**
@@ -79,6 +79,14 @@ public class Viewport {
 	 */
 	float reverseScale() {
 		return 1 / scale;
+	}
+
+	int getWidth() {
+		return viewbox.width;
+	}
+
+	int getHeight() {
+		return viewbox.height;
 	}
 
 }

@@ -2,6 +2,8 @@ package view;
 
 import java.awt.Graphics;
 
+import model.Entity;
+
 /**
  * Classe d'avatar des players
  */
@@ -15,11 +17,12 @@ public class PlayerAvatar extends Avatar {
 	 */
 	public PlayerAvatar(View m_view, Entity player) {
 		super(m_view, player);
+		m_view.store(this);
 	}
 
 	@Override
 	void paint(Graphics g) {
-		m_view.getBank().debugCollisions(g, ViewCst.DEBUG_PLAYER, e.get...);
+		m_view.getBank().debugCollisions(g, ViewCst.DEBUG_PLAYER, instanceEntity.getHitbox());
 	}
 
 }

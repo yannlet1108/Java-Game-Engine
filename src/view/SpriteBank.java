@@ -33,6 +33,8 @@ public class SpriteBank {
 	void debugCollisions(Graphics g, Color c, Rectangle2D collisionBox) {
 		g.setColor(c);
 		Point origin = m_view.getViewport().toViewport(new Point2D.Double(collisionBox.getX(), collisionBox.getY()));
+		if(origin == null)
+			return;
 		g.drawRect(origin.x, origin.y, (int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
 				(int) (collisionBox.getHeight() * m_view.getViewport().getScale()));
 	}

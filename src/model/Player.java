@@ -3,10 +3,13 @@ package model;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import view.PlayerAvatar;
+
 public class Player extends Entity {
 
 	public Player(Point2D position, Direction direction, Model model) {
 		super(position, direction, model);
+		setAvatar(new PlayerAvatar(model.getView(), this));
 	}
 
 	@Override
@@ -30,7 +33,7 @@ public class Player extends Entity {
 	 * @return coordonnées d'une hitbox en hard
 	 */
 	public Rectangle2D getHitbox() {
-		return new Rectangle2D.Double(100, 100, 50, 50);
+		return new Rectangle2D.Double(position.getX(), position.getY(), 50, 50);
 	}
 
 }

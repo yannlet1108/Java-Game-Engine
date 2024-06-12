@@ -2,6 +2,8 @@ package view;
 
 import java.awt.Graphics;
 
+import model.Entity;
+
 /**
  * Classe réunissant les champs et méthodes communes à tout les avatars
  */
