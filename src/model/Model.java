@@ -97,8 +97,15 @@ public class Model {
 	 * 
 	 * @return la collection des players
 	 */
-	public Collection<Player> getPlayers() {
-		return players;
+	public Iterator<Point2D> getPlayersPos() {
+		LinkedList<Point2D> thePoints = new LinkedList<Point2D>();
+		Iterator<Player> iterPlayer = players.iterator();
+		Player play;
+		while(iterPlayer.hasNext()) {
+			play = iterPlayer.next();
+			thePoints.add(play.getPosition()); 
+		}
+		return thePoints.iterator();
 	}
 
 	/**

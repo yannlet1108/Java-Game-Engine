@@ -106,6 +106,7 @@ public abstract class Entity {
 	 */
 	public boolean cell(Direction direction, Category category, int rayon) {
 		Entity entity;
+
 		Point2D currentPos = getPosition();
 		double x = currentPos.getX();
 		double y = currentPos.getY();
