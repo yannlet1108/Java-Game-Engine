@@ -3,6 +3,7 @@ package view;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
 import info3.game.graphics.GameCanvas;
@@ -32,16 +33,19 @@ public class Viewport {
 	/**
 	 * Convertie une coordonnée de simulation en coordonnée sur le viewport
 	 * 
-	 * @param p : point sur la simulation
+	 * @param hitbox : hitbox de l'entité dans la simulation
 	 * @return point dans le viewport
 	 */
-	Point toViewport(Point2D p) {
-		if (p.getX() < viewbox.x || p.getX() > viewbox.x + viewbox.width * reverseScale())
+	Point toViewport(Rectangle2D hitbox) {
+		double left = hitbox.getX();
+		double right = hitbox.getX() + hitbox.getWidth();
+		double top = hitbox.getY();
+		double bottom = hitbox.getY() + hitbox.getHeight();
+		if (right < viewbox.x || left > viewbox.x + viewbox.width * reverseScale())
 			return null;
-		if (p.getY() < viewbox.y || p.getY() > viewbox.y + viewbox.height * reverseScale())
+		if (bottom < viewbox.y || top > viewbox.y + viewbox.height * reverseScale())
 			return null;
-		return new Point((int) ((p.getX() - viewbox.x) * reverseScale()),
-				(int) ((p.getY() - viewbox.y) * reverseScale()));
+		return new Point((int) ((left - viewbox.x) * reverseScale()), (int) ((top - viewbox.y) * reverseScale()));
 	}
 
 	/**
