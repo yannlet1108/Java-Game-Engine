@@ -3,6 +3,7 @@ package view;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+import java.util.Iterator;
 
 import info3.game.graphics.GameCanvas;
 
@@ -49,8 +50,9 @@ public class Viewport {
 	 * @param center : nouveau centre du viewport
 	 * @param scale  : nouveau scaling du viewport
 	 */
-	void updateViewport(Point2D center, float scale) {
+	void updateViewport(Iterator<Point2D> playersPos, float scale) {
 		this.scale = scale;
+		Point2D center = playersPos.next();
 		viewbox.x = (int) (center.getX() - (viewbox.width / 2) * reverseScale());
 		viewbox.y = (int) (center.getY() - (viewbox.height / 2) * reverseScale());
 	}
@@ -81,10 +83,20 @@ public class Viewport {
 		return 1 / scale;
 	}
 
+	/**
+	 * Retourne la largeur du viewport
+	 * 
+	 * @return largeur
+	 */
 	int getWidth() {
 		return viewbox.width;
 	}
 
+	/**
+	 * Retourne la hauteur du viewport
+	 * 
+	 * @return hauteur
+	 */
 	int getHeight() {
 		return viewbox.height;
 	}
