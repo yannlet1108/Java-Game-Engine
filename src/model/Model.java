@@ -35,6 +35,7 @@ public class Model {
 		density = ModelConstants.WORLD_DENSITY;
 		viscosity = ModelConstants.WORLD_VISCOSITY;
 		entities = new LinkedList<Entity>();
+		players = new LinkedList<Player>();
 		Player P = new Player(getWorldCenter(), Direction.E, this, 100);
 		m_view.setModel(this);
 	}
@@ -96,8 +97,15 @@ public class Model {
 	 * 
 	 * @return la collection des players
 	 */
-	public Collection<Player> getPlayers() {
-		return players;
+	public Iterator<Point2D> getPlayersPos() {
+		LinkedList<Point2D> thePoints = new LinkedList<Point2D>();
+		Iterator<Player> iterPlayer = players.iterator();
+		Player play;
+		while(iterPlayer.hasNext()) {
+			play = iterPlayer.next();
+			thePoints.add(play.getPosition()); 
+		}
+		return thePoints.iterator();
 	}
 
 	/**

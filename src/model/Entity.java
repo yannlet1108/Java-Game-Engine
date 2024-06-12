@@ -97,7 +97,7 @@ public abstract class Entity {
 	 */
 	public boolean cell(Direction direction, Category category, int rayon) {
 		Entity entity;
-		Point2D currentPos = this.position;
+		Point2D currentPos = this.getPosition();
 		double x = currentPos.getX();
 		double y = currentPos.getY();
 		Iterator<Entity> entityIter = this.model.entitiesIterator();
