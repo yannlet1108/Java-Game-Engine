@@ -24,7 +24,8 @@ public abstract class Entity {
 	 * @param model
 	 */
 	public Entity(Point2D position, Direction direction, Model model, int healthPoint) {
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH, PlayerConstants.PLAYER_HEIGHT);
+		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
+				PlayerConstants.PLAYER_HEIGHT);
 		this.direction = direction;
 		this.model = model;
 		this.model.addEntity(this);
@@ -55,7 +56,7 @@ public abstract class Entity {
 	public Point2D getPosition() {
 		return new Point2D.Double(hitbox.getX(), hitbox.getY());
 	}
-	
+
 	public void setPosition(Point2D position) {
 		hitbox.setRect(position.getX(), position.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
@@ -111,38 +112,42 @@ public abstract class Entity {
 		while (entityIter.hasNext()) {
 			entity = entityIter.next();
 			if (entity.category == category) {
-				if (direction == Direction.NE && entity.getX() > x && entity.getX() <= x + rayon && entity.getY() < y
-						&& entity.getY() >= y - rayon)
+				//Gauche bas point
+				double GBx = entity.getHitbox().getMinX();
+				double GBy = entity.getHitbox().getMaxY();
+				if (direction == Direction.NE && GBx > x && GBx <= x + rayon && GBy < y
+						&& GBy >= y - rayon)
 					return true;
-				if (direction == Direction.NW && entity.getX() < x && entity.getX() >= x - rayon && entity.getY() < y
-						&& entity.getY() >= y - rayon)
+				if (direction == Direction.NW && GBx < x && GBx >= x - rayon && GBy < y
+						&& GBy >= y - rayon)
 					return true;
-				if (direction == Direction.SW && entity.getX() < x && entity.getX() >= x - rayon && entity.getY() > y
-						&& entity.getY() <= y + rayon)
+				if (direction == Direction.SW && GBx < x && GBx >= x - rayon && GBy > y
+						&& GBy <= y + rayon)
 					return true;
-				if (direction == Direction.SE && entity.getX() > x && entity.getX() <= x + rayon && entity.getY() > y
-						&& entity.getY() <= y + rayon)
+				if (direction == Direction.SE && GBx > x && GBx <= x + rayon && GBy > y
+						&& GBy <= y + rayon)
 					return true;
-				if (direction == Direction.E && ((entity.getX() > x && entity.getX() <= x + rayon / 2
-						&& absolute(entity.getY() - y) < entity.getX() - x)
-						|| (entity.getX() <= x + rayon && entity.getX() >= x + rayon / 2
-								&& absolute(entity.getY() - y) < x + rayon - entity.getX())))
+				if (direction == Direction.E && ((GBx > x && GBx <= x + rayon / 2
+						&& absolute(GBx - y) < GBx - x)
+						|| (GBx <= x + rayon && GBx >= x + rayon / 2
+								&& absolute(entity.getY() - y) < x + rayon - GBx)))
 					return true;
-				if (direction == Direction.W && ((entity.getX() < x && entity.getX() >= x - rayon / 2
-						&& absolute(entity.getY() - y) < x - entity.getX())
-						|| (entity.getX() >= x - rayon && entity.getX() <= x - rayon / 2
-								&& absolute(entity.getY() - y) < entity.getX() - (x - rayon))))
+				if (direction == Direction.W && ((GBx < x && GBx >= x - rayon / 2
+						&& absolute(entity.getY() - y) < x - GBx)
+						|| (GBx >= x - rayon && GBx <= x - rayon / 2
+								&& absolute(entity.getY() - y) < GBx - (x - rayon))))
 					return true;
 				if (direction == Direction.N && ((entity.getY() < y && entity.getY() >= y - rayon / 2
-						&& absolute(entity.getX() - x) < y - entity.getY())
+						&& absolute(GBx - x) < y - entity.getY())
 						|| (entity.getY() >= y - rayon && entity.getY() <= y - rayon / 2
-								&& absolute(entity.getX() - x) < entity.getY() - (y - rayon))))
+								&& absolute(GBx - x) < entity.getY() - (y - rayon))))
 					return true;
 				if (direction == Direction.S && ((entity.getY() > y && entity.getY() <= y + rayon / 2
-						&& absolute(entity.getX() - x) < entity.getY() - y)
+						&& absolute(GBx - x) < entity.getY() - y)
 						|| (entity.getY() <= y + rayon && entity.getY() >= y + rayon / 2
-								&& absolute(entity.getX() - x) < y + rayon - entity.getY())))
+								&& absolute(GBx - x) < y + rayon - entity.getY())))
 					return true;
+				//Gauche
 			}
 		}
 		return false;
