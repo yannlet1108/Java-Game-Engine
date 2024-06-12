@@ -1,3 +1,20 @@
+### Mercredi 12 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Matthieu, Moataz | Fonctionnalités du modèle (point de vie, Cell) | En cours |
+| Yann | Automate en gal et compréhension du parser | En cours |
+| Gwendal | Moteur physique | En cours |
+| Axel, Yohan | Vue dynamique | En cours |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Fonction hit | Moyen | Matthieu |
+| Continuer les automates et le parser| Moyen | Yann |
+| Continuer la vue dynamique | Moyen | Axel, Yohan |
+| Ajouter des fonctionnalités au model | Moyen | Moataz |
+| Moteur physique | Elevé | Gwendal |
+
 ### Mardi 11 juin
 | Nom | Tache | Etat |
 |:-:|---|:-:|
@@ -11,8 +28,8 @@
 | Tache | Priorité | Participants |
 | --- | :-: | :-: |
 | Tester le modele | Elevé | Gwendal, Moataz |
-| Programmer la view (Avatar, fenetre) | Elevé | Yohan, Axel |
-| Continuer les automates | Elevé | Yann |
+| Programmer la view (Avatar, fenetre) | Moyen | Yohan, Axel |
+| Continuer les automates | Faible | Yann |
 
 ### Lundi 10 juin
 | Nom | Tache | Etat |
@@ -58,7 +75,7 @@
 
 | Tache | Priorité | Participants |
 | --- | :-: | :-: |
-| Tester les automates | Elevé | Yann |
+| Tester les automates | Moyen | Yann |
 | Tester le modele | Elevé | Gwendal, Moataz |
 | Tester la view | Elevé | Axel, Yohan |
 
