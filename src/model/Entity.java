@@ -4,6 +4,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
+import view.PlayerAvatar;
+
 public abstract class Entity {
 	private Rectangle2D hitbox;
 	private Direction direction;
@@ -32,6 +34,7 @@ public abstract class Entity {
 		this.healthPoint = healthPoint;
 		force = new Vector();
 		speed = new Vector();
+		model.m_view.store(new PlayerAvatar(model.m_view, this));
 	}
 
 	/**
@@ -54,7 +57,7 @@ public abstract class Entity {
 	}
 
 	public Point2D getPosition() {
-		return new Point2D.Double(hitbox.getX(), hitbox.getY());
+		return new Point2D.Double(hitbox.getCenterX(), hitbox.getCenterY());
 	}
 
 	public void setPosition(Point2D position) {
