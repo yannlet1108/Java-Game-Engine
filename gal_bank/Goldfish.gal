@@ -5,9 +5,9 @@ Goldfish(Forward){
 	| True ? 98% Wait / 2% Egg :(Forward)
 	
 	* (Flee):
-	| Cell(F,A) ? Move(B) :(Forward)
-	| Cell(L,A) ? Move(R) :(Forward)
-	| Cell(B,A) ? Move(F) :(Forward)
-	| Cell(R,A) ? Move(L) :(Forward)
+	| Cell(NE,A) ? Move(SW) :(Forward)
+	| Cell(NW,A) ? Move(SE) :(Forward)
+	| Cell(SE,A) ? Move(NW) :(Forward)
+	| Cell(SW,A) ? Move(NE) :(Forward)
 	| True ? :(Forward)	
 }
