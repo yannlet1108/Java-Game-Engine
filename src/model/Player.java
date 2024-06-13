@@ -8,6 +8,7 @@ public class Player extends Entity {
 		super(position, direction, model, healthPoint);
 		category = Category.PLAYER;
 		density = PlayerConstants.PLAYER_DENSITY;
+		this.team = 1;
 		model.addPlayers(this);
 	}
 

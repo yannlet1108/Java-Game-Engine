@@ -17,6 +17,9 @@ public abstract class Entity {
 	private double volume;
 
 	private int healthPoint;
+	protected int team;
+	protected int meleeRange; // a definir
+	protected int attackDamage; // a definir
 
 	/**
 	 * @param position
@@ -24,13 +27,17 @@ public abstract class Entity {
 	 * @param model
 	 */
 	public Entity(Point2D position, Direction direction, Model model, int healthPoint) {
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH, PlayerConstants.PLAYER_HEIGHT);
+		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
+				PlayerConstants.PLAYER_HEIGHT);
 		this.direction = direction;
 		this.model = model;
 		this.model.addEntity(this);
 		this.healthPoint = healthPoint;
 		force = new Vector();
 		speed = new Vector();
+		this.team = 0;
+		this.meleeRange = 20; // a definir
+		this.attackDamage = 20; // a definir
 	}
 
 	/**
@@ -55,7 +62,7 @@ public abstract class Entity {
 	public Point2D getPosition() {
 		return new Point2D.Double(hitbox.getX(), hitbox.getY());
 	}
-	
+
 	public void setPosition(Point2D position) {
 		hitbox.setRect(position.getX(), position.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
@@ -225,19 +232,68 @@ public abstract class Entity {
 	}
 
 	/**
-	 * Modifie la valeur des points de vie de l'entite
-	 * Si le nombre de point de vie descend en dessous de 0, l'entite est detruite
+	 * Modifie la valeur des points de vie de l'entite Si le nombre de point de vie
+	 * descend en dessous de 0, l'entite est detruite
 	 * 
 	 * @param val
 	 */
 	public void modifyHealthPoint(int val) {
 		this.healthPoint += val;
-		if (this.healthPoint<=0) {
+		if (this.healthPoint <= 0) {
 			this.explode();
 		}
 	}
-	
+
 	public void getHit(int val) {
 		this.modifyHealthPoint(-val);
+	}
+
+	public void hit() {
+		Rectangle2D hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
+				this.hitbox.getWidth() + 2 * meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+		Iterator<Entity> it = this.model.entitiesIterator();
+		while (it.hasNext()) {
+			Entity e = it.next();
+			if (e.getTeam() != this.getTeam()) {
+				if (e.hitbox.intersects(hitRange)) {
+					e.getHit(this.attackDamage);
+				}
+			}
+		}
+	}
+
+	public void hit(Direction d) {
+		Direction.relativeToAbsolute(d, d);
+		Rectangle2D hitRange;
+		switch (d) {
+		case N:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
+					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
+		case E:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() + this.hitbox.getWidth(), this.hitbox.getY() - meleeRange,
+					meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+		case S:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() + meleeRange,
+					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
+		case W:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange, 
+					meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+		default:	
+			hitRange = null;
+		}
+		
+		Iterator<Entity> it = this.model.entitiesIterator();
+		while (it.hasNext()) {
+			Entity e = it.next();
+			if (e.getTeam() != this.getTeam()) {
+				if (e.hitbox.intersects(hitRange)) {
+					e.getHit(this.attackDamage);
+				}
+			}
+		}
+	}
+
+	public int getTeam() {
+		return team;
 	}
 }
