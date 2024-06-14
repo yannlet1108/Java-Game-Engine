@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 import view.PlayerAvatar;
 
@@ -18,7 +19,7 @@ public class Player extends Entity {
 	@Override
 	public void egg() {
 		Direction d = this.getDirection();
-		Point2D pos = this.getPosition();
+		Point2D pos = this.getCenter();
 		pos.setLocation(this.getX()+5, this.getY());
 		Missile m = new Missile(pos, d, this.getModel(), 1);
 		this.getModel().addEntity(m);
@@ -35,7 +36,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	void getHitbox() {
+	public Rectangle2D getHitbox() {
 		throw new RuntimeException("Not Yet Implemented");
 
 	}

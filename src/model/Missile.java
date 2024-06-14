@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 public class Missile extends Entity {
 
@@ -10,7 +11,7 @@ public class Missile extends Entity {
 	}
 
 	@Override
-	void getHitbox() {
+	public Rectangle2D getHitbox() {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("Not Yet Implemented");
 	}
