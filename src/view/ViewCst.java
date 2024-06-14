@@ -6,7 +6,9 @@ import java.awt.Color;
  * Classe listant les variables global de la view
  */
 public class ViewCst {
-	
+
+	public static final boolean DEBUG = true;
+
 	/* Lissage des déplacement */
 	public static final float MOVE_FACTOR = 0.06f;
 
@@ -15,4 +17,9 @@ public class ViewCst {
 
 	/* Couleurs de debug */
 	public static final Color DEBUG_PLAYER = Color.RED;
+	public static final Color DEBUG_OBSTACLE = Color.GREEN;
+	public static final Color DEBUG_GOLDFISH = Color.ORANGE;
+	public static final Color DEBUG_SHARK = Color.CYAN;
+	public static final Color DEBUG_BULLET = Color.DARK_GRAY;
+
 }
