@@ -24,7 +24,8 @@ public abstract class Entity {
 	 * @param model
 	 */
 	public Entity(Point2D position, Direction direction, Model model, int healthPoint) {
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH, PlayerConstants.PLAYER_HEIGHT);
+		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
+				PlayerConstants.PLAYER_HEIGHT);
 		this.direction = direction;
 		this.model = model;
 		this.model.addEntity(this);
@@ -52,12 +53,16 @@ public abstract class Entity {
 
 	}
 
-	public Point2D getPosition() {
+	public Point2D getCenter() {
 		return new Point2D.Double(hitbox.getX(), hitbox.getY());
 	}
-	
+
 	public void setPosition(Point2D position) {
 		hitbox.setRect(position.getX(), position.getY(), hitbox.getWidth(), hitbox.getHeight());
+	}
+
+	public void translatePosition(Vector v) {
+		hitbox.setRect(hitbox.getX() + v.getX(), hitbox.getY() + v.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
 
 	protected void setAvatar() {
@@ -187,7 +192,7 @@ public abstract class Entity {
 		speed = speed.add(acceleration.scalarMultiplication(timeSeconds));
 
 		Vector movement = speed.scalarMultiplication(timeSeconds);
-		setPosition(movement.add(getPosition()));
+		translatePosition(movement);
 	}
 
 	private Vector computeArchimedes() {
