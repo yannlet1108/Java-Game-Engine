@@ -14,7 +14,11 @@ public class Player extends Entity {
 
 	@Override
 	public void egg() {
-		throw new RuntimeException("Not Yet Implemented");
+		Direction d = this.getDirection();
+		Point2D pos = this.getPosition();
+		pos.setLocation(this.getX()+5, this.getY());
+		Missile m = new Missile(pos, d, this.getModel(), 1);
+		this.getModel().addEntity(m);
 	}
 
 	@Override

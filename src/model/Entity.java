@@ -244,10 +244,18 @@ public abstract class Entity {
 		}
 	}
 
+	/**
+	 * Enleve un nombre de point de vie a une entité
+	 * 
+	 * @param val
+	 */
 	public void getHit(int val) {
 		this.modifyHealthPoint(-val);
 	}
 
+	/**
+	 * Action hit autour du personnage dans sa range
+	 */
 	public void hit() {
 		Rectangle2D hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
 				this.hitbox.getWidth() + 2 * meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
@@ -262,6 +270,11 @@ public abstract class Entity {
 		}
 	}
 
+	/**
+	 * Action hit dans une certaine direction
+	 * 
+	 * @param d
+	 */
 	public void hit(Direction d) {
 		Direction.relativeToAbsolute(d, d);
 		Rectangle2D hitRange;
@@ -270,18 +283,18 @@ public abstract class Entity {
 			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
 					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
 		case E:
-			hitRange = new Rectangle2D.Double(this.hitbox.getX() + this.hitbox.getWidth(), this.hitbox.getY() - meleeRange,
-					meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() + this.hitbox.getWidth(),
+					this.hitbox.getY() - meleeRange, meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
 		case S:
 			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() + meleeRange,
 					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
 		case W:
-			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange, 
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
 					meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
-		default:	
+		default:
 			hitRange = null;
 		}
-		
+
 		Iterator<Entity> it = this.model.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
@@ -295,5 +308,9 @@ public abstract class Entity {
 
 	public int getTeam() {
 		return team;
+	}
+
+	public Model getModel() {
+		return model;
 	}
 }
