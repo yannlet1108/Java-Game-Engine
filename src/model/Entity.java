@@ -34,7 +34,6 @@ public abstract class Entity {
 		this.healthPoint = healthPoint;
 		force = new Vector();
 		speed = new Vector();
-		model.m_view.store(new PlayerAvatar(model.m_view, this));
 	}
 
 	/**
