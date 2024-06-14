@@ -55,12 +55,16 @@ public abstract class Entity {
 
 	}
 
-	public Point2D getPosition() {
+	public Point2D getCenter() {
 		return new Point2D.Double(hitbox.getCenterX(), hitbox.getCenterY());
 	}
 
 	public void setPosition(Point2D position) {
 		hitbox.setRect(position.getX(), position.getY(), hitbox.getWidth(), hitbox.getHeight());
+	}
+
+	public void translatePosition(Vector v) {
+		hitbox.setRect(hitbox.getX() + v.getX(), hitbox.getY() + v.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
 
 	protected void setAvatar() {
@@ -259,7 +263,7 @@ public abstract class Entity {
 		speed = speed.add(acceleration.scalarMultiplication(timeSeconds));
 
 		Vector movement = speed.scalarMultiplication(timeSeconds);
-		setPosition(movement.add(getPosition()));
+		translatePosition(movement);
 	}
 
 	private Vector computeArchimedes() {

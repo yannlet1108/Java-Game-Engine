@@ -1,8 +1,12 @@
 package model;
 
+import controller.Controller;
+import view.View;
+
 public class PhysicsTest {
 	public static void main(String[] args) throws InterruptedException {
-		Model model = new Model(null, null);
+		Controller controller = Controller.getInstance();
+		Model model = new Model(controller, new View(controller));
 		Entity playerEntity = new Player(model.getWorldCenter(), Direction.E, model, 100);
 		model.addEntity(playerEntity);
 
