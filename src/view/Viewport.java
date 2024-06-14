@@ -49,16 +49,32 @@ public class Viewport {
 	}
 
 	/**
-	 * Appellé a chaque fois que le viewport achange de taille
+	 * Appellé a chaque fois que le viewport à change de taille
 	 * 
-	 * @param center : nouveau centre du viewport
-	 * @param scale  : nouveau scaling du viewport
+	 * @param playersPos : positions des joueurs
 	 */
-	void updateViewport(Iterator<Point2D> playersPos, float scale) {
-		this.scale = scale;
-		Point2D center = playersPos.next();
-		viewbox.x = (int) (center.getX() - (viewbox.width / 2) * reverseScale());
-		viewbox.y = (int) (center.getY() - (viewbox.height / 2) * reverseScale());
+	void updateViewport(Iterator<Point2D> playersPos) {
+		// this.scale = scale;
+		Point2D center = getTheoricalCenter(playersPos);
+		double x_theorical = center.getX() - (viewbox.width / 2) * reverseScale();
+		double y_theorical = center.getY() - (viewbox.height / 2) * reverseScale();
+		double length_x = viewbox.x - x_theorical;
+		double length_y = viewbox.y - y_theorical;
+		viewbox.x = (int) (viewbox.x - length_x * ViewCst.MOVE_FACTOR);
+		viewbox.y = (int) (viewbox.y - length_y * ViewCst.MOVE_FACTOR);
+	}
+
+	/**
+	 * Calcule le point central auquel le viewport doit se rendre
+	 * 
+	 * @param playersPos : positions des joueurs
+	 * @return point destination du viewport
+	 */
+	private Point2D getTheoricalCenter(Iterator<Point2D> playersPos) {
+		Point2D p1 = playersPos.next();
+		// if(playersPos.hasNext())
+		// return null;
+		return p1;
 	}
 
 	/**

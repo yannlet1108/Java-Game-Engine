@@ -6,6 +6,9 @@ import java.awt.Color;
  * Classe listant les variables global de la view
  */
 public class ViewCst {
+	
+	/* Lissage des déplacement */
+	public static final float MOVE_FACTOR = 0.06f;
 
 	/* Couleurs par defaut */
 	public static final Color BACKGROUND_DEFAULT = Color.GRAY;
