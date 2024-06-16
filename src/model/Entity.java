@@ -38,7 +38,7 @@ public abstract class Entity {
 		force = new Vector();
 		speed = new Vector();
 		this.team = 0;
-		this.meleeRange = 20; // a definir
+		this.meleeRange = 7; // a definir
 		this.attackDamage = 20; // a definir
 	}
 
@@ -122,7 +122,7 @@ public abstract class Entity {
 	public boolean cell(Direction direction, Category category, int rayon) {
 		Entity entity;
 
-		Point2D currentPos = getPosition();
+		Point2D currentPos = getCenter();
 		double x = currentPos.getX();
 		double y = currentPos.getY();
 		Iterator<Entity> entityIter = this.model.entitiesIterator();
@@ -342,7 +342,7 @@ public abstract class Entity {
 		while (it.hasNext()) {
 			Entity e = it.next();
 			if (e.getTeam() != this.getTeam()) {
-				if (e.hitbox.intersects(hitRange)) {
+				if (e.getHitbox().intersects(hitRange)) {
 					e.getHit(this.attackDamage);
 				}
 			}
@@ -361,15 +361,19 @@ public abstract class Entity {
 		case N:
 			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
 					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
+			break;
 		case E:
 			hitRange = new Rectangle2D.Double(this.hitbox.getX() + this.hitbox.getWidth(),
 					this.hitbox.getY() - meleeRange, meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+			break;
 		case S:
 			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() + meleeRange,
 					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
+			break;
 		case W:
 			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
 					meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+			break;
 		default:
 			hitRange = null;
 		}
@@ -378,7 +382,7 @@ public abstract class Entity {
 		while (it.hasNext()) {
 			Entity e = it.next();
 			if (e.getTeam() != this.getTeam()) {
-				if (e.hitbox.intersects(hitRange)) {
+				if (e.getHitbox().intersects(hitRange)) {
 					e.getHit(this.attackDamage);
 				}
 			}

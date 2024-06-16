@@ -37,7 +37,8 @@ public class Player extends Entity {
 
 	@Override
 	public Rectangle2D getHitbox() {
-		throw new RuntimeException("Not Yet Implemented");
-
+		Rectangle2D hitbox = new Rectangle2D.Double(this.getX(), this.getY(), PlayerConstants.PLAYER_WIDTH,
+				PlayerConstants.PLAYER_HEIGHT);
+		return hitbox;
 	}
 }
