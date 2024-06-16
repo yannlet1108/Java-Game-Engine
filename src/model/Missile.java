@@ -7,6 +7,10 @@ public class Missile extends Entity {
 
 	public Missile(Point2D position, Direction direction, Model model, int healthPoint) {
 		super(position, direction, model, healthPoint);
+		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), 10, 2); //Constante de taille a redefinir
+		this.team = 3;
+		this.attackDamage = 30;
+		this.meleeRange = 2;
 		// TODO Auto-generated constructor stub
 	}
 

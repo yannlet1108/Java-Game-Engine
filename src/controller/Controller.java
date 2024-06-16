@@ -156,4 +156,8 @@ public class Controller implements GameCanvasListener {
 	public void expired() {
 	}
 
+	public Model getM_model() {
+		return m_model;
+	}
+
 }

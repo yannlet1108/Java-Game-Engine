@@ -12,7 +12,7 @@ public class TestsModel {
 
 	public static void TestHP() {
 		Controller controller = Controller.getInstance();
-		Model model = new Model(controller, new View(controller));
+		Model model = controller.getM_model();
 		Entity p1 = new Player(model.getWorldCenter(), Direction.N, model, 100);
 		Point2D pos = model.getWorldCenter();
 		pos.setLocation(pos.getX(), pos.getY() + 10);
@@ -28,6 +28,5 @@ public class TestsModel {
 		p1.hit(Direction.N);
 		System.out.printf("Hp P1 apres 2eme coup: %d \n", p1.getHealthPoint());
 		System.out.printf("Hp P2 apres 2eme coup: %d \n", p2.getHealthPoint());
-
 	}
 }

@@ -7,7 +7,7 @@ import java.util.Iterator;
 import view.PlayerAvatar;
 
 public abstract class Entity {
-	private Rectangle2D hitbox;
+	protected Rectangle2D hitbox;
 	private Direction direction;
 	protected Category category;
 	private Model model;
@@ -29,17 +29,12 @@ public abstract class Entity {
 	 * @param model
 	 */
 	public Entity(Point2D position, Direction direction, Model model, int healthPoint) {
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
-				PlayerConstants.PLAYER_HEIGHT);
 		this.direction = direction;
 		this.model = model;
 		this.model.addEntity(this);
 		this.healthPoint = healthPoint;
 		force = new Vector();
 		speed = new Vector();
-		this.team = 0;
-		this.meleeRange = 7; // a definir
-		this.attackDamage = 20; // a definir
 	}
 
 	/**
