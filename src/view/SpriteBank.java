@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -137,8 +136,8 @@ public class SpriteBank {
 	 */
 	void debugCollisions(Graphics g, Color c, Rectangle2D collisionBox) {
 		g.setColor(c);
-		Point origin = m_view.getViewport().toViewport(new Point2D.Double(collisionBox.getX(), collisionBox.getY()));
-		if(origin == null)
+		Point origin = m_view.getViewport().toViewport(collisionBox);
+		if (origin == null)
 			return;
 		g.drawRect(origin.x, origin.y, (int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
 				(int) (collisionBox.getHeight() * m_view.getViewport().getScale()));

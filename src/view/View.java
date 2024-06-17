@@ -141,7 +141,7 @@ public class View {
 	 */
 	public void paint(Graphics g) {
 		if (m_model != null)
-			viewport.updateViewport(m_model.getPlayersPos(), 1);
+			viewport.updateViewport(m_model.getPlayersPos());
 		viewport.resize();
 		fillBackground(g);
 		Iterator<Avatar> avatarIterator = getAvatarIterator();
@@ -160,7 +160,7 @@ public class View {
 			g.setColor(ViewCst.BACKGROUND_DEFAULT);
 			g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
 		}
-		//TODO implementer une version fonctionnelle avec une image
+		//TODO implementer une version fonctionnelle avec une image scalée
 		else {
 			//BufferedImage backimg = bank.getBackground().getSubimage(viewport.getX(), viewport.getY(), viewport.getWidth(), viewport.getHeight());
 			
