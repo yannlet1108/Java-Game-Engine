@@ -2,16 +2,20 @@ package model;
 
 import java.awt.geom.Point2D;
 
+import controller.Controller;
+import view.View;
+
 public class CellTest {
 	public static void main(String args[]) {
-		View v = new View();
-		Model mod = new Model(v);
+		Controller cntrl = Controller.getInstance();
+		View v = new View(cntrl);
+		Model mod = new Model(cntrl, v);
 		int rayon = 8;
 		Point2D P = new Point2D.Double(28 , 74);
 		Point2D P2 = new Point2D.Double(34 , 70);
 		Category categ = Category.PLAYER;
-		Player seeker = new Player(P, Direction.N, mod, 100);
-		Player hider = new Player(P2, Direction.N, mod, 100);
+		Player seeker = new Player(P, Direction.N, mod);
+		Player hider = new Player(P2, Direction.N, mod);
 		hider.category = Category.PLAYER;
 		if(seeker.cell(Direction.N, categ, rayon))
 			System.out.println("a Player found a " +categ+ " in the direction " + Direction.N);

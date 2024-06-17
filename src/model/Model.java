@@ -104,7 +104,7 @@ public class Model {
 
 	/**
 	 * 
-	 * @return la collection des players
+	 * @return un iterateur sur la collection des players
 	 */
 	public Iterator<Point2D> getPlayersPos() {
 		LinkedList<Point2D> thePoints = new LinkedList<Point2D>();
@@ -122,16 +122,16 @@ public class Model {
 	 * 
 	 * @param Player P
 	 */
-	public void addPlayers(Player P) {
+	public void addPlayer(Player P) {
 		players.add(P);
 	}
-
+	
 	/**
 	 * Enleve un player de la collection des players
 	 * 
 	 * @param Player P
 	 */
-	public void removePlayers(Player P) {
+	public void removePlayer(Player P) {
 		players.remove(P);
 	}
 
@@ -161,7 +161,7 @@ public class Model {
 			Entity e = iter.next();
 			this.removeEntity(e);
 			if (e instanceof Player) {
-				this.removePlayers((Player) e);
+				this.removePlayer((Player) e);
 			}
 		}
 		toRemove.clear();

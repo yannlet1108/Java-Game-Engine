@@ -15,7 +15,7 @@ public class Player extends Entity {
 		density = PlayerConstants.PLAYER_DENSITY;
 		this.team = 1;
 		model.m_view.store(new PlayerAvatar(model.m_view, this));
-		this.model.addPlayers(this);
+		this.model.addPlayer(this);
 		this.meleeRange = 10; // a definir
 		this.attackDamage = 20; // a definir
 	}
@@ -41,5 +41,10 @@ public class Player extends Entity {
 		Rectangle2D hitbox = new Rectangle2D.Double(this.getX(), this.getY(), PlayerConstants.PLAYER_WIDTH,
 				PlayerConstants.PLAYER_HEIGHT);
 		return hitbox;
+	}
+	
+	public void explode() {
+		this.getModel().removeEntity(this);
+		this.getModel().removePlayer(this);
 	}
 }
