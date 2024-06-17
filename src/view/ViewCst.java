@@ -14,8 +14,9 @@ public class ViewCst {
 	public static final float MIN_SCALING = 0.1f;
 	public static final int MARGIN = 20;
 
-	/* Lissage des déplacement */
+	/* Lissage des déplacements */
 	public static final float MOVE_FACTOR = 0.06f;
+	public static final float SCALE_FACTOR = 0.06f;
 
 	/* Couleurs par defaut */
 	public static final Color BACKGROUND_DEFAULT = Color.GRAY;

@@ -86,7 +86,7 @@ public class Viewport {
 				th_scaling = ViewCst.MIN_SCALING;
 		} else
 			th_scaling = ViewCst.MAX_SCALING;
-		this.scale = (float) th_scaling;
+		this.scale = (float) (this.scale - (this.scale - th_scaling) * ViewCst.SCALE_FACTOR);
 
 		Point2D center = new Point2D.Double(xMin + (xMax - xMin) / 2, yMin + (yMax - yMin) / 2);
 		double x_theorical = center.getX() - (viewbox.getWidth() / 2) * reverseScale();
