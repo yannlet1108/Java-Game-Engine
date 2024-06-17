@@ -1,3 +1,39 @@
+### Vendredi 14 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Matthieu | Fin des fonctions hit et test | En cours |
+| Yann | Implémentation du visiteur | En cours |
+| Gwendal | Moteur physique (collisions) | En cours |
+| Yohan | Implémentation des avatars | En cours |
+| Moataz | Test de la méthode cell | Done |
+| Axel | Vue qui suit le joueur et qui s'adapte a la taille | En cours |
+
+#### Taches programmés  
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Continuer d'implémenter le visiteur | Moyen | Yann |
+| Continuer les collisions | Moyen | Gwendal |
+| Continuer les sprites | Moyen | Yohan |
+| Finir les tests de hit | Moyen | Matthieu |
+| Continuer la vue dynamique | Moyen | Axel |
+
+### Jeudi 13 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Matthieu | Fonction hit | Done |
+| Axel | Vue qui suit le joueur et qui s'adapte a la taille | En cours |
+| Yohan | Début des sprites | En cours |
+| Moataz | Optimisation de la methode cell | Done |
+| Yann | Implémentation du code du parser dans le code | Done |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Continuer les automates et le parser| Moyen | Yann |
+| Continuer la vue dynamique | Moyen | Axel, Yohan |
+| Moteur physique (collisions) | Moyen | Gwendal |
+| Ajouter des fonctionnalités au model | Moyen | Moataz |
+
 ### Mercredi 12 juin
 | Nom | Tache | Etat |
 |:-:|---|:-:|
