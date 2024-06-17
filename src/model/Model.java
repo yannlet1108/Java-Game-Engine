@@ -36,7 +36,7 @@ public class Model {
 		viscosity = ModelConstants.WORLD_VISCOSITY;
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
-		Player P = new Player(getWorldCenter(), Direction.E, this, 100);
+		Player P = new Player(getWorldCenter(), Direction.E, this, PlayerConstants.PLAYER_HEALTH);
 		entities.add(P);
 		players.add(P);
 		m_view.setModel(this);
@@ -94,10 +94,14 @@ public class Model {
 	void addEntity(Entity e) {
 		entities.add(e);
 	}
+	
+	void removeEntity(Entity e) {
+		entities.remove(e);
+	}
 
 	/**
 	 * 
-	 * @return la collection des players
+	 * @return un iterateur sur la collection des players
 	 */
 	public Iterator<Point2D> getPlayersPos() {
 		LinkedList<Point2D> thePoints = new LinkedList<Point2D>();
@@ -115,8 +119,12 @@ public class Model {
 	 * 
 	 * @param Player P
 	 */
-	public void addPlayers(Player P) {
+	public void addPlayer(Player P) {
 		players.add(P);
+	}
+	
+	public void removePlayer(Player P) {
+		players.remove(P);
 	}
 
 	/**

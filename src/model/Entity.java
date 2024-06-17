@@ -66,6 +66,10 @@ public abstract class Entity {
 	public void translatePosition(Vector v) {
 		hitbox.setRect(hitbox.getX() + v.getX(), hitbox.getY() + v.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
+	
+	public Model getModel() {
+		return this.model;
+	}
 
 	protected void setAvatar() {
 		throw new RuntimeException("Not Yet Implemented");
@@ -114,7 +118,7 @@ public abstract class Entity {
 	public boolean cell(Direction direction, Category category, int rayon) {
 		Entity entity;
 
-		Point2D currentPos = getPosition();
+		Point2D currentPos = getCenter();
 		double x = currentPos.getX();
 		double y = currentPos.getY();
 		Iterator<Entity> entityIter = this.model.entitiesIterator();

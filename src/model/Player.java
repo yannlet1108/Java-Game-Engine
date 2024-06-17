@@ -10,7 +10,7 @@ public class Player extends Entity {
 		super(position, direction, model, healthPoint);
 		category = Category.PLAYER;
 		density = PlayerConstants.PLAYER_DENSITY;
-		model.addPlayers(this);
+		model.addPlayer(this);
 		model.m_view.store(new PlayerAvatar(model.m_view, this));
 	}
 
@@ -26,6 +26,7 @@ public class Player extends Entity {
 
 	@Override
 	public void explode() {
-		throw new RuntimeException("Not Yet Implemented");
+		this.getModel().removeEntity(this);
+		this.getModel().removePlayer(this);
 	}
 }
