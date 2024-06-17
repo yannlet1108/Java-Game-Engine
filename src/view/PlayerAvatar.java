@@ -22,7 +22,9 @@ public class PlayerAvatar extends Avatar {
 
 	@Override
 	void paint(Graphics g) {
-		m_view.getBank().debugCollisions(g, ViewCst.DEBUG_PLAYER, instanceEntity.getHitbox());
+		if (ViewCst.DEBUG) {
+			m_view.getBank().debugCollisions(g, ViewCst.DEBUG_PLAYER, instanceEntity.getHitbox());
+		}
 	}
 
 }
