@@ -6,7 +6,7 @@ import java.awt.Color;
  * Classe listant les variables global de la view
  */
 public class ViewCst {
-	
+
 	public static final boolean DEBUG = true;
 
 	/* Couleurs par defaut */
@@ -18,10 +18,10 @@ public class ViewCst {
 	public static final Color DEBUG_GOLDFISH = Color.ORANGE;
 	public static final Color DEBUG_SHARK = Color.CYAN;
 	public static final Color DEBUG_BULLET = Color.DARK_GRAY;
-	
-	public static final String[] SPRITES_FILES = {"sprites/playersprites.png"," "};
-	public static final int[] SPRITES_NROWS = {4,2};
-	public static final int[] SPRITES_NCOLS = {6, 2};
-	
-	
+
+	public static final String[] SPRITES_FILES = { "sprites/backgroundsprites", "sprites/playersprites.png",
+			"sprites/obstaclesprites", "sprites/bulletsprites", "sprites/goldfishsprites", "sprites/sharksprites" };
+	public static final int[] SPRITES_NROWS = { 2, 6, 2 };
+	public static final int[] SPRITES_NCOLS = { 2, 6, 2 };
+
 }

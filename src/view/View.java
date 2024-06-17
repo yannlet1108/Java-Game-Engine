@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -155,8 +156,15 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	private void fillBackground(Graphics g) {
-		g.setColor(ViewCst.BACKGROUND_DEFAULT);
-		g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
+		if (ViewCst.DEBUG) {
+			g.setColor(ViewCst.BACKGROUND_DEFAULT);
+			g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
+		}
+		//TODO implementer une version fonctionnelle avec une image
+		else {
+			//BufferedImage backimg = bank.getBackground().getSubimage(viewport.getX(), viewport.getY(), viewport.getWidth(), viewport.getHeight());
+			
+		}
 	}
 
 	/**

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.management.InstanceAlreadyExistsException;
 
 /**
  * Classe utilisé comme banque de sprite pour les avatars
@@ -37,12 +38,25 @@ public class SpriteBank {
 		}
 	}
 	
+	/**
+	 * Charge tous les sprites de la liste depuis les fichiers
+	 * @throws IOException
+	 */
+	
 	void loadsprites() throws IOException {
 		for(int i = 0; i<ViewCst.SPRITES_FILES.length; i++) {
 			spritebank[i]= loadSprite(ViewCst.SPRITES_FILES[i],ViewCst.SPRITES_NROWS[i],ViewCst.SPRITES_NCOLS[i]);
 		}
 	}
 	
+	/**
+	 * Charge les sprites d'un fichier sous forme d'un tableau de sprites
+	 * @param filename : nom du fichier contenant les sprites
+	 * @param nrows	: nombre de lignes de sprites dans le fichier
+	 * @param ncols : nombre de colonnes de sprites dans le fichier
+	 * @return : le tableau des sprites du fichier
+	 * @throws IOException
+	 */
 	public static BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {
 	    File imageFile = new File(filename);
 	    if (imageFile.exists()) {
@@ -63,6 +77,55 @@ public class SpriteBank {
 	    return null;
 	  }
 	
+	/**
+	 * Cherche le sprite d'un avatar dans la banque de sprite
+	 * @param avatar : avatar dont on veut le sprite
+	 * @param numSprite : numéro du sprite souhaité parmi les sprites de l'avatar
+	 * @return	: le sprite de l'avatar
+	 */
+	BufferedImage getSprite(Avatar avatar, int numSprite) {
+			return spritebank[findAvatarType(avatar)][numSprite];
+			
+	}
+	
+	/**
+	 * Retourne le sprite de l'arrière plan
+	 */
+	BufferedImage getBackground() {
+		return spritebank[0][0];
+	}
+	
+	
+	/**
+	 * Fait correspondre un avatar à son numéro de sprites dans la banque de sprites
+	 * 0 : avatar inconnu (renvoie le numéro de l'arrirère plan)
+	 * 1 : avatar joueur
+	 * 2 : avatar obstacle
+	 * 3 : avatar bullet
+	 * 4 : avatar goldfish
+	 * 5 : avatar shark
+	 * 
+	 * @param a : avatar dont on veut le numéro de sprites
+	 * @return
+	 */
+	int findAvatarType(Avatar a) {
+		if(a instanceof PlayerAvatar) {
+			return 1;
+		}
+		if (a instanceof ObstacleAvatar) {
+			return 2;
+		}
+		if (a instanceof BulletAvatar) {
+			return 3;
+		}
+		if ( a instanceof GoldfishAvatar) {
+			return 4;
+		}
+		if( a instanceof SharkAvatar) {
+			return 5;
+		}
+		return 0;
+	}
 	
 
 	/**
@@ -81,7 +144,4 @@ public class SpriteBank {
 				(int) (collisionBox.getHeight() * m_view.getViewport().getScale()));
 	}
 	
-	BufferedImage getSprite (int avatarType, int nsprite ) {
-		return spritebank[avatarType][nsprite];
-	}
 }

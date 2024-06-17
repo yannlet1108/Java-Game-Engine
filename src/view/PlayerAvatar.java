@@ -1,6 +1,9 @@
 package view;
 
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 import model.Entity;
 
@@ -24,6 +27,16 @@ public class PlayerAvatar extends Avatar {
 	void paint(Graphics g) {
 		if (ViewCst.DEBUG) {
 			m_view.getBank().debugCollisions(g, ViewCst.DEBUG_PLAYER, instanceEntity.getHitbox());
+		} else {
+			Rectangle2D collisionBox = instanceEntity.getHitbox();
+			Point origin = m_view.getViewport()
+					.toViewport(new Point2D.Double(collisionBox.getX(), collisionBox.getY()));
+			if (origin == null) {
+				return;
+			}
+			g.drawImage(m_view.getBank().getSprite(this, 0), origin.x, origin.y,
+					(int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
+					(int) (collisionBox.getHeight() * m_view.getViewport().getScale()), null);
 		}
 	}
 
