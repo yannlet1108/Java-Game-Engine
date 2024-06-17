@@ -394,8 +394,4 @@ public abstract class Entity {
 	public int getTeam() {
 		return team;
 	}
-
-	public Model getModel() {
-		return model;
-	}
 }
