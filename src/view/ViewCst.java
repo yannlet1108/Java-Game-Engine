@@ -18,4 +18,9 @@ public class ViewCst {
 	public static final Color DEBUG_GOLDFISH = Color.ORANGE;
 	public static final Color DEBUG_SHARK = Color.CYAN;
 	
+	public static final String[] SPRITES_FILES = {"sprites/playersprites.png"," "};
+	public static final int[] SPRITES_NROWS = {4,2};
+	public static final int[] SPRITES_NCOLS = {6, 2};
+	
+	
 }
