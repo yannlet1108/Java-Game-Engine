@@ -9,7 +9,7 @@ public class Shark extends Fish {
 		super(position, direction, model, healthPoint);
 		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), 20, 8); //Constante de taille a redefinir
 		this.attackDamage = 50;
-		this.meleeRange = 5;
+		this.meleeRange = 10;
 		// TODO Auto-generated constructor stub
 	}
 

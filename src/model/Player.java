@@ -15,10 +15,14 @@ public class Player extends Entity {
 		density = PlayerConstants.PLAYER_DENSITY;
 		this.team = 1;
 		model.m_view.store(new PlayerAvatar(model.m_view, this));
-		this.meleeRange = 7; // a definir
+		this.model.addPlayers(this);
+		this.meleeRange = 10; // a definir
 		this.attackDamage = 20; // a definir
 	}
 
+	/**
+	 * Methode qui créé un missile devant le joueur
+	 */
 	@Override
 	public void egg() {
 		Direction d = this.getDirection();
@@ -29,11 +33,6 @@ public class Player extends Entity {
 
 	@Override
 	public void pick() {
-		throw new RuntimeException("Not Yet Implemented");
-	}
-
-	@Override
-	public void explode() {
 		throw new RuntimeException("Not Yet Implemented");
 	}
 

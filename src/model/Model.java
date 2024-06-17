@@ -19,6 +19,7 @@ public class Model {
 
 	private Collection<Entity> entities;
 	private Collection<Player> players;
+	Collection<Entity> toRemove;
 
 	/**
 	 * Initialise la simulation en creant les entites d'origine et en definisant
@@ -36,9 +37,7 @@ public class Model {
 		viscosity = ModelConstants.WORLD_VISCOSITY;
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
-		Player P = new Player(getWorldCenter(), Direction.E, this, 100);
-		entities.add(P);
-		players.add(P);
+		toRemove = new LinkedList<Entity>();
 		m_view.setModel(this);
 	}
 
@@ -94,7 +93,11 @@ public class Model {
 	void addEntity(Entity e) {
 		entities.add(e);
 	}
-	
+
+	/**
+	 * Supprime une entitée de la collection des entitées
+	 * @param e
+	 */
 	void removeEntity(Entity e) {
 		entities.remove(e);
 	}
@@ -124,11 +127,47 @@ public class Model {
 	}
 
 	/**
+	 * Enleve un player de la collection des players
+	 * 
+	 * @param Player P
+	 */
+	public void removePlayers(Player P) {
+		players.remove(P);
+	}
+
+	/**
 	 * 
 	 * @return Iterateur sur les entitées de model.
 	 */
 	public Iterator<Entity> entitiesIterator() {
 		Iterator<Entity> iter = this.entities.iterator();
 		return iter;
+	}
+
+	/**
+	 * Ajoute une entité dans un tableau d'entité a supprimer
+	 * @param e
+	 */
+	void addEntityToRemove(Entity e) {
+		toRemove.add(e);
+	}
+
+	/**
+	 * Supprime une entité des tableaux entities et players
+	 */
+	void removeEntityToRemove() {
+		Iterator<Entity> iter = this.toRemove.iterator();
+		while (iter.hasNext()) {
+			Entity e = iter.next();
+			this.removeEntity(e);
+			if (e instanceof Player) {
+				this.removePlayers((Player) e);
+			}
+		}
+		toRemove.clear();
+	}
+
+	public Collection<Player> getPlayers() {
+		return players;
 	}
 }

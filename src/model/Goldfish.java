@@ -14,14 +14,6 @@ public class Goldfish extends Fish {
 	}
 
 	@Override
-	public void egg() {
-		// TODO Auto-generated method stub
-		Point2D pos = this.getCenter();
-		pos.setLocation(this.getX() + getRandomNumber(10, 10), this.getY() + getRandomNumber(10, 10));
-		Goldfish g = new Goldfish(pos, this.getDirection(), this.getModel(), this.attackDamage);		
-	}
-
-	@Override
 	public void pick() {
 		// TODO Auto-generated method stub
 		
@@ -31,4 +23,9 @@ public class Goldfish extends Fish {
 	    return (Math.random() * (max - min)) + min;
 	}
 
+	@Override
+	public void egg() {
+		// TODO Auto-generated method stub
+		
+	}
 }

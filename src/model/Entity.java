@@ -10,7 +10,7 @@ public abstract class Entity {
 	protected Rectangle2D hitbox;
 	private Direction direction;
 	protected Category category;
-	private Model model;
+	protected Model model;
 
 	protected double density;
 	private Vector speed;
@@ -22,6 +22,7 @@ public abstract class Entity {
 	protected int team;
 	protected int meleeRange; // a definir
 	protected int attackDamage; // a definir
+	
 
 	/**
 	 * @param position
@@ -307,14 +308,14 @@ public abstract class Entity {
 
 	/**
 	 * Modifie la valeur des points de vie de l'entite Si le nombre de point de vie
-	 * descend en dessous de 0, l'entite est detruite
+	 * descend en dessous de 0, l'entite est placée dans un tableau pour etre supprimé
 	 * 
 	 * @param val
 	 */
 	public void modifyHealthPoint(int val) {
 		this.healthPoint += val;
 		if (this.healthPoint <= 0) {
-			this.explode();
+			this.model.addEntityToRemove(this);
 		}
 	}
 
@@ -342,6 +343,7 @@ public abstract class Entity {
 				}
 			}
 		}
+		this.model.removeEntityToRemove();
 	}
 
 	/**
@@ -382,6 +384,7 @@ public abstract class Entity {
 				}
 			}
 		}
+		this.model.removeEntityToRemove();
 	}
 
 	public int getTeam() {
