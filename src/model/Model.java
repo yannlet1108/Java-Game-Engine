@@ -103,9 +103,9 @@ public class Model {
 		LinkedList<Point2D> thePoints = new LinkedList<Point2D>();
 		Iterator<Player> iterPlayer = players.iterator();
 		Player play;
-		while(iterPlayer.hasNext()) {
+		while (iterPlayer.hasNext()) {
 			play = iterPlayer.next();
-			thePoints.add(play.getPosition()); 
+			thePoints.add(play.getCenter());
 		}
 		return thePoints.iterator();
 	}
