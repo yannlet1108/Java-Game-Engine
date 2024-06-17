@@ -9,6 +9,11 @@ public class ViewCst {
 
 	public static final boolean DEBUG = true;
 
+	/* Calcul du scaling */
+	public static final float MAX_SCALING = 16f;
+	public static final float MIN_SCALING = 0.1f;
+	public static final int MARGIN = 20;
+
 	/* Lissage des déplacement */
 	public static final float MOVE_FACTOR = 0.06f;
 
