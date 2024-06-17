@@ -6,8 +6,8 @@ import view.PlayerAvatar;
 
 public class Player extends Entity {
 
-	public Player(Point2D position, Direction direction, Model model, int healthPoint) {
-		super(position, direction, model, healthPoint);
+	public Player(Point2D position, Direction direction, Model model) {
+		super(position, direction, model, PlayerConstants.PLAYER_HEALTH);
 		category = Category.PLAYER;
 		density = PlayerConstants.PLAYER_DENSITY;
 		model.addPlayer(this);

@@ -14,8 +14,8 @@ public class CellTest {
 		Point2D P = new Point2D.Double(28 , 74);
 		Point2D P2 = new Point2D.Double(34 , 70);
 		Category categ = Category.PLAYER;
-		Player seeker = new Player(P, Direction.N, mod, 100);
-		Player hider = new Player(P2, Direction.N, mod, 100);
+		Player seeker = new Player(P, Direction.N, mod);
+		Player hider = new Player(P2, Direction.N, mod);
 		hider.category = Category.PLAYER;
 		if(seeker.cell(Direction.N, categ, rayon))
 			System.out.println("a Player found a " +categ+ " in the direction " + Direction.N);

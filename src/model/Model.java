@@ -36,7 +36,7 @@ public class Model {
 		viscosity = ModelConstants.WORLD_VISCOSITY;
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
-		Player P = new Player(getWorldCenter(), Direction.E, this, PlayerConstants.PLAYER_HEALTH);
+		Player P = new Player(getWorldCenter(), Direction.E, this);
 		entities.add(P);
 		players.add(P);
 		m_view.setModel(this);
