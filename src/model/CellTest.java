@@ -2,6 +2,8 @@ package model;
 
 import java.awt.geom.Point2D;
 
+import view.View;
+
 public class CellTest {
 	public static void main(String args[]) {
 		View v = new View();

@@ -29,8 +29,7 @@ public class PlayerAvatar extends Avatar {
 			m_view.getBank().debugCollisions(g, ViewCst.DEBUG_PLAYER, instanceEntity.getHitbox());
 		} else {
 			Rectangle2D collisionBox = instanceEntity.getHitbox();
-			Point origin = m_view.getViewport()
-					.toViewport(new Point2D.Double(collisionBox.getX(), collisionBox.getY()));
+			Point origin = m_view.getViewport().toViewport(collisionBox);
 			if (origin == null) {
 				return;
 			}
