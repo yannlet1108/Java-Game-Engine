@@ -1,18 +1,21 @@
 package model;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import java.util.Timer;
+import java.util.LinkedList;
+import java.util.List;
 
 import automaton.Automaton;
 import view.PlayerAvatar;
 
 public abstract class Entity {
-	private Rectangle2D hitbox;
+	protected Rectangle2D hitbox;
 	private Direction direction;
 	protected Category category;
-	private Model model;
+	protected Model model;
 
 	protected double density;
 	private Vector speed;
@@ -21,6 +24,9 @@ public abstract class Entity {
 	private double volume;
 
 	private int healthPoint;
+	protected int team;
+	protected int meleeRange; // a definir
+	protected int attackDamage; // a definir
 	private boolean automatonAvailable = true;
 	private Automaton automaton;
 	private int range = 10;
@@ -30,16 +36,14 @@ public abstract class Entity {
 	 * @param direction
 	 * @param model
 	 */
-	public Entity(Point2D position, Direction direction, Model model, int healthPoint) {
+	public Entity(Point2D position, Direction direction, Model model) {
 		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
 				PlayerConstants.PLAYER_HEIGHT);
 		this.direction = direction;
 		this.model = model;
 		this.model.addEntity(this);
-		this.healthPoint = healthPoint;
 		force = new Vector();
 		speed = new Vector();
-		model.m_view.store(new PlayerAvatar(model.m_view, this));
 	}
 
 	/**
@@ -61,12 +65,20 @@ public abstract class Entity {
 
 	}
 
-	public Point2D getPosition() {
+	public Point2D getCenter() {
 		return new Point2D.Double(hitbox.getCenterX(), hitbox.getCenterY());
 	}
 
 	public void setPosition(Point2D position) {
 		hitbox.setRect(position.getX(), position.getY(), hitbox.getWidth(), hitbox.getHeight());
+	}
+
+	public void translatePosition(Vector v) {
+		hitbox.setRect(hitbox.getX() + v.getX(), hitbox.getY() + v.getY(), hitbox.getWidth(), hitbox.getHeight());
+	}
+
+	public Model getModel() {
+		return this.model;
 	}
 
 	protected void setAvatar() {
@@ -110,7 +122,7 @@ public abstract class Entity {
 	 * Execute l'action Pick comme definit par l'entite
 	 */
 	public abstract void pick();
-	
+
 	void doExplode(Direction direction) {
 		blockAutomaton();
 		if (direction == null) {
@@ -124,15 +136,15 @@ public abstract class Entity {
 	}
 
 	/**
-	 * Execute l'action Explode comme definit par l'entite
+	 * Supprime l'entite
 	 */
 	public abstract void explode();
-	
+
 	public boolean doCell(Direction direction, Category category) {
-		if(direction == null) {
+		if (direction == null) {
 			direction = Direction.FORWARD;
 		}
-		if(category == null) {
+		if (category == null) {
 			category = Category.VOID;
 		}
 		return cell(direction, category, range);
@@ -150,48 +162,122 @@ public abstract class Entity {
 	public boolean cell(Direction direction, Category category, int rayon) {
 		Entity entity;
 
-		Point2D currentPos = getPosition();
+		Point2D currentPos = getCenter();
 		double x = currentPos.getX();
 		double y = currentPos.getY();
 		Iterator<Entity> entityIter = this.model.entitiesIterator();
-		
+
 		Direction absoluteDirection = Direction.relativeToAbsolute(getDirection(), direction);
 
 		while (entityIter.hasNext()) {
 			entity = entityIter.next();
-			if (entity.category == category) {
-				if (absoluteDirection == Direction.NE && entity.getX() > x && entity.getX() <= x + rayon && entity.getY() < y
-						&& entity.getY() >= y - rayon)
-					return true;
-				if (absoluteDirection == Direction.NW && entity.getX() < x && entity.getX() >= x - rayon && entity.getY() < y
-						&& entity.getY() >= y - rayon)
-					return true;
-				if (absoluteDirection == Direction.SW && entity.getX() < x && entity.getX() >= x - rayon && entity.getY() > y
-						&& entity.getY() <= y + rayon)
-					return true;
-				if (absoluteDirection == Direction.SE && entity.getX() > x && entity.getX() <= x + rayon && entity.getY() > y
-						&& entity.getY() <= y + rayon)
-					return true;
-				if (absoluteDirection == Direction.E && ((entity.getX() > x && entity.getX() <= x + rayon / 2
-						&& absolute(entity.getY() - y) < entity.getX() - x)
-						|| (entity.getX() <= x + rayon && entity.getX() >= x + rayon / 2
-								&& absolute(entity.getY() - y) < x + rayon - entity.getX())))
-					return true;
-				if (absoluteDirection == Direction.W && ((entity.getX() < x && entity.getX() >= x - rayon / 2
-						&& absolute(entity.getY() - y) < x - entity.getX())
-						|| (entity.getX() >= x - rayon && entity.getX() <= x - rayon / 2
-								&& absolute(entity.getY() - y) < entity.getX() - (x - rayon))))
-					return true;
-				if (absoluteDirection == Direction.N && ((entity.getY() < y && entity.getY() >= y - rayon / 2
-						&& absolute(entity.getX() - x) < y - entity.getY())
-						|| (entity.getY() >= y - rayon && entity.getY() <= y - rayon / 2
-								&& absolute(entity.getX() - x) < entity.getY() - (y - rayon))))
-					return true;
-				if (absoluteDirection == Direction.S && ((entity.getY() > y && entity.getY() <= y + rayon / 2
-						&& absolute(entity.getX() - x) < entity.getY() - y)
-						|| (entity.getY() <= y + rayon && entity.getY() >= y + rayon / 2
-								&& absolute(entity.getX() - x) < y + rayon - entity.getY())))
-					return true;
+
+			if (entity.category == category && entity != this) {
+				// Cela test si un des points de rectangle est dans cette direction
+				double GBx, GBy;
+				for (int i = 0; i < 4; i++) {
+					if (i == 0) {
+						// Gauche bas point
+						GBx = entity.getHitbox().getMinX();
+						GBy = entity.getHitbox().getMaxY();
+					} else if (i == 1) {
+						// Gauche Haut point
+						GBx = entity.getHitbox().getMinX();
+						GBy = entity.getHitbox().getMinY();
+					} else if (i == 2) {
+						// Droit Haut point
+						GBx = entity.getHitbox().getMaxX();
+						GBy = entity.getHitbox().getMinY();
+					} else {
+						// Droit bas point
+						GBx = entity.getHitbox().getMaxX();
+						GBy = entity.getHitbox().getMaxY();
+					}
+					if (absoluteDirection == Direction.NE && GBx > x && GBx <= x + rayon && GBy < y && GBy >= y - rayon)
+						return true;
+					if (absoluteDirection == Direction.NW && GBx < x && GBx >= x - rayon && GBy < y && GBy >= y - rayon)
+						return true;
+					if (absoluteDirection == Direction.SW && GBx < x && GBx >= x - rayon && GBy > y && GBy <= y + rayon)
+						return true;
+					if (absoluteDirection == Direction.SE && GBx > x && GBx <= x + rayon && GBy > y && GBy <= y + rayon)
+						return true;
+					if (absoluteDirection == Direction.E
+							&& ((GBx > x && GBx <= x + rayon / 2 && absolute(GBx - y) < GBx - x) || (GBx <= x + rayon
+									&& GBx >= x + rayon / 2 && absolute(GBy - y) < x + rayon - GBx)))
+						return true;
+					if (absoluteDirection == Direction.W
+							&& ((GBx < x && GBx >= x - rayon / 2 && absolute(GBy - y) < x - GBx) || (GBx >= x - rayon
+									&& GBx <= x - rayon / 2 && absolute(GBy - y) < GBx - (x - rayon))))
+						return true;
+					if (absoluteDirection == Direction.N
+							&& ((GBy < y && GBy >= y - rayon / 2 && absolute(GBx - x) < y - GBy) || (GBy >= y - rayon
+									&& GBy <= y - rayon / 2 && absolute(GBx - x) < GBy - (y - rayon))))
+						return true;
+					if (absoluteDirection == Direction.S
+							&& ((GBy > y && GBy <= y + rayon / 2 && absolute(GBx - x) < GBy - y) || (GBy <= y + rayon
+									&& GBy >= y + rayon / 2 && absolute(GBx - x) < y + rayon - GBy)))
+						return true;
+				}
+				// Cela test si le rectangle ou le losange de la direction a un point dans le
+				// hitbox d'entité
+				Rectangle2D hitBox = entity.getHitbox();
+				Point2D point1, point2, point3;
+				if (absoluteDirection == Direction.SE) {
+					point1 = new Point2D.Double(x + rayon, y);
+					point2 = new Point2D.Double(x, y + rayon);
+					point3 = new Point2D.Double(x + rayon, y + rayon);
+					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+						return true;
+				}
+				if (absoluteDirection == Direction.SW) {
+					point1 = new Point2D.Double(x - rayon, y);
+					point2 = new Point2D.Double(x, y + rayon);
+					point3 = new Point2D.Double(x - rayon, y + rayon);
+					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+						return true;
+				}
+				if (absoluteDirection == Direction.NW) {
+					point1 = new Point2D.Double(x - rayon, y);
+					point2 = new Point2D.Double(x, y - rayon);
+					point3 = new Point2D.Double(x - rayon, y - rayon);
+					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+						return true;
+				}
+				if (absoluteDirection == Direction.NE) {
+					point1 = new Point2D.Double(x + rayon, y);
+					point2 = new Point2D.Double(x, y - rayon);
+					point3 = new Point2D.Double(x + rayon, y - rayon);
+					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+						return true;
+				}
+				if (absoluteDirection == Direction.E) {
+					point1 = new Point2D.Double(x + rayon, y);
+					point2 = new Point2D.Double(x + rayon / 2, y + rayon / 2);
+					point3 = new Point2D.Double(x + rayon / 2, y - rayon / 2);
+					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+						return true;
+				}
+				if (absoluteDirection == Direction.W) {
+					point1 = new Point2D.Double(x - rayon, y);
+					point2 = new Point2D.Double(x - rayon / 2, y + rayon / 2);
+					point3 = new Point2D.Double(x - rayon / 2, y - rayon / 2);
+					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+						return true;
+				}
+				if (absoluteDirection == Direction.N) {
+					point1 = new Point2D.Double(x, y - rayon);
+					point2 = new Point2D.Double(x + rayon / 2, y - rayon / 2);
+					point3 = new Point2D.Double(x - rayon / 2, y - rayon / 2);
+					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+						return true;
+				}
+				if (absoluteDirection == Direction.S) {
+					point1 = new Point2D.Double(x, y + rayon);
+					point2 = new Point2D.Double(x + rayon / 2, y + rayon / 2);
+					point3 = new Point2D.Double(x - rayon / 2, y + rayon / 2);
+					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+						return true;
+				}
 			}
 		}
 		return false;
@@ -235,7 +321,8 @@ public abstract class Entity {
 		speed = speed.add(acceleration.scalarMultiplication(timeSeconds));
 
 		Vector movement = speed.scalarMultiplication(timeSeconds);
-		setPosition(movement.add(getPosition()));
+		movement = checkCollisions(movement);
+		translatePosition(movement);
 	}
 
 	private Vector computeArchimedes() {
@@ -253,6 +340,45 @@ public abstract class Entity {
 		double speedNorm = speed.norm();
 		double vs2 = model.getViscosity() * (Math.pow(speedNorm, 2));
 		return unitVector.scalarMultiplication(vs2);
+	}
+
+	Vector checkCollisions(Vector movement) {
+		Rectangle2D movementBox = getHitbox();
+		Rectangle2D newHitbox = new Rectangle2D.Double(hitbox.getX() + movement.getX(), hitbox.getY() + movement.getY(),
+				hitbox.getWidth(), hitbox.getHeight());
+		movementBox.add(newHitbox);
+		List<Entity> closeEntities = getEntitiesInRectangle(movementBox);
+		closeEntities.remove(this);
+		if (closeEntities.isEmpty())
+			return movement;
+		return new Vector(0, 0);
+	}
+
+	List<Entity> getEntitiesInRectangle(Rectangle2D rectangle) {
+		List<Entity> list = new LinkedList<Entity>();
+		for (Iterator<Entity> iterator = model.entitiesIterator(); iterator.hasNext();) {
+			Entity entity = (Entity) iterator.next();
+			if (entity.getHitbox().intersects(rectangle)) {
+				list.add(entity);
+			}
+		}
+		return list;
+	}
+
+	public Point2D.Double getHitboxTopLeft() {
+		return new Point2D.Double(hitbox.getX(), hitbox.getY());
+	}
+
+	public Point2D.Double getHitboxTopRight() {
+		return new Point2D.Double(hitbox.getX() + hitbox.getWidth(), hitbox.getY());
+	}
+
+	public Point2D.Double getHitboxBottomLeft() {
+		return new Point2D.Double(hitbox.getX(), hitbox.getY() + hitbox.getHeight());
+	}
+
+	public Point2D.Double getHitboxBottomRight() {
+		return new Point2D.Double(hitbox.getX() + hitbox.getWidth(), hitbox.getY() + hitbox.getHeight());
 	}
 
 	public Vector getSpeed() {
@@ -274,8 +400,90 @@ public abstract class Entity {
 		this.healthPoint = healthPoint;
 	}
 
+	/**
+	 * Modifie la valeur des points de vie de l'entite Si le nombre de point de vie
+	 * descend en dessous de 0, l'entite est placée dans un tableau pour etre
+	 * supprimé
+	 * 
+	 * @param val
+	 */
 	public void modifyHealthPoint(int val) {
 		this.healthPoint += val;
+		if (this.healthPoint <= 0) {
+			this.model.addEntityToRemove(this);
+		}
+	}
+
+	/**
+	 * Enleve un nombre de point de vie a une entité
+	 * 
+	 * @param val
+	 */
+	public void getHit(int val) {
+		this.modifyHealthPoint(-val);
+	}
+
+	/**
+	 * Action hit autour du personnage dans sa range
+	 */
+	public void hit() {
+		Rectangle2D hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
+				this.hitbox.getWidth() + 2 * meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+		Iterator<Entity> it = this.model.entitiesIterator();
+		while (it.hasNext()) {
+			Entity e = it.next();
+			if (e.getTeam() != this.getTeam()) {
+				if (e.getHitbox().intersects(hitRange)) {
+					e.getHit(this.attackDamage);
+				}
+			}
+		}
+		this.model.removeEntityToRemove();
+	}
+
+	/**
+	 * Action hit dans une certaine direction
+	 * 
+	 * @param d
+	 */
+	public void hit(Direction d) {
+		Direction.relativeToAbsolute(d, d);
+		Rectangle2D hitRange;
+		switch (d) {
+		case N:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
+					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
+			break;
+		case E:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() + this.hitbox.getWidth(),
+					this.hitbox.getY() - meleeRange, meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+			break;
+		case S:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() + meleeRange,
+					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
+			break;
+		case W:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
+					meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+			break;
+		default:
+			hitRange = null;
+		}
+
+		Iterator<Entity> it = this.model.entitiesIterator();
+		while (it.hasNext()) {
+			Entity e = it.next();
+			if (e.getTeam() != this.getTeam()) {
+				if (e.getHitbox().intersects(hitRange)) {
+					e.getHit(this.attackDamage);
+				}
+			}
+		}
+		this.model.removeEntityToRemove();
+	}
+
+	public int getTeam() {
+		return team;
 	}
 
 	public void setForce(Vector newForce) {
