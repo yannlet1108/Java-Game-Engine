@@ -5,12 +5,13 @@ import java.awt.geom.Rectangle2D;
 
 public class Missile extends Entity {
 
-	public Missile(Point2D position, Direction direction, Model model, int healthPoint) {
-		super(position, direction, model, healthPoint);
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), 10, 2); //Constante de taille a redefinir
-		this.team = 3;
-		this.attackDamage = 30;
-		this.meleeRange = 2;
+	public Missile(Point2D position, Direction direction, Model model) {
+		super(position, direction, model);
+		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), EntityConstants.MISSILE_WIDTH,
+				EntityConstants.MISSILE_HEIGHT);
+		this.team = EntityConstants.MISSILE_TEAM;
+		this.attackDamage = EntityConstants.MISSILE_ATTACK_DAMAGE;
+		this.meleeRange = EntityConstants.MISSILE_MELEE_RANGE;
 		// TODO Auto-generated constructor stub
 	}
 

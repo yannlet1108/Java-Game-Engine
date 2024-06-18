@@ -8,7 +8,7 @@ import view.PlayerAvatar;
 public class Player extends Entity {
 
 	public Player(Point2D position, Direction direction, Model model) {
-		super(position, direction, model, PlayerConstants.PLAYER_HEALTH_POINT);
+		super(position, direction, model);
 		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
 				PlayerConstants.PLAYER_HEIGHT);
 		category = Category.PLAYER;
@@ -18,17 +18,17 @@ public class Player extends Entity {
 		this.model.addPlayer(this);
 		this.meleeRange = PlayerConstants.PLAYER_MELEE_RANGE;
 		this.attackDamage = PlayerConstants.PLAYER_ATTACK_DAMAGE;
+		this.healthPoint = PlayerConstants.PLAYER_HEALTH_POINT;
 	}
 
 	/**
 	 * Methode qui créé un missile devant le joueur
 	 */
-	@Override
-	public void egg() {
+	public void throwMissile() {
 		Direction d = this.getDirection();
 		Point2D pos = this.getCenter();
-		pos.setLocation(this.getX()+5, this.getY());
-		Missile m = new Missile(pos, d, this.getModel(), 1);
+		pos.setLocation(this.getX() + 5, this.getY());
+		Missile m = new Missile(pos, d, this.getModel());
 	}
 
 	@Override
@@ -42,9 +42,15 @@ public class Player extends Entity {
 				PlayerConstants.PLAYER_HEIGHT);
 		return hitbox;
 	}
-	
+
 	public void explode() {
 		this.getModel().removeEntity(this);
 		this.getModel().removePlayer(this);
+	}
+
+	@Override
+	public void egg() {
+		// TODO Auto-generated method stub
+
 	}
 }

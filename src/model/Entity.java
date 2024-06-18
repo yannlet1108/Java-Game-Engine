@@ -18,22 +18,20 @@ public abstract class Entity {
 	private double mass;
 	private double volume;
 
-	private int healthPoint;
+	protected int healthPoint;
 	protected int team;
 	protected int meleeRange; // a definir
 	protected int attackDamage; // a definir
-	
 
 	/**
 	 * @param position
 	 * @param direction
 	 * @param model
 	 */
-	public Entity(Point2D position, Direction direction, Model model, int healthPoint) {
+	public Entity(Point2D position, Direction direction, Model model) {
 		this.direction = direction;
 		this.model = model;
 		this.model.addEntity(this);
-		this.healthPoint = healthPoint;
 		force = new Vector();
 		speed = new Vector();
 	}
@@ -68,7 +66,7 @@ public abstract class Entity {
 	public void translatePosition(Vector v) {
 		hitbox.setRect(hitbox.getX() + v.getX(), hitbox.getY() + v.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
-	
+
 	public Model getModel() {
 		return this.model;
 	}
@@ -312,7 +310,8 @@ public abstract class Entity {
 
 	/**
 	 * Modifie la valeur des points de vie de l'entite Si le nombre de point de vie
-	 * descend en dessous de 0, l'entite est placée dans un tableau pour etre supprimé
+	 * descend en dessous de 0, l'entite est placée dans un tableau pour etre
+	 * supprimé
 	 * 
 	 * @param val
 	 */

@@ -189,8 +189,8 @@ public class Model {
 		Iterator<Entity> it = this.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
-			if(e instanceof Obstacle) {
-				if(e.getHitbox().intersects(safezone)) {
+			if (e instanceof Obstacle) {
+				if (e.getHitbox().intersects(safezone)) {
 					this.addEntityToRemove(e);
 				}
 			}
