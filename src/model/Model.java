@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -177,11 +178,27 @@ public class Model {
 	public void mapGenerator() {
 		Random r = new Random(ModelConstants.SEED);
 		for (int i = 0; i < ModelConstants.WORLD_WIDTH; i = i + EntityConstants.OBSTACLE_WIDTH) {
-			for (int j = 0; i < ModelConstants.WORLD_HEIGHT; j = j + EntityConstants.OBSTACLE_HEIGHT) {
-				if (r.nextDouble() < 0.5) {
+			for (int j = 0; j < ModelConstants.WORLD_HEIGHT; j = j + EntityConstants.OBSTACLE_HEIGHT) {
+				if (r.nextDouble() < ModelConstants.OBSTACLE_PROBABILITY) {
 					new Obstacle(new Point2D.Double(i, j), null, this);
 				}
 			}
 		}
+		Rectangle2D safezone = new Rectangle2D.Double(ModelConstants.PLAYER_SPAWN_X - ModelConstants.SAFE_AREA,
+				ModelConstants.PLAYER_SPAWN_Y, ModelConstants.SAFE_AREA, ModelConstants.SAFE_AREA);
+		Iterator<Entity> it = this.entitiesIterator();
+		while (it.hasNext()) {
+			Entity e = it.next();
+			if(e instanceof Obstacle) {
+				if(e.getHitbox().intersects(safezone)) {
+					this.addEntityToRemove(e);
+				}
+			}
+		}
+		this.removeEntityToRemove();
+	}
+
+	public Collection<Entity> getEntities() {
+		return entities;
 	}
 }

@@ -11,6 +11,7 @@ public class TestsModel {
 		Controller controller = Controller.getInstance();
 		Model model = controller.getM_model();
 		TestHP(controller, model);
+		TestMap(controller, model);
 	}
 
 	public static void TestHP(Controller controller, Model model) {
@@ -38,7 +39,7 @@ public class TestsModel {
 		System.out.printf("Hp P2 apres 3eme coup: %d \n", p2.getHealthPoint());
 		System.out.printf("Hp G1 apres 3eme coup: %d \n", g1.getHealthPoint());
 		System.out.println("------------------------------------");
-		pos.setLocation(pos.getX()+2, pos.getY());
+		pos.setLocation(pos.getX() + 2, pos.getY());
 		Entity s1 = new Shark(pos, Direction.N, model);
 		s1.hit();
 		System.out.printf("Hp P1 apres 4eme coup: %d \n", p1.getHealthPoint());
@@ -54,5 +55,10 @@ public class TestsModel {
 		System.out.printf("Hp G1 apres 5eme coup: %d \n", g1.getHealthPoint());
 		System.out.printf("Nombre de joueur en vie : %d \n", model.getPlayers().size());
 		System.out.println("------------------------------------");
+	}
+
+	public static void TestMap(Controller controller, Model model) {
+		model.mapGenerator();
+		System.out.println(model.getEntities().size());
 	}
 }
