@@ -141,10 +141,20 @@ public class Viewport {
 		return (int) viewbox.getHeight();
 	}
 
+	/**
+	 * retourne la coordonnée X de la viewbox
+	 * 
+	 * @return coordonnée X du viewport
+	 */
 	int getX() {
 		return (int) viewbox.getX();
 	}
 
+	/**
+	 * retourne la coordonnée Y de la viewbox
+	 * 
+	 * @return coordonnée Y du viewport
+	 */
 	int getY() {
 		return (int) viewbox.getY();
 	}

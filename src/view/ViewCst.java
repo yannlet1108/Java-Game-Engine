@@ -29,7 +29,8 @@ public class ViewCst {
 	public static final Color DEBUG_BULLET = Color.DARK_GRAY;
 
 	/* Chargement des sprites */
-	// A lister dans l'ordre {background, joueur1, joueur2, obstacles, bullet, mob1, mob2}
+	// A lister dans l'ordre {background, joueur1, joueur2, obstacles, bullet, mob1,
+	// mob2}
 	public static final String[] SPRITES_FILES = { "sprites/backgroundsprites.jpeg", "sprites/playersprites.png",
 			"sprites/playersprites.png", "sprites/obstaclesprites.png", "sprites/bulletsprites.png",
 			"sprites/goldfishsprites.png", "sprites/sharksprites.png" };

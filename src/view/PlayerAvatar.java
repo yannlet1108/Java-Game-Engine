@@ -23,7 +23,6 @@ public class PlayerAvatar extends Avatar {
 		m_view.store(this);
 	}
 
-
 	@Override
 	void paint(Graphics g) {
 		if (ViewCst.DEBUG) {

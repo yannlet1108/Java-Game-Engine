@@ -1,16 +1,19 @@
 package model;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import view.PlayerAvatar;
 
 public abstract class Entity {
-	private Rectangle2D hitbox;
+	protected Rectangle2D hitbox;
 	private Direction direction;
 	protected Category category;
-	private Model model;
+	protected Model model;
 
 	protected double density;
 	private Vector speed;
@@ -18,23 +21,22 @@ public abstract class Entity {
 	private double mass;
 	private double volume;
 
-	private int healthPoint;
+	protected int healthPoint;
+	protected int team;
+	protected int meleeRange; // a definir
+	protected int attackDamage; // a definir
 
 	/**
 	 * @param position
 	 * @param direction
 	 * @param model
 	 */
-	public Entity(Point2D position, Direction direction, Model model, int healthPoint) {
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
-				PlayerConstants.PLAYER_HEIGHT);
+	public Entity(Point2D position, Direction direction, Model model) {
 		this.direction = direction;
 		this.model = model;
 		this.model.addEntity(this);
-		this.healthPoint = healthPoint;
 		force = new Vector();
 		speed = new Vector();
-		model.m_view.store(new PlayerAvatar(model.m_view, this));
 	}
 
 	/**
@@ -68,6 +70,10 @@ public abstract class Entity {
 		hitbox.setRect(hitbox.getX() + v.getX(), hitbox.getY() + v.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
 
+	public Model getModel() {
+		return this.model;
+	}
+
 	protected void setAvatar() {
 		throw new RuntimeException("Not Yet Implemented");
 	}
@@ -99,9 +105,11 @@ public abstract class Entity {
 	public abstract void pick();
 
 	/**
-	 * Execute l'action Explode comme definit par l'entite
+	 * Supprime l'entite
 	 */
-	public abstract void explode();
+	public void explode() {
+		this.model.removeEntity(this);
+	}
 
 	/**
 	 * Retourne True Si la case dans la direction donnée en paramètre a une entité
@@ -115,7 +123,7 @@ public abstract class Entity {
 	public boolean cell(Direction direction, Category category, int rayon) {
 		Entity entity;
 
-		Point2D currentPos = getPosition();
+		Point2D currentPos = getCenter();
 		double x = currentPos.getX();
 		double y = currentPos.getY();
 		Iterator<Entity> entityIter = this.model.entitiesIterator();
@@ -264,6 +272,7 @@ public abstract class Entity {
 		speed = speed.add(acceleration.scalarMultiplication(timeSeconds));
 
 		Vector movement = speed.scalarMultiplication(timeSeconds);
+		movement = checkCollisions(movement);
 		translatePosition(movement);
 	}
 
@@ -282,6 +291,45 @@ public abstract class Entity {
 		double speedNorm = speed.norm();
 		double vs2 = model.getViscosity() * (Math.pow(speedNorm, 2));
 		return unitVector.scalarMultiplication(vs2);
+	}
+
+	Vector checkCollisions(Vector movement) {
+		Rectangle2D movementBox = getHitbox();
+		Rectangle2D newHitbox = new Rectangle2D.Double(hitbox.getX() + movement.getX(), hitbox.getY() + movement.getY(),
+				hitbox.getWidth(), hitbox.getHeight());
+		movementBox.add(newHitbox);
+		List<Entity> closeEntities = getEntitiesInRectangle(movementBox);
+		closeEntities.remove(this);
+		if (closeEntities.isEmpty())
+			return movement;
+		return new Vector(0, 0);
+	}
+
+	List<Entity> getEntitiesInRectangle(Rectangle2D rectangle) {
+		List<Entity> list = new LinkedList<Entity>();
+		for (Iterator<Entity> iterator = model.entitiesIterator(); iterator.hasNext();) {
+			Entity entity = (Entity) iterator.next();
+			if (entity.getHitbox().intersects(rectangle)) {
+				list.add(entity);
+			}
+		}
+		return list;
+	}
+
+	public Point2D.Double getHitboxTopLeft() {
+		return new Point2D.Double(hitbox.getX(), hitbox.getY());
+	}
+
+	public Point2D.Double getHitboxTopRight() {
+		return new Point2D.Double(hitbox.getX() + hitbox.getWidth(), hitbox.getY());
+	}
+
+	public Point2D.Double getHitboxBottomLeft() {
+		return new Point2D.Double(hitbox.getX(), hitbox.getY() + hitbox.getHeight());
+	}
+
+	public Point2D.Double getHitboxBottomRight() {
+		return new Point2D.Double(hitbox.getX() + hitbox.getWidth(), hitbox.getY() + hitbox.getHeight());
 	}
 
 	public Vector getSpeed() {
@@ -303,7 +351,89 @@ public abstract class Entity {
 		this.healthPoint = healthPoint;
 	}
 
+	/**
+	 * Modifie la valeur des points de vie de l'entite Si le nombre de point de vie
+	 * descend en dessous de 0, l'entite est placée dans un tableau pour etre
+	 * supprimé
+	 * 
+	 * @param val
+	 */
 	public void modifyHealthPoint(int val) {
 		this.healthPoint += val;
+		if (this.healthPoint <= 0) {
+			this.model.addEntityToRemove(this);
+		}
+	}
+
+	/**
+	 * Enleve un nombre de point de vie a une entité
+	 * 
+	 * @param val
+	 */
+	public void getHit(int val) {
+		this.modifyHealthPoint(-val);
+	}
+
+	/**
+	 * Action hit autour du personnage dans sa range
+	 */
+	public void hit() {
+		Rectangle2D hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
+				this.hitbox.getWidth() + 2 * meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+		Iterator<Entity> it = this.model.entitiesIterator();
+		while (it.hasNext()) {
+			Entity e = it.next();
+			if (e.getTeam() != this.getTeam()) {
+				if (e.getHitbox().intersects(hitRange)) {
+					e.getHit(this.attackDamage);
+				}
+			}
+		}
+		this.model.removeEntityToRemove();
+	}
+
+	/**
+	 * Action hit dans une certaine direction
+	 * 
+	 * @param d
+	 */
+	public void hit(Direction d) {
+		Direction.relativeToAbsolute(d, d);
+		Rectangle2D hitRange;
+		switch (d) {
+		case N:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
+					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
+			break;
+		case E:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() + this.hitbox.getWidth(),
+					this.hitbox.getY() - meleeRange, meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+			break;
+		case S:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() + meleeRange,
+					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
+			break;
+		case W:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
+					meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+			break;
+		default:
+			hitRange = null;
+		}
+
+		Iterator<Entity> it = this.model.entitiesIterator();
+		while (it.hasNext()) {
+			Entity e = it.next();
+			if (e.getTeam() != this.getTeam()) {
+				if (e.getHitbox().intersects(hitRange)) {
+					e.getHit(this.attackDamage);
+				}
+			}
+		}
+		this.model.removeEntityToRemove();
+	}
+
+	public int getTeam() {
+		return team;
 	}
 }

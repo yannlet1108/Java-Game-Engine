@@ -94,6 +94,8 @@ public class SpriteBank {
 
 	/**
 	 * Retourne le sprite de l'arrière plan
+	 * 
+	 * @return buffered image du background
 	 */
 	BufferedImage getBackground() {
 		return spritesBank.get(0)[0];
