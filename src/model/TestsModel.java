@@ -11,6 +11,7 @@ public class TestsModel {
 		Controller controller = Controller.getInstance();
 		Model model = controller.getM_model();
 		TestHP(controller, model);
+		TestMap(controller, model);
 	}
 
 	public static void TestHP(Controller controller, Model model) {
@@ -54,5 +55,10 @@ public class TestsModel {
 		System.out.printf("Hp G1 apres 5eme coup: %d \n", g1.getHealthPoint());
 		System.out.printf("Nombre de joueur en vie : %d \n", model.getPlayers().size());
 		System.out.println("------------------------------------");
+	}
+
+	public static void TestMap(Controller controller, Model model) {
+		model.mapGenerator();
+		System.out.println(model.getEntities().size());
 	}
 }

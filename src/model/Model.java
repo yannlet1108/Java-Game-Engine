@@ -247,4 +247,31 @@ public class Model {
 	public Collection<Player> getPlayers() {
 		return players;
 	}
+
+	public void mapGenerator() {
+		Random r = new Random(ModelConstants.SEED);
+		for (int i = 0; i < ModelConstants.WORLD_WIDTH; i = i + EntityConstants.OBSTACLE_WIDTH) {
+			for (int j = 0; j < ModelConstants.WORLD_HEIGHT; j = j + EntityConstants.OBSTACLE_HEIGHT) {
+				if (r.nextDouble() < ModelConstants.OBSTACLE_PROBABILITY) {
+					new Obstacle(new Point2D.Double(i, j), null, this);
+				}
+			}
+		}
+		Rectangle2D safezone = new Rectangle2D.Double(ModelConstants.PLAYER_SPAWN_X - ModelConstants.SAFE_AREA,
+				ModelConstants.PLAYER_SPAWN_Y, ModelConstants.SAFE_AREA, ModelConstants.SAFE_AREA);
+		Iterator<Entity> it = this.entitiesIterator();
+		while (it.hasNext()) {
+			Entity e = it.next();
+			if (e instanceof Obstacle) {
+				if (e.getHitbox().intersects(safezone)) {
+					this.addEntityToRemove(e);
+				}
+			}
+		}
+		this.removeEntityToRemove();
+	}
+
+	public Collection<Entity> getEntities() {
+		return entities;
+	}
 }

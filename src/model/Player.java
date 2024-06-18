@@ -11,18 +11,19 @@ public class Player extends Entity {
 	private int oxygen;
 
 	public Player(Point2D position, Direction direction, Model model) {
-		super(position, direction, model, PlayerConstants.PLAYER_HEALTH);
+		super(position, direction, model);
 		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
 				PlayerConstants.PLAYER_HEIGHT);
 		category = Category.PLAYER;
 		density = PlayerConstants.PLAYER_DENSITY;
 		oxygen = 100;
 		vest = new Vest();
-		this.team = 1;
+		this.team = PlayerConstants.PLAYER_TEAM;
 		model.m_view.store(new PlayerAvatar(model.m_view, this));
 		this.model.addPlayer(this);
-		this.meleeRange = 10; // a definir
-		this.attackDamage = 20; // a definir
+		this.meleeRange = PlayerConstants.PLAYER_MELEE_RANGE;
+		this.attackDamage = PlayerConstants.PLAYER_ATTACK_DAMAGE;
+		this.healthPoint = PlayerConstants.PLAYER_HEALTH_POINT;
 	}
 
 	public class Vest {
@@ -41,7 +42,7 @@ public class Player extends Entity {
 	public void step() {
 		this.breathe();
 	}
-	
+
 	public int getOxygen() {
 		return oxygen;
 	}
@@ -75,7 +76,8 @@ public class Player extends Entity {
 	}
 
 	/**
-	 *  gonfler le gilet : diminue l'oxygen, diminue la densité, augmenter l'air dans le gilet
+	 * gonfler le gilet : diminue l'oxygen, diminue la densité, augmenter l'air dans
+	 * le gilet
 	 */
 	private void swell() {
 		if (vest.getVestAir() + PlayerConstants.VEST_STEP_AIR < PlayerConstants.VEST_MAX_AIR) {
@@ -91,7 +93,8 @@ public class Player extends Entity {
 	}
 
 	/**
-	 * degonfler le gilet : augmente l'oxygen, augmente la densité, diminuer l'air dans le gilet
+	 * degonfler le gilet : augmente l'oxygen, augmente la densité, diminuer l'air
+	 * dans le gilet
 	 */
 	private void deflate() {
 		if (vest.getVestAir() > 0) {
@@ -106,13 +109,12 @@ public class Player extends Entity {
 	/**
 	 * Methode qui créé un missile devant le joueur
 	 */
-	@Override
-	public Entity egg() {
+
+	public void throwMissile() {
 		Direction d = this.getDirection();
 		Point2D pos = this.getCenter();
 		pos.setLocation(this.getX() + 5, this.getY());
-		Missile m = new Missile(pos, d, this.getModel(), 1);
-		return m;
+		Missile m = new Missile(pos, d, this.getModel());
 	}
 
 	@Override
@@ -130,5 +132,11 @@ public class Player extends Entity {
 	public void explode() {
 		this.getModel().removeEntity(this);
 		this.getModel().removePlayer(this);
+	}
+
+	@Override
+	public void egg() {
+		// TODO Auto-generated method stub
+
 	}
 }
