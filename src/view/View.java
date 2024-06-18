@@ -140,7 +140,7 @@ public class View {
 	 */
 	public void paint(Graphics g) {
 		if (m_model != null)
-			viewport.updateViewport(m_model.getPlayersPos(), 1);
+			viewport.updateViewport(m_model.getPlayersPos());
 		viewport.resize();
 		fillBackground(g);
 		Iterator<Avatar> avatarIterator = getAvatarIterator();

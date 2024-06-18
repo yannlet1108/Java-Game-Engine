@@ -7,7 +7,7 @@ public class PhysicsTest {
 	public static void main(String[] args) throws InterruptedException {
 		Controller controller = Controller.getInstance();
 		Model model = new Model(controller, new View(controller));
-		Entity playerEntity = new Player(model.getWorldCenter(), Direction.E, model, 100);
+		Entity playerEntity = new Player(model.getWorldCenter(), Direction.E, model);
 		model.addEntity(playerEntity);
 
 		while (true) {

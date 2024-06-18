@@ -19,6 +19,7 @@ public class Model {
 
 	private Collection<Entity> entities;
 	private Collection<Player> players;
+	Collection<Entity> toRemove;
 
 	/**
 	 * Initialise la simulation en creant les entites d'origine et en definisant
@@ -36,9 +37,7 @@ public class Model {
 		viscosity = ModelConstants.WORLD_VISCOSITY;
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
-		Player P = new Player(getWorldCenter(), Direction.E, this, 100);
-		entities.add(P);
-		players.add(P);
+		toRemove = new LinkedList<Entity>();
 		m_view.setModel(this);
 	}
 
@@ -96,8 +95,16 @@ public class Model {
 	}
 
 	/**
+	 * Supprime une entitée de la collection des entitées
+	 * @param e
+	 */
+	void removeEntity(Entity e) {
+		entities.remove(e);
+	}
+
+	/**
 	 * 
-	 * @return la collection des players
+	 * @return un iterateur sur la collection des players
 	 */
 	public Iterator<Point2D> getPlayersPos() {
 		LinkedList<Point2D> thePoints = new LinkedList<Point2D>();
@@ -115,8 +122,17 @@ public class Model {
 	 * 
 	 * @param Player P
 	 */
-	public void addPlayers(Player P) {
+	public void addPlayer(Player P) {
 		players.add(P);
+	}
+	
+	/**
+	 * Enleve un player de la collection des players
+	 * 
+	 * @param Player P
+	 */
+	public void removePlayer(Player P) {
+		players.remove(P);
 	}
 
 	/**
@@ -126,5 +142,32 @@ public class Model {
 	public Iterator<Entity> entitiesIterator() {
 		Iterator<Entity> iter = this.entities.iterator();
 		return iter;
+	}
+
+	/**
+	 * Ajoute une entité dans un tableau d'entité a supprimer
+	 * @param e
+	 */
+	void addEntityToRemove(Entity e) {
+		toRemove.add(e);
+	}
+
+	/**
+	 * Supprime une entité des tableaux entities et players
+	 */
+	void removeEntityToRemove() {
+		Iterator<Entity> iter = this.toRemove.iterator();
+		while (iter.hasNext()) {
+			Entity e = iter.next();
+			this.removeEntity(e);
+			if (e instanceof Player) {
+				this.removePlayer((Player) e);
+			}
+		}
+		toRemove.clear();
+	}
+
+	public Collection<Player> getPlayers() {
+		return players;
 	}
 }

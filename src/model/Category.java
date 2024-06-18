@@ -1,5 +1,5 @@
 package model;
 
 public enum Category {
-	VOID, OBSTACLE, PLAYER;
+	VOID, OBSTACLE, PLAYER, FISH;
 }

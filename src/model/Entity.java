@@ -10,10 +10,10 @@ import java.util.List;
 import view.PlayerAvatar;
 
 public abstract class Entity {
-	private Rectangle2D hitbox;
+	protected Rectangle2D hitbox;
 	private Direction direction;
 	protected Category category;
-	private Model model;
+	protected Model model;
 
 	protected double density;
 	private Vector speed;
@@ -22,6 +22,10 @@ public abstract class Entity {
 	private double volume;
 
 	private int healthPoint;
+	protected int team;
+	protected int meleeRange; // a definir
+	protected int attackDamage; // a definir
+	
 
 	/**
 	 * @param position
@@ -29,8 +33,6 @@ public abstract class Entity {
 	 * @param model
 	 */
 	public Entity(Point2D position, Direction direction, Model model, int healthPoint) {
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
-				PlayerConstants.PLAYER_HEIGHT);
 		this.direction = direction;
 		this.model = model;
 		this.model.addEntity(this);
@@ -69,6 +71,10 @@ public abstract class Entity {
 	public void translatePosition(Vector v) {
 		hitbox.setRect(hitbox.getX() + v.getX(), hitbox.getY() + v.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
+	
+	public Model getModel() {
+		return this.model;
+	}
 
 	protected void setAvatar() {
 		throw new RuntimeException("Not Yet Implemented");
@@ -101,9 +107,11 @@ public abstract class Entity {
 	public abstract void pick();
 
 	/**
-	 * Execute l'action Explode comme definit par l'entite
+	 * Supprime l'entite
 	 */
-	public abstract void explode();
+	public void explode() {
+		this.model.removeEntity(this);
+	}
 
 	/**
 	 * Retourne True Si la case dans la direction donnée en paramètre a une entité
@@ -117,7 +125,7 @@ public abstract class Entity {
 	public boolean cell(Direction direction, Category category, int rayon) {
 		Entity entity;
 
-		Point2D currentPos = getPosition();
+		Point2D currentPos = getCenter();
 		double x = currentPos.getX();
 		double y = currentPos.getY();
 		Iterator<Entity> entityIter = this.model.entitiesIterator();
@@ -345,7 +353,88 @@ public abstract class Entity {
 		this.healthPoint = healthPoint;
 	}
 
+	/**
+	 * Modifie la valeur des points de vie de l'entite Si le nombre de point de vie
+	 * descend en dessous de 0, l'entite est placée dans un tableau pour etre supprimé
+	 * 
+	 * @param val
+	 */
 	public void modifyHealthPoint(int val) {
 		this.healthPoint += val;
+		if (this.healthPoint <= 0) {
+			this.model.addEntityToRemove(this);
+		}
+	}
+
+	/**
+	 * Enleve un nombre de point de vie a une entité
+	 * 
+	 * @param val
+	 */
+	public void getHit(int val) {
+		this.modifyHealthPoint(-val);
+	}
+
+	/**
+	 * Action hit autour du personnage dans sa range
+	 */
+	public void hit() {
+		Rectangle2D hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
+				this.hitbox.getWidth() + 2 * meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+		Iterator<Entity> it = this.model.entitiesIterator();
+		while (it.hasNext()) {
+			Entity e = it.next();
+			if (e.getTeam() != this.getTeam()) {
+				if (e.getHitbox().intersects(hitRange)) {
+					e.getHit(this.attackDamage);
+				}
+			}
+		}
+		this.model.removeEntityToRemove();
+	}
+
+	/**
+	 * Action hit dans une certaine direction
+	 * 
+	 * @param d
+	 */
+	public void hit(Direction d) {
+		Direction.relativeToAbsolute(d, d);
+		Rectangle2D hitRange;
+		switch (d) {
+		case N:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
+					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
+			break;
+		case E:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() + this.hitbox.getWidth(),
+					this.hitbox.getY() - meleeRange, meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+			break;
+		case S:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() + meleeRange,
+					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
+			break;
+		case W:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
+					meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+			break;
+		default:
+			hitRange = null;
+		}
+
+		Iterator<Entity> it = this.model.entitiesIterator();
+		while (it.hasNext()) {
+			Entity e = it.next();
+			if (e.getTeam() != this.getTeam()) {
+				if (e.getHitbox().intersects(hitRange)) {
+					e.getHit(this.attackDamage);
+				}
+			}
+		}
+		this.model.removeEntityToRemove();
+	}
+
+	public int getTeam() {
+		return team;
 	}
 }
