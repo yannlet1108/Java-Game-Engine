@@ -64,7 +64,7 @@ public abstract class Avatar {
 	 * @return nombre de colonnes de sprites
 	 */
 	int getSpritesNcols(int entityType) {
-		return ViewCst.SPRITES_NROWS[entityType];
+		return ViewCst.SPRITES_NCOLS[entityType];
 
 	}
 
