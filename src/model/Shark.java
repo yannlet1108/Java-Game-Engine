@@ -5,11 +5,11 @@ import java.awt.geom.Rectangle2D;
 
 public class Shark extends Fish {
 
-	public Shark(Point2D position, Direction direction, Model model, int healthPoint) {
-		super(position, direction, model, healthPoint);
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), 20, 8); //Constante de taille a redefinir
-		this.attackDamage = 50;
-		this.meleeRange = 10;
+	public Shark(Point2D position, Direction direction, Model model) {
+		super(position, direction, model, EntityConstants.SHARK_HEALTH_POINT);
+		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), EntityConstants.SHARK_WIDTH, EntityConstants.SHARK_HEIGHT);
+		this.attackDamage = EntityConstants.SHARK_ATTACK_DAMAGE;
+		this.meleeRange = EntityConstants.SHARK_MELEE_RANGE;
 		// TODO Auto-generated constructor stub
 	}
 

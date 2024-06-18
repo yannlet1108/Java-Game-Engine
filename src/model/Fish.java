@@ -6,7 +6,7 @@ public abstract class Fish extends Entity {
 
 	public Fish(Point2D position, Direction direction, Model model, int healthPoint) {
 		super(position, direction, model, healthPoint);
-		this.team = 2;
+		this.team = EntityConstants.FISH_TEAM;
 		this.category = Category.FISH;
 		// TODO Auto-generated constructor stub
 	}

@@ -5,11 +5,11 @@ import java.awt.geom.Rectangle2D;
 
 public class Goldfish extends Fish {
 
-	public Goldfish(Point2D position, Direction direction, Model model, int healthPoint) {
-		super(position, direction, model, healthPoint);
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), 4, 2); //Constante de taille a redefinir
-		this.attackDamage = 5;
-		this.meleeRange = 2;
+	public Goldfish(Point2D position, Direction direction, Model model) {
+		super(position, direction, model, EntityConstants.GOLDFISH_HEALTH_POINT);
+		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), EntityConstants.GOLDFISH_WIDTH, EntityConstants.GOLDFISH_HEIGHT);
+		this.attackDamage = EntityConstants.GOLDFISH_ATTACK_DAMAGE;
+		this.meleeRange = EntityConstants.GOLDFISH_MELEE_RANGE;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -17,10 +17,6 @@ public class Goldfish extends Fish {
 	public void pick() {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	public double getRandomNumber(double min, double max) {
-	    return (Math.random() * (max - min)) + min;
 	}
 
 	@Override

@@ -7,17 +7,17 @@ import view.PlayerAvatar;
 
 public class Player extends Entity {
 
-	public Player(Point2D position, Direction direction, Model model, int healthPoint) {
-		super(position, direction, model, healthPoint);
+	public Player(Point2D position, Direction direction, Model model) {
+		super(position, direction, model, PlayerConstants.PLAYER_HEALTH_POINT);
 		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
 				PlayerConstants.PLAYER_HEIGHT);
 		category = Category.PLAYER;
 		density = PlayerConstants.PLAYER_DENSITY;
-		this.team = 1;
+		this.team = PlayerConstants.PLAYER_TEAM;
 		model.m_view.store(new PlayerAvatar(model.m_view, this));
 		this.model.addPlayer(this);
-		this.meleeRange = 10; // a definir
-		this.attackDamage = 20; // a definir
+		this.meleeRange = PlayerConstants.PLAYER_MELEE_RANGE;
+		this.attackDamage = PlayerConstants.PLAYER_ATTACK_DAMAGE;
 	}
 
 	/**

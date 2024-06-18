@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Random;
 
 import controller.Controller;
 import view.View;
@@ -96,6 +97,7 @@ public class Model {
 
 	/**
 	 * Supprime une entitée de la collection des entitées
+	 * 
 	 * @param e
 	 */
 	void removeEntity(Entity e) {
@@ -125,7 +127,7 @@ public class Model {
 	public void addPlayer(Player P) {
 		players.add(P);
 	}
-	
+
 	/**
 	 * Enleve un player de la collection des players
 	 * 
@@ -146,6 +148,7 @@ public class Model {
 
 	/**
 	 * Ajoute une entité dans un tableau d'entité a supprimer
+	 * 
 	 * @param e
 	 */
 	void addEntityToRemove(Entity e) {
@@ -169,5 +172,16 @@ public class Model {
 
 	public Collection<Player> getPlayers() {
 		return players;
+	}
+
+	public void mapGenerator() {
+		Random r = new Random(ModelConstants.SEED);
+		for (int i = 0; i < ModelConstants.WORLD_WIDTH; i = i + EntityConstants.OBSTACLE_WIDTH) {
+			for (int j = 0; i < ModelConstants.WORLD_HEIGHT; j = j + EntityConstants.OBSTACLE_HEIGHT) {
+				if (r.nextDouble() < 0.5) {
+					new Obstacle(new Point2D.Double(i, j), null, this);
+				}
+			}
+		}
 	}
 }

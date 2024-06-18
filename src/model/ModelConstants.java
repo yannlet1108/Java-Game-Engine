@@ -11,4 +11,6 @@ public class ModelConstants {
 
 	public static double WORLD_DENSITY = 1;
 	public static double WORLD_VISCOSITY = 0.2;
+	
+	public static long SEED = 12;
 }
