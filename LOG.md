@@ -1,3 +1,22 @@
+### Mardi 18 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Matthieu | Génération de la map, fichiers de constantes | Done |
+| Moataz | Spawn d'enemis et gilet | Done |
+| Gwendal | Collisions finies | Done |
+| Yann | Visiteur et automates | En cours |
+| Yohan | Sprites et animations | En cours |
+| Axel | Vue dynamique et merge | Done |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Continuer le visiteur | Moyen | Yann |
+| Continuer les sprites et animations | Moyen | Yohan |
+| Ajouter les actions des automates | Moyen | Gwendal |
+| Test des fonctions d'oxygene | Moyen | Moataz |
+
+
 ### Lundi 17 juin
 | Nom | Tache | Etat |
 |:-:|---|:-:|
