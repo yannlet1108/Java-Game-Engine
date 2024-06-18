@@ -1,9 +1,11 @@
 package model;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Random;
 
 import controller.Controller;
 import view.View;
@@ -38,6 +40,7 @@ public class Model {
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
+		Entity p1 = new Player(getWorldCenter(), Direction.N, this);
 		m_view.setModel(this);
 	}
 
@@ -67,6 +70,78 @@ public class Model {
 		for (Entity entity : entities) {
 			entity.step();
 		}
+		spawnEnemy();
+	}
+
+	/**
+	 * spawn un poisson d'une probabilitée IN_GENERAL / 1000 dans une poisition aléatoire , ce poisson peut être
+	 * de differents types avec une probabilitée chacun,
+	 * 10 essaies si il n y a pas de la place l'opération s'arrête.
+	 * @return le poisson
+	 * @author MO ER
+	 */ 
+	private Fish spawnEnemy() {
+		Random yesOrNotRand = new Random();
+		int yesOrNot = yesOrNotRand.nextInt(1000); // 1000 à modif
+		if (yesOrNot < ModelConstants.IN_GENERAL) {
+			Random ranWhatFish = new Random();
+			int fishProb = ranWhatFish.nextInt(100);
+			int fish = -1;
+			double width = 0, height = 0;
+			if (fishProb < ModelConstants.GOLDENFISH_PROBA) {
+				fish = 0;
+				width = FishConstants.GOLDFISH_WIDTH;
+				height = FishConstants.GOLDFISH_HEIGHT;
+			} else if (fishProb >= ModelConstants.GOLDENFISH_PROBA
+					&& fishProb < ModelConstants.GOLDENFISH_PROBA + ModelConstants.SHARK_PROBA) {
+				fish = 1;
+				width = FishConstants.SHARK_WIDTH;
+				height = FishConstants.SHARK_HEIGHT;
+			} else {
+				return null;
+			}
+			boolean isGood = false;
+			int x = 0, y = 0;
+			Point2D pts = new Point2D.Double(x, y);
+			Rectangle2D candidate;
+			int whileCounter = 0;
+			while (!isGood) {
+				if (whileCounter > 10) {
+					System.out.println("Almost Nowhere to spawn, gave Up");
+					return null;
+				}
+				isGood = true;
+				Random ranWhereFish = new Random();
+				x = ranWhereFish.nextInt((int) this.getBoardWidth());
+				y = ranWhereFish.nextInt((int) this.getBoardHeight());
+				pts = new Point2D.Double(x, y);
+				candidate = new Rectangle2D.Double(x, y, width, height);
+				Iterator<Entity> iter = this.entitiesIterator();
+				Entity currentEntity;
+				while (iter.hasNext()) {
+					currentEntity = iter.next();
+					if (currentEntity.hitbox.intersects(candidate)) {
+						isGood = false;
+						break;
+					}
+				}
+				whileCounter++;
+			}
+			Fish nue;
+			if (fish == 0) {
+				nue = new Goldfish(pts, Direction.E, this);
+				//Pour test
+				//System.out.println("Goldfish added at x = " + pts.getX() + ", y = " + pts.getY() + "."); 
+				return nue;
+			} else if (fish == 1) {
+				nue = new Shark(pts, Direction.E, this);
+				//Pour test
+				//System.out.println("Shark added at x = " + pts.getX() + ", y = " + pts.getY() + ".");
+				return nue;
+			}
+			return null;
+		}
+		return null;
 	}
 
 	/**
@@ -96,6 +171,7 @@ public class Model {
 
 	/**
 	 * Supprime une entitée de la collection des entitées
+	 * 
 	 * @param e
 	 */
 	void removeEntity(Entity e) {
@@ -125,7 +201,7 @@ public class Model {
 	public void addPlayer(Player P) {
 		players.add(P);
 	}
-	
+
 	/**
 	 * Enleve un player de la collection des players
 	 * 
@@ -146,6 +222,7 @@ public class Model {
 
 	/**
 	 * Ajoute une entité dans un tableau d'entité a supprimer
+	 * 
 	 * @param e
 	 */
 	void addEntityToRemove(Entity e) {

@@ -96,7 +96,7 @@ public abstract class Entity {
 		move(Direction.FORWARD);
 	}
 
-	public abstract void egg();
+	public abstract Entity egg();
 
 	/**
 	 * Execute l'action Pick comme definit par l'entite

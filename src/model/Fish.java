@@ -12,5 +12,5 @@ public abstract class Fish extends Entity {
 	}
 
 	@Override
-	public abstract void egg();
+	public abstract Entity egg();
 }

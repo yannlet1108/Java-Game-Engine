@@ -21,7 +21,7 @@ public class Missile extends Entity {
 	}
 
 	@Override
-	public void egg() {
+	public Entity egg() {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("Not Yet Implemented");
 	}

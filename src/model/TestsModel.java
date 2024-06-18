@@ -31,15 +31,15 @@ public class TestsModel {
 		p1.hit(Direction.N);
 		System.out.printf("Hp P1 apres 2eme coup: %d \n", p1.getHealthPoint());
 		System.out.printf("Hp P2 apres 2eme coup: %d \n", p2.getHealthPoint());
-		Entity g1 = new Goldfish(model.getWorldCenter(), Direction.N, model, 10);
+		Entity g1 = new Goldfish(model.getWorldCenter(), Direction.N, model);
 		System.out.println("------------------------------------");
 		g1.hit();
 		System.out.printf("Hp P1 apres 3eme coup: %d \n", p1.getHealthPoint());
 		System.out.printf("Hp P2 apres 3eme coup: %d \n", p2.getHealthPoint());
 		System.out.printf("Hp G1 apres 3eme coup: %d \n", g1.getHealthPoint());
 		System.out.println("------------------------------------");
-		pos.setLocation(pos.getX()+2, pos.getY());
-		Entity s1 = new Shark(pos, Direction.N, model, 150);
+		pos.setLocation(pos.getX() + 2, pos.getY());
+		Entity s1 = new Shark(pos, Direction.N, model);
 		s1.hit();
 		System.out.printf("Hp P1 apres 4eme coup: %d \n", p1.getHealthPoint());
 		System.out.printf("Hp P2 apres 4eme coup: %d \n", p2.getHealthPoint());

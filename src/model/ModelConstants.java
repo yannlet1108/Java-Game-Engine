@@ -11,4 +11,8 @@ public class ModelConstants {
 
 	public static double WORLD_DENSITY = 1;
 	public static double WORLD_VISCOSITY = 0.2;
+	
+	public static int IN_GENERAL = 1;
+	public static int GOLDENFISH_PROBA = 70; //ça signifie 70%
+	public static int SHARK_PROBA = 10;
 }

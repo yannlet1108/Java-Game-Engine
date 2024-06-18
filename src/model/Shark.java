@@ -5,23 +5,22 @@ import java.awt.geom.Rectangle2D;
 
 public class Shark extends Fish {
 
-	public Shark(Point2D position, Direction direction, Model model, int healthPoint) {
-		super(position, direction, model, healthPoint);
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), 20, 8); //Constante de taille a redefinir
+	public Shark(Point2D position, Direction direction, Model model) {
+		super(position, direction, model, FishConstants.SHARK_HEALTH);
+		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), FishConstants.SHARK_WIDTH,
+				FishConstants.SHARK_HEIGHT);
 		this.attackDamage = 50;
 		this.meleeRange = 10;
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void egg() {
-		// TODO Auto-generated method stub
-		
+	public Entity egg() {
+		throw new RuntimeException("Not Yet Implemented");
+
 	}
 
 	@Override
 	public void pick() {
-		// TODO Auto-generated method stub
-		
+		throw new RuntimeException("Not Yet Implemented");
 	}
 }

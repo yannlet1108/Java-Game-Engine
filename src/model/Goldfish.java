@@ -5,27 +5,25 @@ import java.awt.geom.Rectangle2D;
 
 public class Goldfish extends Fish {
 
-	public Goldfish(Point2D position, Direction direction, Model model, int healthPoint) {
-		super(position, direction, model, healthPoint);
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), 4, 2); //Constante de taille a redefinir
+	public Goldfish(Point2D position, Direction direction, Model model) {
+		super(position, direction, model, FishConstants.GOLDFISH_HEALTH);
+		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), FishConstants.GOLDFISH_WIDTH,
+				FishConstants.GOLDFISH_HEIGHT);
 		this.attackDamage = 5;
 		this.meleeRange = 2;
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void pick() {
-		// TODO Auto-generated method stub
-		
+		throw new RuntimeException("Not Yet Implemented");
 	}
-	
+
 	public double getRandomNumber(double min, double max) {
-	    return (Math.random() * (max - min)) + min;
+		return (Math.random() * (max - min)) + min;
 	}
 
 	@Override
-	public void egg() {
-		// TODO Auto-generated method stub
-		
+	public Entity egg() {
+		throw new RuntimeException("Not Yet Implemented");
 	}
 }
