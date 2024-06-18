@@ -2,7 +2,6 @@ package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -11,7 +10,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
-import javax.management.InstanceAlreadyExistsException;
 
 /**
  * Classe utilisé comme banque de sprite pour les avatars
