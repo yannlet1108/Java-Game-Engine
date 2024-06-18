@@ -1,8 +1,11 @@
 package model;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import view.PlayerAvatar;
 
@@ -263,6 +266,7 @@ public abstract class Entity {
 		speed = speed.add(acceleration.scalarMultiplication(timeSeconds));
 
 		Vector movement = speed.scalarMultiplication(timeSeconds);
+		movement = checkCollisions(movement);
 		translatePosition(movement);
 	}
 
@@ -281,6 +285,45 @@ public abstract class Entity {
 		double speedNorm = speed.norm();
 		double vs2 = model.getViscosity() * (Math.pow(speedNorm, 2));
 		return unitVector.scalarMultiplication(vs2);
+	}
+
+	Vector checkCollisions(Vector movement) {
+		Rectangle2D movementBox = getHitbox();
+		Rectangle2D newHitbox = new Rectangle2D.Double(hitbox.getX() + movement.getX(), hitbox.getY() + movement.getY(),
+				hitbox.getWidth(), hitbox.getHeight());
+		movementBox.add(newHitbox);
+		List<Entity> closeEntities = getEntitiesInRectangle(movementBox);
+		closeEntities.remove(this);
+		if (closeEntities.isEmpty())
+			return movement;
+		return new Vector(0, 0);
+	}
+
+	List<Entity> getEntitiesInRectangle(Rectangle2D rectangle) {
+		List<Entity> list = new LinkedList<Entity>();
+		for (Iterator<Entity> iterator = model.entitiesIterator(); iterator.hasNext();) {
+			Entity entity = (Entity) iterator.next();
+			if (entity.getHitbox().intersects(rectangle)) {
+				list.add(entity);
+			}
+		}
+		return list;
+	}
+
+	public Point2D.Double getHitboxTopLeft() {
+		return new Point2D.Double(hitbox.getX(), hitbox.getY());
+	}
+
+	public Point2D.Double getHitboxTopRight() {
+		return new Point2D.Double(hitbox.getX() + hitbox.getWidth(), hitbox.getY());
+	}
+
+	public Point2D.Double getHitboxBottomLeft() {
+		return new Point2D.Double(hitbox.getX(), hitbox.getY() + hitbox.getHeight());
+	}
+
+	public Point2D.Double getHitboxBottomRight() {
+		return new Point2D.Double(hitbox.getX() + hitbox.getWidth(), hitbox.getY() + hitbox.getHeight());
 	}
 
 	public Vector getSpeed() {
