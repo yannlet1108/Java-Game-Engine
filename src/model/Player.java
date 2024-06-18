@@ -19,7 +19,7 @@ public class Player extends Entity {
 		oxygen = 100;
 		vest = new Vest();
 		this.team = PlayerConstants.PLAYER_TEAM;
-		model.m_view.store(new PlayerAvatar(model.m_view, this));
+		model.m_view.store(new PlayerAvatar(model.m_view, this, 1));
 		this.model.addPlayer(this);
 		this.meleeRange = PlayerConstants.PLAYER_MELEE_RANGE;
 		this.attackDamage = PlayerConstants.PLAYER_ATTACK_DAMAGE;

@@ -6,16 +6,14 @@ import model.Entity;
 
 public class BulletAvatar extends Avatar {
 
-	protected BulletAvatar(View m_view, Entity e) {
-		super(m_view, e);
+	protected BulletAvatar(View m_view, Entity e, int entityType) {
+		super(m_view, e, entityType);
 		m_view.store(this);
 	}
 
 	@Override
-	void paint(Graphics g) {
-		if (ViewCst.DEBUG) {
+	void debugPaint(Graphics g) {
 			m_view.getBank().debugCollisions(g, ViewCst.DEBUG_BULLET, instanceEntity.getHitbox());
-		}
 	}
 
 }
