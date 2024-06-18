@@ -31,21 +31,37 @@ public class SpriteBank {
 		this.spritesBank = new LinkedList<BufferedImage[]>();
 		loadBackground();
 	}
-	
+
+	/**
+	 * Charge le sprite correspondant au background
+	 */
 	void loadBackground() {
 		try {
-			spritesBank.add(0,loadSprite(getBackgroundFile(), 1,1));
+			spritesBank.add(0, loadSprite(getBackgroundFile(), 1, 1));
 		} catch (IOException e) {
 			System.err.println("Erreur de chargement pour " + ViewCst.SPRITES_FILES[0]);
 		} catch (ArrayIndexOutOfBoundsException e2) {
 			System.err.println("Nombre de colonnes/lignes non spécifié pour " + ViewCst.SPRITES_FILES[0]);
 		}
 	}
-	
+
+	/**
+	 * Retourne le fichier contenant le sprite du background
+	 *
+	 * @return nom du fichier de sprite
+	 */
 	String getBackgroundFile() {
 		return ViewCst.SPRITES_FILES[0];
 	}
-	
+
+	/**
+	 * Charge un sprite enregistré sous forme de matrice
+	 * 
+	 * @param fileName : nom du fichier
+	 * @param nrows    : nombre de ligne de sprite
+	 * @param ncols    : nombre de collone de sprite
+	 * @return numero du sprite enragistré
+	 */
 	int loadSpritesSet(String fileName, int nrows, int ncols) {
 		try {
 			spritesBank.add(loadSprite(fileName, nrows, ncols));
@@ -54,7 +70,7 @@ public class SpriteBank {
 		} catch (ArrayIndexOutOfBoundsException e2) {
 			System.err.println("Nombre de colonnes/lignes non spécifié pour " + fileName);
 		}
-		return spritesBank.size()-1;
+		return spritesBank.size() - 1;
 	}
 
 	/**
@@ -100,6 +116,8 @@ public class SpriteBank {
 
 	/**
 	 * Retourne le sprite de l'arrière plan
+	 * 
+	 * @return buffered image du background
 	 */
 	BufferedImage getBackground() {
 		return spritesBank.get(0)[0];

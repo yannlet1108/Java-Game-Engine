@@ -1,8 +1,6 @@
 package view;
 
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.geom.Rectangle2D;
 
 import model.Entity;
 
@@ -22,7 +20,9 @@ public class PlayerAvatar extends Avatar {
 		m_view.store(this);
 	}
 
-
+	/**
+	 * Affiche la hitbox de debug de l'avatar player
+	 */
 	void debugPaint(Graphics g) {
 		m_view.getBank().debugCollisions(g, ViewCst.DEBUG_PLAYER, instanceEntity.getHitbox());
 	}
