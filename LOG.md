@@ -1,3 +1,25 @@
+### Lundi 17 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Matthieu | Fin des fonctions hit et test, implémentation des poissons | Done |
+| Axel | Vue qui suit le joueur et qui s'adapte a la taille | Done |
+| Gwendal | Moteur physique (collisions) | En cours |
+| Yohan | Implémentation des avatars | En cours |
+| Yann | Implémentation du visiteur | En cours |
+| Moataz | Implémentation de la methode explode et test | En cours |
+| Tout le groupe | Entretien de gestion d'équipe | Done |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Continuer les collisions | Moyen | Gwendal |
+| Continuer les sprites et animation | Moyen | Yohan |
+| Continuer l'implémentation du visiteur | Moyen | Yann |
+| Implémentation du gilet et du spawn des ennemis | Moyen | Moataz |
+| Génération de la map | Moyen | Matthieu |
+| Voir pour la config | Moyen | Axel |
+
+
 ### Vendredi 14 juin
 | Nom | Tache | Etat |
 |:-:|---|:-:|
