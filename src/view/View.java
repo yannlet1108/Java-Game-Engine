@@ -156,15 +156,9 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	private void fillBackground(Graphics g) {
-		if (ViewCst.DEBUG) {
-			g.setColor(ViewCst.BACKGROUND_DEFAULT);
-			g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
-		}
-		//TODO implementer une version fonctionnelle avec une image scalée
-		else {
-			//BufferedImage backimg = bank.getBackground().getSubimage(viewport.getX(), viewport.getY(), viewport.getWidth(), viewport.getHeight());
-			
-		}
+		g.setColor(ViewCst.BACKGROUND_DEFAULT);
+		g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
+		// TODO implementer une version fonctionnelle avec une image scalée
 	}
 
 	/**

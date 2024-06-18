@@ -8,6 +8,7 @@ public class ObstacleAvatar extends Avatar {
 
 	protected ObstacleAvatar(View m_view, Entity e) {
 		super(m_view, e);
+		this.spriteSetNumber = 4;
 		m_view.store(this);
 	}
 

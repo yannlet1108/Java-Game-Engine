@@ -14,6 +14,9 @@ public abstract class Avatar {
 	protected Entity instanceEntity;
 	protected boolean isVisible;
 
+	protected int currentSpriteNumber = 0; // numero de sprite dans un set
+	protected int spriteSetNumber = 1; // numero de set de sprite
+
 	/**
 	 * Crée et initialise les champs communs des avatars. Doit être appellé par une
 	 * sous-classe

@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 import model.Entity;
 
-public class BulletAvatar extends Avatar{
+public class BulletAvatar extends Avatar {
 
 	protected BulletAvatar(View m_view, Entity e) {
 		super(m_view, e);
@@ -17,6 +17,5 @@ public class BulletAvatar extends Avatar{
 			m_view.getBank().debugCollisions(g, ViewCst.DEBUG_BULLET, instanceEntity.getHitbox());
 		}
 	}
-
 
 }

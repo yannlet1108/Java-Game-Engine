@@ -36,9 +36,14 @@ public class Model {
 		viscosity = ModelConstants.WORLD_VISCOSITY;
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
+		/*Tests*/
 		Player P = new Player(getWorldCenter(), Direction.E, this, 100);
-		entities.add(P);
-		players.add(P);
+		/*
+		Point2D pos = new Point2D.Double(getWorldCenter().getX()+20, getWorldCenter().getY()+20);
+		Player p2 = new Player(pos, Direction.E, this, 10);
+		entities.add(p2);
+		players.add(p2);
+		/*=====*/
 		m_view.setModel(this);
 	}
 

@@ -7,7 +7,7 @@ import java.awt.Color;
  */
 public class ViewCst {
 
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 
 	/* Calcul du scaling */
 	public static final float MAX_SCALING = 16f;
@@ -19,7 +19,7 @@ public class ViewCst {
 	public static final float SCALE_FACTOR = 0.06f;
 
 	/* Couleurs par defaut */
-	public static final Color BACKGROUND_DEFAULT = Color.GRAY;
+	public static final Color BACKGROUND_DEFAULT = Color.BLUE;
 
 	/* Couleurs de debug */
 	public static final Color DEBUG_PLAYER = Color.RED;
@@ -28,10 +28,12 @@ public class ViewCst {
 	public static final Color DEBUG_SHARK = Color.CYAN;
 	public static final Color DEBUG_BULLET = Color.DARK_GRAY;
 
-	/* Chargement des sprites*/
-	public static final String[] SPRITES_FILES = { "sprites/backgroundsprites", "sprites/playersprites.png",
-			"sprites/obstaclesprites", "sprites/bulletsprites", "sprites/goldfishsprites", "sprites/sharksprites" };
-	public static final int[] SPRITES_NROWS = { 2, 6, 2 };
-	public static final int[] SPRITES_NCOLS = { 2, 6, 2 };
+	/* Chargement des sprites */
+	// A lister dans l'ordre {background, joueur1, joueur2, obstacles, bullet, mob1, mob2}
+	public static final String[] SPRITES_FILES = { "sprites/backgroundsprites.jpeg", "sprites/playersprites.png",
+			"sprites/playersprites.png", "sprites/obstaclesprites.png", "sprites/bulletsprites.png",
+			"sprites/goldfishsprites.png", "sprites/sharksprites.png" };
+	public static final int[] SPRITES_NROWS = { 1, 3 };
+	public static final int[] SPRITES_NCOLS = { 1, 4 };
 
 }

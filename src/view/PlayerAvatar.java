@@ -20,8 +20,10 @@ public class PlayerAvatar extends Avatar {
 	 */
 	public PlayerAvatar(View m_view, Entity player) {
 		super(m_view, player);
+		this.spriteSetNumber = 1;
 		m_view.store(this);
 	}
+
 
 	@Override
 	void paint(Graphics g) {
@@ -33,7 +35,7 @@ public class PlayerAvatar extends Avatar {
 			if (origin == null) {
 				return;
 			}
-			g.drawImage(m_view.getBank().getSprite(this, 0), origin.x, origin.y,
+			g.drawImage(m_view.getBank().getSprite(spriteSetNumber, currentSpriteNumber), origin.x, origin.y,
 					(int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
 					(int) (collisionBox.getHeight() * m_view.getViewport().getScale()), null);
 		}

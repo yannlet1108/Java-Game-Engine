@@ -140,11 +140,11 @@ public class Viewport {
 	int getHeight() {
 		return (int) viewbox.getHeight();
 	}
-	
+
 	int getX() {
 		return (int) viewbox.getX();
 	}
-	
+
 	int getY() {
 		return (int) viewbox.getY();
 	}
