@@ -29,26 +29,32 @@ public class SpriteBank {
 		this.m_view = m_view;
 		m_view.setBank(this);
 		this.spritesBank = new LinkedList<BufferedImage[]>();
-		loadsprites();
+		loadBackground();
 	}
-
-	/**
-	 * Charge tous les sprites de la liste depuis les fichiers
-	 * 
-	 * @throws IOException
-	 */
-
-	void loadsprites() {
-		for (int i = 0; i < ViewCst.SPRITES_FILES.length; i++) {
-			try {
-				spritesBank
-						.add(loadSprite(ViewCst.SPRITES_FILES[i], ViewCst.SPRITES_NROWS[i], ViewCst.SPRITES_NCOLS[i]));
-			} catch (IOException e) {
-				System.err.println("Erreur de chargement pour " + ViewCst.SPRITES_FILES[i]);
-			} catch (ArrayIndexOutOfBoundsException e2) {
-				System.err.println("Nombre de colonnes/lignes non spécifié pour " + ViewCst.SPRITES_FILES[i]);
-			}
+	
+	void loadBackground() {
+		try {
+			spritesBank.add(0,loadSprite(getBackgroundFile(), 1,1));
+		} catch (IOException e) {
+			System.err.println("Erreur de chargement pour " + ViewCst.SPRITES_FILES[0]);
+		} catch (ArrayIndexOutOfBoundsException e2) {
+			System.err.println("Nombre de colonnes/lignes non spécifié pour " + ViewCst.SPRITES_FILES[0]);
 		}
+	}
+	
+	String getBackgroundFile() {
+		return ViewCst.SPRITES_FILES[0];
+	}
+	
+	int loadSpritesSet(String fileName, int nrows, int ncols) {
+		try {
+			spritesBank.add(loadSprite(fileName, nrows, ncols));
+		} catch (IOException e) {
+			System.err.println("Erreur de chargement pour " + fileName);
+		} catch (ArrayIndexOutOfBoundsException e2) {
+			System.err.println("Nombre de colonnes/lignes non spécifié pour " + fileName);
+		}
+		return spritesBank.size()-1;
 	}
 
 	/**
