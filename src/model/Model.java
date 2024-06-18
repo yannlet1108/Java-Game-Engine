@@ -94,6 +94,10 @@ public class Model {
 	void addEntity(Entity e) {
 		entities.add(e);
 	}
+	
+	void removeEntity(Entity e) {
+		entities.remove(e);
+	}
 
 	/**
 	 * 

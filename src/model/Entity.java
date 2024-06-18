@@ -3,7 +3,9 @@ package model;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
+import java.util.Timer;
 
+import automaton.Automaton;
 import view.PlayerAvatar;
 
 public abstract class Entity {
@@ -19,6 +21,9 @@ public abstract class Entity {
 	private double volume;
 
 	private int healthPoint;
+	private boolean automatonAvailable = true;
+	private Automaton automaton;
+	private int range = 10;
 
 	/**
 	 * @param position
@@ -26,7 +31,8 @@ public abstract class Entity {
 	 * @param model
 	 */
 	public Entity(Point2D position, Direction direction, Model model, int healthPoint) {
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH, PlayerConstants.PLAYER_HEIGHT);
+		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
+				PlayerConstants.PLAYER_HEIGHT);
 		this.direction = direction;
 		this.model = model;
 		this.model.addEntity(this);
@@ -58,7 +64,7 @@ public abstract class Entity {
 	public Point2D getPosition() {
 		return new Point2D.Double(hitbox.getCenterX(), hitbox.getCenterY());
 	}
-	
+
 	public void setPosition(Point2D position) {
 		hitbox.setRect(position.getX(), position.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
@@ -71,6 +77,18 @@ public abstract class Entity {
 		Rectangle2D hitbox = new Rectangle2D.Double();
 		hitbox.setRect(this.hitbox);
 		return hitbox;
+	}
+
+	void doMove(Direction direction) {
+		blockAutomaton();
+		if (direction == null) {
+			move();
+		} else {
+			move(direction);
+		}
+		Timer timer = new Timer();
+		ActionTask endMoveTask = new EndMoveTask(this, 1000);
+		timer.schedule(endMoveTask, endMoveTask.getDuration());
 	}
 
 	/**
@@ -92,11 +110,33 @@ public abstract class Entity {
 	 * Execute l'action Pick comme definit par l'entite
 	 */
 	public abstract void pick();
+	
+	void doExplode(Direction direction) {
+		blockAutomaton();
+		if (direction == null) {
+			move();
+		} else {
+			move(direction);
+		}
+		Timer timer = new Timer();
+		ActionTask endMoveTask = new EndMoveTask(this, 1000);
+		timer.schedule(endMoveTask, endMoveTask.getDuration());
+	}
 
 	/**
 	 * Execute l'action Explode comme definit par l'entite
 	 */
 	public abstract void explode();
+	
+	public boolean doCell(Direction direction, Category category) {
+		if(direction == null) {
+			direction = Direction.FORWARD;
+		}
+		if(category == null) {
+			category = Category.VOID;
+		}
+		return cell(direction, category, range);
+	}
 
 	/**
 	 * Retourne True Si la case dans la direction donnée en paramètre a une entité
@@ -114,38 +154,40 @@ public abstract class Entity {
 		double x = currentPos.getX();
 		double y = currentPos.getY();
 		Iterator<Entity> entityIter = this.model.entitiesIterator();
+		
+		Direction absoluteDirection = Direction.relativeToAbsolute(getDirection(), direction);
 
 		while (entityIter.hasNext()) {
 			entity = entityIter.next();
 			if (entity.category == category) {
-				if (direction == Direction.NE && entity.getX() > x && entity.getX() <= x + rayon && entity.getY() < y
+				if (absoluteDirection == Direction.NE && entity.getX() > x && entity.getX() <= x + rayon && entity.getY() < y
 						&& entity.getY() >= y - rayon)
 					return true;
-				if (direction == Direction.NW && entity.getX() < x && entity.getX() >= x - rayon && entity.getY() < y
+				if (absoluteDirection == Direction.NW && entity.getX() < x && entity.getX() >= x - rayon && entity.getY() < y
 						&& entity.getY() >= y - rayon)
 					return true;
-				if (direction == Direction.SW && entity.getX() < x && entity.getX() >= x - rayon && entity.getY() > y
+				if (absoluteDirection == Direction.SW && entity.getX() < x && entity.getX() >= x - rayon && entity.getY() > y
 						&& entity.getY() <= y + rayon)
 					return true;
-				if (direction == Direction.SE && entity.getX() > x && entity.getX() <= x + rayon && entity.getY() > y
+				if (absoluteDirection == Direction.SE && entity.getX() > x && entity.getX() <= x + rayon && entity.getY() > y
 						&& entity.getY() <= y + rayon)
 					return true;
-				if (direction == Direction.E && ((entity.getX() > x && entity.getX() <= x + rayon / 2
+				if (absoluteDirection == Direction.E && ((entity.getX() > x && entity.getX() <= x + rayon / 2
 						&& absolute(entity.getY() - y) < entity.getX() - x)
 						|| (entity.getX() <= x + rayon && entity.getX() >= x + rayon / 2
 								&& absolute(entity.getY() - y) < x + rayon - entity.getX())))
 					return true;
-				if (direction == Direction.W && ((entity.getX() < x && entity.getX() >= x - rayon / 2
+				if (absoluteDirection == Direction.W && ((entity.getX() < x && entity.getX() >= x - rayon / 2
 						&& absolute(entity.getY() - y) < x - entity.getX())
 						|| (entity.getX() >= x - rayon && entity.getX() <= x - rayon / 2
 								&& absolute(entity.getY() - y) < entity.getX() - (x - rayon))))
 					return true;
-				if (direction == Direction.N && ((entity.getY() < y && entity.getY() >= y - rayon / 2
+				if (absoluteDirection == Direction.N && ((entity.getY() < y && entity.getY() >= y - rayon / 2
 						&& absolute(entity.getX() - x) < y - entity.getY())
 						|| (entity.getY() >= y - rayon && entity.getY() <= y - rayon / 2
 								&& absolute(entity.getX() - x) < entity.getY() - (y - rayon))))
 					return true;
-				if (direction == Direction.S && ((entity.getY() > y && entity.getY() <= y + rayon / 2
+				if (absoluteDirection == Direction.S && ((entity.getY() > y && entity.getY() <= y + rayon / 2
 						&& absolute(entity.getX() - x) < entity.getY() - y)
 						|| (entity.getY() <= y + rayon && entity.getY() >= y + rayon / 2
 								&& absolute(entity.getX() - x) < y + rayon - entity.getY())))
@@ -175,6 +217,9 @@ public abstract class Entity {
 	 * Met a jour l'etat de l'entite comme definit par son automate
 	 */
 	public void step() {
+		if (automatonAvailable) {
+			automaton.step();
+		}
 	}
 
 	public void computeMovement() {
@@ -231,5 +276,21 @@ public abstract class Entity {
 
 	public void modifyHealthPoint(int val) {
 		this.healthPoint += val;
+	}
+
+	public void setForce(Vector newForce) {
+		force = newForce;
+	}
+
+	public void blockAutomaton() {
+		automatonAvailable = false;
+	}
+
+	public void freeAutomaton() {
+		automatonAvailable = true;
+	}
+
+	public void destroy() {
+		model.removeEntity(this);
 	}
 }
