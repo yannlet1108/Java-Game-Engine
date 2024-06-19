@@ -2,10 +2,10 @@ package automaton;
 
 import model.Entity;
 
-public class Mode {
+class Mode {
 
-	State name;
-	Behaviour behaviour; // Liste de transitions
+	private State name;
+	private Behaviour behaviour; // Liste de transitions
 
 	Mode(State name, Behaviour behaviour) {
 		this.name = name;

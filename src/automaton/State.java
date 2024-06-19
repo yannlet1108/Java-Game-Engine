@@ -5,12 +5,12 @@ package automaton;
  */
 public class State {
 
-	String name;
+	private String name;
 
 	State(String name) {
 		this.name = name;
 	}
-	
+
 	String getName() {
 		return name;
 	}

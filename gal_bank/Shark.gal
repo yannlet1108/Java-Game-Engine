@@ -3,5 +3,4 @@ Shark(Chase){
 	| Cell(d,A) ? Hit(d) :(Chase)
 	| Closest(A,d) ? Move(d) :(Chase)
 	| True ? Move(_) :(Chase)
-	
 }

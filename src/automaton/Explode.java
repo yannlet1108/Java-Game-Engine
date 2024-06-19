@@ -2,11 +2,15 @@ package automaton;
 
 import model.Entity;
 
-public class Explode implements Action {
+class Explode implements Action {
+	
+	Explode(){
+		// Nothing to do here
+	}
 
 	@Override
 	public void exec(Entity e) {
-		e.explode();
+		e.doExplode();
 	}
 
 }

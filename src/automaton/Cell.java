@@ -7,13 +7,13 @@ import model.Category;
 /**
  * Classe de la condition cell
  */
-public class Cell implements Condition {
+class Cell implements Condition {
 
-	Direction dir;
-	Category cat;
+	private Direction dir;
+	private Category cat;
 
 	/**
-	 * Parametre une condition cell.
+	 * Constructeur de condition cell.
 	 * 
 	 * @param dir : Direction a evaluer
 	 * @param cat : Categorie de l'entite a evaluer
@@ -24,7 +24,7 @@ public class Cell implements Condition {
 	}
 
 	/**
-	 * Evalue la cellule en fonction des parametres
+	 * Demande à l'entité d'évaluer la condition
 	 */
 	@Override
 	public boolean eval(Entity e) {

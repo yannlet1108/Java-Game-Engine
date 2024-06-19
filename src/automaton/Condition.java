@@ -7,6 +7,9 @@ import model.Entity;
  */
 interface Condition {
 
+	/**
+	 * Demande à l'entité d'évaluer la condition
+	 */
 	boolean eval(Entity e);
 
 }

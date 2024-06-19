@@ -20,10 +20,13 @@ import gal.ast.UnaryOp;
 import gal.ast.Underscore;
 import gal.ast.Value;
 
-public class AutBuilder implements IVisitor {
+/**
+ * Visiteur qui construit une liste d'automates à partir d'un AST
+ */
+class AutBuilder implements IVisitor {
 
-	public AutBuilder(AST bot) {
-		// TO DO
+	AutBuilder(AST bot) {
+		// Nothing to do here
 	}
 
 	@Override
@@ -34,7 +37,7 @@ public class AutBuilder implements IVisitor {
 		case "O":
 			return model.Category.OBSTACLE;
 		default:
-			throw new IllegalArgumentException("Category's name not recognised");
+			throw new IllegalArgumentException("Category's name not recognised : " + cat.toString());
 		}
 	}
 
@@ -50,7 +53,7 @@ public class AutBuilder implements IVisitor {
 		case "B":
 			return model.Direction.BACKWARD;
 		default:
-			throw new IllegalArgumentException("Direction's name not recognised");
+			throw new IllegalArgumentException("Direction's name not recognised : " + dir.toString());
 		}
 	}
 
@@ -93,7 +96,7 @@ public class AutBuilder implements IVisitor {
 		case "True":
 			return new TrueCondition();
 		default:
-			throw new IllegalArgumentException("Function's name not recognised");
+			throw new IllegalArgumentException("Function's name not recognised : " + funcall.name);
 		}
 	}
 
@@ -119,7 +122,7 @@ public class AutBuilder implements IVisitor {
 		case "/":
 			return new Disjonction((automaton.Condition) right, (automaton.Condition) left);
 		default:
-			throw new IllegalArgumentException("Binary operator not recognised");
+			throw new IllegalArgumentException("Binary operator not recognised : " + binop.toString());
 		}
 	}
 
@@ -174,13 +177,7 @@ public class AutBuilder implements IVisitor {
 	public void exit(Condition condition) {
 	}
 
-	/**
-	 * Pas certain !
-	 */
 	public Object build(Condition condition, Object expression) {
-		/*if (expression.toString() == "True") {
-			return new TrueCondition();
-		}*/
 		return (automaton.Condition) expression;
 	}
 
@@ -196,8 +193,6 @@ public class AutBuilder implements IVisitor {
 	}
 
 	/**
-	 * À Pas certain !
-	 * 
 	 * À modifier si on veut des listes d'actions
 	 */
 	public Object build(Actions action, String operator, List<Object> funcalls) {
@@ -226,7 +221,7 @@ public class AutBuilder implements IVisitor {
 	}
 
 	public Object build(Automaton automaton, Object initial_state, List<Object> modes) {
-		return new automaton.Automaton((automaton.State) initial_state, modes);
+		return new automaton.Automaton(automaton.name, (automaton.State) initial_state, modes);
 	}
 
 	// AST
@@ -238,7 +233,7 @@ public class AutBuilder implements IVisitor {
 	}
 
 	public Object build(AST ast, List<Object> automata) {
-		return new automaton.AST(automata);
+		return new automaton.AutomatonBank(automata);
 	}
 
 }

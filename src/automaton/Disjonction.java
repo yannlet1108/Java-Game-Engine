@@ -3,11 +3,11 @@ package automaton;
 import model.Entity;
 
 /**
- * Classe evaluant deux conditions avec un ou inclusif
+ * Classe evaluant la disjonction (OU) de deux conditions
  */
 class Disjonction implements Condition {
-	Condition c1;
-	Condition c2;
+	private Condition c1;
+	private Condition c2;
 
 	/**
 	 * Enregistre les deux conditions a comparer

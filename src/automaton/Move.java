@@ -6,7 +6,7 @@ import model.Direction;
 /**
  * Classe de l'action move
  */
-public class Move implements Action {
+class Move implements Action {
 
 	private Direction dir;
 
@@ -20,7 +20,7 @@ public class Move implements Action {
 	}
 
 	/**
-	 * Ne pas exécuter direct
+	 * Demande à l'entité d'exécuter l'action
 	 */
 	@Override
 	public void exec(Entity e) {

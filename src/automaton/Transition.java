@@ -3,13 +3,13 @@ package automaton;
 import model.Entity;
 
 /**
- * Classe permettant d'ecrire un automate pour creer un comportement d'entite.
+ * Classe Transition
  */
-public class Transition {
+class Transition {
 
-	Condition cond;
-	Action action;
-	State end;
+	private Condition cond;
+	private Action action;
+	private State end;
 
 	/**
 	 * Cree une nouvelle transition a partir d'une action et d'une condition.
@@ -24,10 +24,16 @@ public class Transition {
 		this.end = end;
 	}
 
+	/**
+	 * Demande à l'entité d'évaluer la condition de la transition
+	 */
 	boolean eval(Entity e) {
 		return cond.eval(e);
 	}
-	
+
+	/**
+	 * Demande à l'entité d'exécuter l'action de la transition
+	 */
 	void exec(Entity e) {
 		action.exec(e);
 	}

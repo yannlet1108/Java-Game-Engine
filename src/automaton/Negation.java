@@ -5,20 +5,19 @@ import model.Entity;
 /**
  * Classe exprimant la negation d'une condition
  */
-public class Negation implements Condition {
+class Negation implements Condition {
 
-	Condition cond;
+	private Condition cond;
 
 	/**
-	 * Defini la condition a refuser
-	 * @param cond : Condition a parametrer
+	 * Constructeur de négation
 	 */
 	Negation(Condition cond) {
 		this.cond = cond;
 	}
 
 	/**
-	 * Evalue la valeur de la condition
+	 * Evalue la condition
 	 */
 	@Override
 	public boolean eval(Entity e) {

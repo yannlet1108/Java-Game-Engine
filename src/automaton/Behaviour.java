@@ -5,9 +5,12 @@ import java.util.List;
 
 import model.Entity;
 
-public class Behaviour {
+/**
+ * Classe représentant la liste de Transitions associées à un Mode
+ */
+class Behaviour {
 
-	List<Transition> transitions;
+	private List<Transition> transitions;
 
 	Behaviour(List<Object> transitions) {
 		this.transitions = new LinkedList<Transition>();
@@ -26,9 +29,5 @@ public class Behaviour {
 				return;
 			}
 		}
-	}
-
-	List<Transition> getTransitions() {
-		return transitions;
 	}
 }

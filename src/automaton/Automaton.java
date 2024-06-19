@@ -7,9 +7,9 @@ import model.Entity;
 
 public class Automaton {
 
-	// String name; // Maybe later
-	State initialState;
-	List<Mode> modes;
+	private String name;
+	private State initialState;
+	private List<Mode> modes;
 
 	/**
 	 * Automate instancié de manière unique dans le jeu et utilisé par plusieurs FSM
@@ -17,7 +17,8 @@ public class Automaton {
 	 * @param initialState
 	 * @param modes
 	 */
-	Automaton(State initialState, List<Object> modes) {
+	Automaton(String name, State initialState, List<Object> modes) {
+		this.name = name;
 		this.initialState = initialState;
 		this.modes = new LinkedList<Mode>();
 		for (Object mode : modes) {
@@ -40,7 +41,11 @@ public class Automaton {
 		return initialState;
 	}
 
-	Mode getMode(State name) {
+	/**
+	 * @param name
+	 * @return the mode with the corresponding name
+	 */
+	private Mode getMode(State name) {
 		for (Mode mode : modes) {
 			if (mode.isSameState(name)) {
 				return mode;
@@ -49,10 +54,8 @@ public class Automaton {
 		throw new IllegalArgumentException("No mode found with that name");
 	}
 
-	/*
-	 * List<Transition> getTransitions(State state){ for (Mode mode : modes) { if
-	 * (mode.isSameState(state)) { return mode.getBehaviour().getTransitions(); } }
-	 * return null; // shouldn't happen }
-	 */
+	boolean hasName(String name) {
+		return name.equals(this.name);
+	}
 
 }
