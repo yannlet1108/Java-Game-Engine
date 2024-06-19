@@ -9,11 +9,6 @@ import model.Direction;
 public class Move implements Action {
 
 	private Direction dir;
-	private boolean isDirectionPrecised;
-
-	Move() {
-		isDirectionPrecised = false;
-	}
 
 	/**
 	 * Parametre une action de mouvement
@@ -22,7 +17,6 @@ public class Move implements Action {
 	 */
 	Move(Direction dir) {
 		this.dir = dir;
-		isDirectionPrecised = true;
 	}
 
 	/**
@@ -30,13 +24,7 @@ public class Move implements Action {
 	 */
 	@Override
 	public void exec(Entity e) {
-		/*
-		if (isDirectionPrecised) {
-			e.move(dir);
-		} else {
-			e.move();
-		}
-		*/
+		e.doMove(dir);
 		return;
 	}
 

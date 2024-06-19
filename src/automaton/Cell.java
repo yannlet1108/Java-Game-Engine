@@ -25,13 +25,10 @@ public class Cell implements Condition {
 
 	/**
 	 * Evalue la cellule en fonction des parametres
-	 * 
-	 * TO DO : Voir aveec le modèle comment faire
 	 */
 	@Override
 	public boolean eval(Entity e) {
-		//return e.cell(dir, cat);
-		return false;
+		return e.doCell(dir, cat);
 	}
 
 }
