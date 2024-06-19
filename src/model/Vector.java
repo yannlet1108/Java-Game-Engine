@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 public class Vector {
@@ -47,5 +48,52 @@ public class Vector {
 	@Override
 	public String toString() {
 		return "(" + getX() + "," + getY() + ")";
+	}
+
+	Direction getVectorDirection() {
+		double x = getX();
+		double y = getY();
+
+		if (x == 0 && y == 0) {
+			return Direction.HERE;
+		}
+
+		if (x == 0) {
+			if (y > 0) {
+				return Direction.N;
+			} else {
+				return Direction.S;
+			}
+		}
+
+		if (y == 0) {
+			if (x > 0) {
+				return Direction.E;
+			} else {
+				return Direction.W;
+			}
+		}
+
+		if (x > 0 && y > 0) {
+			return Direction.NE;
+		}
+
+		if (x > 0 && y < 0) {
+			return Direction.SE;
+		}
+
+		if (x < 0 && y > 0) {
+			return Direction.NW;
+		}
+
+		if (x < 0 && y < 0) {
+			return Direction.SW;
+		}
+
+		return Direction.HERE;
+	}
+
+	Line2D getLineFrom(Point2D p) {
+		return new Line2D.Double(p, add(p));
 	}
 }
