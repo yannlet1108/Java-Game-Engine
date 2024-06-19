@@ -1,3 +1,19 @@
+### Mercredi 19 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Gwendal | Fichiers de config et chargement | En cours |
+| Yann | Visiteur | Done |
+| Yann | Automates | En cours |
+| Yohan | Sprites et animations | En cours |
+| Axel | Vue dynamique à deux joueurs | En cours |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Continuer les sprites et animations | Moyen | Yohan |
+| Faire les fichiers de config | Moyen | Gwendal |
+| Merge les automates avec le reste du projet | Elevé | Gwendal, Yann, Axel |
+
 ### Mardi 18 juin
 | Nom | Tache | Etat |
 |:-:|---|:-:|
