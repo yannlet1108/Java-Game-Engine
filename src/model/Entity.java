@@ -25,6 +25,7 @@ public abstract class Entity {
 	protected int team;
 	protected int meleeRange; // a definir
 	protected int attackDamage; // a definir
+	protected State state;
 
 	/**
 	 * @param position
@@ -435,5 +436,13 @@ public abstract class Entity {
 
 	public int getTeam() {
 		return team;
+	}
+
+	public State getState() {
+		return state;
+	}
+	
+	void setState(State newState) {
+		state = newState;
 	}
 }
