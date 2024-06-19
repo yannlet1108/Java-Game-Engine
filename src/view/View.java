@@ -205,4 +205,22 @@ public class View {
 		return viewport;
 	}
 
+	/**
+	 * Retourne la hauteur de la simulation
+	 * 
+	 * @return taille de la simulation sur les abcisses
+	 */
+	double getSimHeight() {
+		return m_model.getBoardHeight();
+	}
+
+	/**
+	 * Retourne la largeur de la simulation
+	 * 
+	 * @return taille de la simulation sur les ordonnées
+	 */
+	double getSimWidth() {
+		return m_model.getBoardWidth();
+	}
+
 }

@@ -38,6 +38,21 @@ public class SpriteBank {
 	void loadBackground() {
 		try {
 			spritesBank.add(0, loadSprite(getBackgroundFile(), 1, 1));
+			BufferedImage background = spritesBank.remove()[0];
+			double xRatio = background.getWidth() / m_view.getSimWidth();
+			double yRatio = background.getHeight() / m_view.getSimHeight();
+			double ratio = Math.min(xRatio, yRatio);
+			double newWidth = background.getWidth();
+			double newHeight = background.getHeight();
+			int offset = background.getMinX();
+			if (xRatio > ratio)
+				newWidth = (int) ((yRatio * background.getWidth()) / ratio);
+			offset = (int) ((background.getWidth() - newWidth) / 2);
+			if (yRatio > ratio)
+				newHeight = (int) ((xRatio * background.getHeight()) / ratio);
+			BufferedImage newBackground[] = new BufferedImage[1];
+			newBackground[0] = background.getSubimage(offset, background.getMinY(), (int) newWidth, (int) newHeight);
+			spritesBank.add(0, newBackground);
 		} catch (IOException e) {
 			System.err.println("Erreur de chargement pour " + ViewCst.SPRITES_FILES[0]);
 		} catch (ArrayIndexOutOfBoundsException e2) {
