@@ -35,7 +35,18 @@ class Transition {
 	 * Demande à l'entité d'exécuter l'action de la transition
 	 */
 	void exec(Entity e) {
-		action.exec(e);
+		if (action != null) {
+			action.exec(e);
+		}
+		e.getFSM.setState(end);
+	}
+
+	@Override
+	public String toString() {
+		if (action == null) {
+			return cond.toString() + "? ";
+		}
+		return cond.toString() + "? " + action.toString();
 	}
 
 }

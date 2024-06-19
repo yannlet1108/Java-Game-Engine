@@ -27,4 +27,9 @@ class Conjonction implements Condition {
 	public boolean eval(Entity e) {
 		return c1.eval(e) && c2.eval(e);
 	}
+
+	@Override
+	public String toString() {
+		return c1.toString() + "&" + c2.toString();
+	}
 }

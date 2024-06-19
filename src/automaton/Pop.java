@@ -2,20 +2,22 @@ package automaton;
 
 import model.Entity;
 
-class Explode implements Action {
+class Pop implements Action {
 
-	Explode() {
-		// Nothing to do here
+	int val;
+
+	Pop(int val) {
+		this.val = val;
 	}
 
 	@Override
 	public void exec(Entity e) {
-		e.doExplode();
+		e.doPop(val);
 	}
 
 	@Override
 	public String toString() {
-		return "Explode";
+		return "Pop(" + val + ")";
 	}
 
 }

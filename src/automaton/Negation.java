@@ -23,4 +23,9 @@ class Negation implements Condition {
 	public boolean eval(Entity e) {
 		return !cond.eval(e);
 	}
+
+	@Override
+	public String toString() {
+		return "not(" + cond.toString() + ")";
+	}
 }

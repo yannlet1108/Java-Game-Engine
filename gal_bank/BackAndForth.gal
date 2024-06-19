@@ -1,5 +1,5 @@
 BackAndForth(Init){
 	* (Init):
-	| Cell(F,V) ? Move(F) :(Init)
+	| Cell(F,V) ? Move :(Init)
 	| True ? Move(B) :(Init)
 }

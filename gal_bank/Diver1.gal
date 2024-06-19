@@ -5,6 +5,5 @@ Diver1(Init){
 	| Key(s) ? Pop(-1) :(Init)
 	| Key(d) ? Move(E) :(Init)
 	| Key(SPACE) ? Hit :(Init)
-	| Key(e) ? Pick :(Init)
 	| True ? :(Init)
 }

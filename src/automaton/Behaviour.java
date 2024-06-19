@@ -30,4 +30,9 @@ class Behaviour {
 			}
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return transitions.toString();
+	}
 }

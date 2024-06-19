@@ -36,6 +36,14 @@ class AutBuilder implements IVisitor {
 			return model.Category.VOID;
 		case "O":
 			return model.Category.OBSTACLE;
+		case "A":
+			return model.Category.ADVERSARY;
+		case "T":
+			return model.Category.TEAM_MEMBER;
+		/* On utilise Underscore comme une Direction */
+		case "_":
+			//System.out.println("Underscore found in Category");
+			return model.Direction.UNDERSCORE;
 		default:
 			throw new IllegalArgumentException("Category's name not recognised : " + cat.toString());
 		}
@@ -44,32 +52,65 @@ class AutBuilder implements IVisitor {
 	@Override
 	public Object visit(Direction dir) {
 		switch (dir.toString()) {
+		// Directions absolues
+		case "N":
+			return model.Direction.N;
+		case "S":
+			return model.Direction.S;
 		case "E":
 			return model.Direction.E;
 		case "W":
 			return model.Direction.W;
+		case "NW":
+			return model.Direction.NW;
+		case "NE":
+			return model.Direction.NE;
+		case "SW":
+			return model.Direction.SW;
+		case "SE":
+			return model.Direction.SE;
+		// Directions relatives
+		case "H":
+			return model.Direction.HERE;
 		case "F":
 			return model.Direction.FORWARD;
 		case "B":
 			return model.Direction.BACKWARD;
+		case "L":
+			return model.Direction.LEFT;
+		case "R":
+			return model.Direction.RIGHT;
+		// Directions spéciales
+		case "d":
+			return model.Direction.d;
 		default:
 			throw new IllegalArgumentException("Direction's name not recognised : " + dir.toString());
 		}
 	}
 
+	/**
+	 * TO DO : Voir avec le controlleur
+	 */
 	@Override
 	public Object visit(Key key) {
 		return null;
 	}
 
+	/**
+	 * On utilise directement des int
+	 */
 	@Override
 	public Object visit(Value v) {
-		return null;
+		return v.value;
 	}
 
+	/**
+	 * Seems to never be called
+	 */
 	@Override
 	public Object visit(Underscore u) {
-		return null;
+		System.out.println("Underscore found in Underscore");
+		return model.Direction.UNDERSCORE;
 	}
 
 	// FUNCALL
@@ -86,13 +127,42 @@ class AutBuilder implements IVisitor {
 	public void exit(FunCall funcall) {
 	}
 
+	/**
+	 * For now : Key uses Strings
+	 */
 	@Override
 	public Object build(FunCall funcall, List<Object> parameters) {
 		switch (funcall.name) {
+		// Conditions
 		case "Cell":
 			return new Cell((model.Direction) parameters.get(0), (model.Category) parameters.get(1));
+		case "Closest":
+			return new Closest((model.Category) parameters.get(0), (model.Direction) parameters.get(1));
+		case "Key":
+			return new automaton.Key(((Key) funcall.parameters.get(0)).toString());
+		// Actions
 		case "Move":
+			if (parameters.isEmpty()) {
+				return new Move(null);
+			}
 			return new Move((model.Direction) parameters.get(0));
+		case "Explode":
+			return new Explode();
+		case "Hit":
+			if (parameters.isEmpty()) {
+				return new Hit(null);
+			}
+			return new Hit((model.Direction) parameters.get(0));
+		case "Pop":
+			return new Pop((int) parameters.get(0));
+		case "Egg":
+			if (parameters.isEmpty()) {
+				return new Egg(null);
+			}
+			return new Egg((model.Direction) parameters.get(0));
+		case "Wait":
+			return new Wait();
+		// TrueCondition
 		case "True":
 			return new TrueCondition();
 		default:
@@ -196,6 +266,9 @@ class AutBuilder implements IVisitor {
 	 * À modifier si on veut des listes d'actions
 	 */
 	public Object build(Actions action, String operator, List<Object> funcalls) {
+		if (funcalls.isEmpty()) {
+			return null;
+		}
 		return (automaton.Action) funcalls.get(0);
 	}
 

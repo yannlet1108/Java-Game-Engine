@@ -57,5 +57,10 @@ public class Automaton {
 	boolean hasName(String name) {
 		return name.equals(this.name);
 	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 
 }

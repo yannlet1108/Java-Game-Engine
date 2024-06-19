@@ -24,8 +24,20 @@ class Move implements Action {
 	 */
 	@Override
 	public void exec(Entity e) {
-		e.doMove(dir);
-		return;
+		if (dir == Direction.UNDERSCORE) {
+			Direction randomDirection = dir.getRandomDirection();
+			e.doMove(randomDirection);
+		} else {
+			e.doMove(dir);
+		}
+	}
+
+	@Override
+	public String toString() {
+		if (dir == null) {
+			return "Move";
+		}
+		return "Hit(" + dir.toString() + ")";
 	}
 
 }

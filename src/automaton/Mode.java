@@ -27,4 +27,9 @@ class Mode {
 		return state.equals(name);
 	}
 
+	@Override
+	public String toString() {
+		return name.toString();
+	}
+
 }

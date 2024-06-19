@@ -18,4 +18,9 @@ public class State {
 	boolean equals(State state) {
 		return state.getName().equals(name);
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

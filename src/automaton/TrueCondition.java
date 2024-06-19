@@ -16,4 +16,9 @@ public class TrueCondition implements Condition {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "True";
+	}
+
 }

@@ -5,7 +5,6 @@ Diver1(Init){
 	| Key(s) ? Pop(-1) :(Init)
 	| Key(d) ? Move(E) :(Init)
 	| Key(SPACE) ? Hit :(Init)
-	| Key(e) ? Pick :(Init)
 	| True ? :(Init)
 }
 
@@ -15,8 +14,7 @@ Diver2(Init){
 	| Key(FL) ? Move(W) :(Init)
 	| Key(FD) ? Pop(-1) :(Init)
 	| Key(FR) ? Move(E) :(Init)
-	| Key(RightButtonPressed) ? Hit :(Init)
-	| Key(LeftButtonPressed) ? Pick :(Init)
+	| Key(ENTER) ? Hit :(Init)
 	| True ? :(Init)
 }
 
@@ -43,7 +41,7 @@ Shark(Chase){
 
 BackAndForth(Init){
 	* (Init):
-	| Cell(F,V) ? Move(F) :(Init)
+	| Cell(F,V) ? Move :(Init)
 	| True ? Move(B) :(Init)
 }
 

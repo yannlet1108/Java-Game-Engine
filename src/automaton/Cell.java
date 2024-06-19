@@ -31,4 +31,9 @@ class Cell implements Condition {
 		return e.doCell(dir, cat);
 	}
 
+	@Override
+	public String toString() {
+		return "Cell(" + dir.toString() + "," + cat.toString() + ")";
+	}
+
 }
