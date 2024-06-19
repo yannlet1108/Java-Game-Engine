@@ -423,6 +423,18 @@ public abstract class Entity {
 		this.modifyHealthPoint(-val);
 	}
 
+	void doHit(Direction direction) {
+		blockAutomaton();
+		if (direction == null) {
+			move();
+		} else {
+			move(direction);
+		}
+		Timer timer = new Timer();
+		ActionTask hitTask = new HitTask(this, 1000 / 2);
+		timer.schedule(hitTask, hitTask.getDuration());
+	}
+
 	/**
 	 * Action hit autour du personnage dans sa range
 	 */

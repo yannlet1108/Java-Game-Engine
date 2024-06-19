@@ -74,12 +74,13 @@ public class Model {
 	}
 
 	/**
-	 * spawn un poisson d'une probabilitée IN_GENERAL / 1000 dans une poisition aléatoire , ce poisson peut être
-	 * de differents types avec une probabilitée chacun,
-	 * 10 essaies si il n y a pas de la place l'opération s'arrête.
+	 * spawn un poisson d'une probabilitée IN_GENERAL / 1000 dans une poisition
+	 * aléatoire , ce poisson peut être de differents types avec une probabilitée
+	 * chacun, 10 essaies si il n y a pas de la place l'opération s'arrête.
+	 * 
 	 * @return le poisson
 	 * @author MO ER
-	 */ 
+	 */
 	private Fish spawnEnemy() {
 		Random yesOrNotRand = new Random();
 		int yesOrNot = yesOrNotRand.nextInt(1000); // 1000 à modif
@@ -130,13 +131,15 @@ public class Model {
 			Fish nue;
 			if (fish == 0) {
 				nue = new Goldfish(pts, Direction.E, this);
-				//Pour test
-				//System.out.println("Goldfish added at x = " + pts.getX() + ", y = " + pts.getY() + "."); 
+				// Pour test
+				// System.out.println("Goldfish added at x = " + pts.getX() + ", y = " +
+				// pts.getY() + ".");
 				return nue;
 			} else if (fish == 1) {
 				nue = new Shark(pts, Direction.E, this);
-				//Pour test
-				//System.out.println("Shark added at x = " + pts.getX() + ", y = " + pts.getY() + ".");
+				// Pour test
+				// System.out.println("Shark added at x = " + pts.getX() + ", y = " + pts.getY()
+				// + ".");
 				return nue;
 			}
 			return null;
@@ -167,10 +170,6 @@ public class Model {
 	 */
 	void addEntity(Entity e) {
 		entities.add(e);
-	}
-	
-	void removeEntity(Entity e) {
-		entities.remove(e);
 	}
 
 	/**
