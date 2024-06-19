@@ -1,5 +1,6 @@
 package automaton;
 
+import java.util.Iterator;
 import java.util.List;
 
 import gal.ast.AST;
@@ -42,7 +43,7 @@ class AutBuilder implements IVisitor {
 			return model.Category.TEAM_MEMBER;
 		/* On utilise Underscore comme une Direction */
 		case "_":
-			//System.out.println("Underscore found in Category");
+			// System.out.println("Underscore found in Category");
 			return model.Direction.UNDERSCORE;
 		default:
 			throw new IllegalArgumentException("Category's name not recognised : " + cat.toString());
@@ -165,6 +166,7 @@ class AutBuilder implements IVisitor {
 		// TrueCondition
 		case "True":
 			return new TrueCondition();
+		// Unexpected Function's name
 		default:
 			throw new IllegalArgumentException("Function's name not recognised : " + funcall.name);
 		}
@@ -266,10 +268,18 @@ class AutBuilder implements IVisitor {
 	 * À modifier si on veut des listes d'actions
 	 */
 	public Object build(Actions action, String operator, List<Object> funcalls) {
+
 		if (funcalls.isEmpty()) {
 			return null;
 		}
 		return (automaton.Action) funcalls.get(0);
+
+		/**
+		 * automaton.Actions actions = new automaton.Actions(); for (Iterator<Object>
+		 * iterator = funcalls.iterator(); iterator.hasNext();) { FunCall funcall =
+		 * (FunCall) iterator.next(); actions.add((automaton.Action) funcall); } return
+		 * actions;
+		 */
 	}
 
 	// TRANSITION
