@@ -8,7 +8,6 @@ public class ObstacleAvatar extends Avatar {
 
 	protected ObstacleAvatar(View m_view, Entity e, int entityType) {
 		super(m_view, e, entityType);
-		m_view.store(this);
 	}
 
 	@Override

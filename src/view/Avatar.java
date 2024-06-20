@@ -29,8 +29,8 @@ public abstract class Avatar {
 	 * Crée et initialise les champs communs des avatars. Doit être appellé par une
 	 * sous-classe charge le set de sprites associé à l'entité
 	 * 
-	 * @param m_view : instance courante de la view
-	 * @param e      : entité associé à l'avatar
+	 * @param m_view     : instance courante de la view
+	 * @param e          : entité associé à l'avatar
 	 * @param entityType : numero de l'entité dans la config
 	 */
 	protected Avatar(View m_view, Entity e, int entityType) {
@@ -40,11 +40,13 @@ public abstract class Avatar {
 		spriteSetNumber = m_view.getBank().loadSpritesSet(getSpritesFile(entityType), getSpritesNrows(entityType),
 				getSpritesNcols(entityType));
 		this.animationSprite = new PriorityQueue<Integer>();
+		m_view.store(this);
 		setInvisible();
 	}
 
 	/**
 	 * Retourne le prochain sprite à afficher dans la liste d'animation
+	 * 
 	 * @return numero du sprite
 	 */
 	int getNextSpriteNumber() {
@@ -55,21 +57,22 @@ public abstract class Avatar {
 	}
 
 	/**
-	 * Met à jour la file d'animation en fonction de l'état de l'entité
-	 * Relance l'animation liée à l'état si necessaire
+	 * Met à jour la file d'animation en fonction de l'état de l'entité Relance
+	 * l'animation liée à l'état si necessaire
 	 */
 	void updateAnimations() {
 		model.State newState = instanceEntity.getState();
 		if (newState != lastState) {
 			lastState = newState;
-			if (lastState == model.State.HITTING || lastState == model.State.HITTING_AROUND && lastState != model.State.DYING) {
+			if (lastState == model.State.HITTING
+					|| lastState == model.State.HITTING_AROUND && lastState != model.State.DYING) {
 				animationSprite.clear();
 			}
 			addAnimation(lastState);
-		}
-		else {
-			if(animationSprite.isEmpty()) {
-				if(lastState!= model.State.HITTING && lastState != model.State.HITTING_AROUND && lastState != model.State.DYING) {
+		} else {
+			if (animationSprite.isEmpty()) {
+				if (lastState != model.State.HITTING && lastState != model.State.HITTING_AROUND
+						&& lastState != model.State.DYING) {
 					addAnimation(lastState);
 				}
 			}
@@ -91,7 +94,8 @@ public abstract class Avatar {
 	}
 
 	/**
-	 * Ajoute les sprites correspondant à l'état de l'entité dans la file d'animation
+	 * Ajoute les sprites correspondant à l'état de l'entité dans la file
+	 * d'animation
 	 * 
 	 * @param state : état de l'entité
 	 */
@@ -103,25 +107,34 @@ public abstract class Avatar {
 		switch (state) {
 		case WAITING:
 			animationSprite.add(0 + diff);
+			animationSprite.add(0 + diff);
+			animationSprite.add(1 + diff);
 			animationSprite.add(1 + diff);
 			break;
 
 		case DYING:
 			animationSprite.add(diff + 4);
+			animationSprite.add(diff + 4);
+			animationSprite.add(diff + 5);
 			animationSprite.add(diff + 5);
 			animationSprite.add(diff + 6);
+			animationSprite.add(diff + 6);
+			animationSprite.add(diff + 7);
 			animationSprite.add(diff + 7);
 			break;
 
 		case EMPTYING:
 			animationSprite.add(diff + 20);
+			animationSprite.add(diff + 20);
 			break;
 
 		case FILLING:
 			animationSprite.add(diff + 21);
+			animationSprite.add(diff + 21);
 			break;
 
 		case HITTING:
+			animationSprite.add(diff + 12);
 			animationSprite.add(diff + 12);
 			animationSprite.add(diff + 13);
 			animationSprite.add(diff + 14);
