@@ -157,6 +157,7 @@ public class View {
 	private void fillBackground(Graphics g) {
 		g.setColor(ViewCst.BACKGROUND_DEFAULT);
 		g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
+		
 		// TODO implementer une version fonctionnelle avec une image scalée
 	}
 

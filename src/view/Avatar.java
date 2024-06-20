@@ -2,7 +2,6 @@ package view;
 
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.Taskbar.State;
 import java.awt.geom.Rectangle2D;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -32,6 +31,7 @@ public abstract class Avatar {
 	 * 
 	 * @param m_view : instance courante de la view
 	 * @param e      : entité associé à l'avatar
+	 * @param entityType : numero de l'entité dans la config
 	 */
 	protected Avatar(View m_view, Entity e, int entityType) {
 		this.m_view = m_view;
@@ -39,10 +39,14 @@ public abstract class Avatar {
 
 		spriteSetNumber = m_view.getBank().loadSpritesSet(getSpritesFile(entityType), getSpritesNrows(entityType),
 				getSpritesNcols(entityType));
-
+		this.animationSprite = new PriorityQueue<Integer>();
 		setInvisible();
 	}
 
+	/**
+	 * Retourne le prochain sprite à afficher dans la liste d'animation
+	 * @return numero du sprite
+	 */
 	int getNextSpriteNumber() {
 		if (animationSprite.isEmpty()) {
 			return 0;
@@ -50,6 +54,10 @@ public abstract class Avatar {
 		return animationSprite.poll();
 	}
 
+	/**
+	 * Met à jour la file d'animation en fonction de l'état de l'entité
+	 * Relance l'animation liée à l'état si necessaire
+	 */
 	void updateAnimations() {
 		model.State newState = instanceEntity.getState();
 		if (newState != lastState) {
@@ -69,6 +77,11 @@ public abstract class Avatar {
 
 	}
 
+	/**
+	 * Determine si l'avatar est orienté vers la droite pouur le choix des sprites
+	 * 
+	 * @return true si l'avatar est orienté vers la droite
+	 */
 	Boolean isRightSided() {
 		Direction dir = instanceEntity.getDirection();
 		if (dir == Direction.E || dir == Direction.SE || dir == Direction.NE) {
@@ -77,6 +90,11 @@ public abstract class Avatar {
 		return false;
 	}
 
+	/**
+	 * Ajoute les sprites correspondant à l'état de l'entité dans la file d'animation
+	 * 
+	 * @param state : état de l'entité
+	 */
 	void addAnimation(model.State state) {
 		int diff = 0;
 		if (!isRightSided()) {

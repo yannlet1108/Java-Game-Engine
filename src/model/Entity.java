@@ -38,6 +38,7 @@ public abstract class Entity {
 		this.model.addEntity(this);
 		force = new Vector();
 		speed = new Vector();
+		this.state = State.WAITING;
 	}
 
 	/**
