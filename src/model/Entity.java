@@ -127,6 +127,14 @@ public abstract class Entity {
 		move(Direction.FORWARD);
 	}
 
+	void doWait() {
+		blockAutomaton();
+		config.Config cfg = this.model.getConfig();
+		Timer timer = new Timer();
+		ActionTask endMoveTask = new EndMoveTask(this, 1000 * cfg.getIntValue("Model", "waitingTime") );
+		timer.schedule(endMoveTask, endMoveTask.getDuration());
+	}
+	
 	public abstract void egg();
 
 	/**

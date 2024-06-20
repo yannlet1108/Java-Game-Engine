@@ -88,7 +88,7 @@ public class Model {
 	private Fish spawnEnemy() {
 		Random yesOrNotRand = new Random();
 		int yesOrNot = yesOrNotRand.nextInt(1000); // 1000 à modif
-		if (yesOrNot < ModelConstants.IN_GENERAL) {
+		if (yesOrNot <  ModelConstants.IN_GENERAL) {
 			Random ranWhatFish = new Random();
 			int fishProb = ranWhatFish.nextInt(100);
 			int fish = -1;
