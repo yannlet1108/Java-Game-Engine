@@ -1,0 +1,47 @@
+Diver1(Init){
+	* (Init):
+	| Key(z) ? Pop(1) :(Init)
+	| Key(q) ? Move(W) :(Init)
+	| Key(s) ? Pop(-1) :(Init)
+	| Key(d) ? Move(E) :(Init)
+	| Key(SPACE) ? Hit :(Init)
+	| True ? :(Init)
+}
+
+Diver2(Init){
+	* (Init):
+	| Key(FU) ? Pop(1) :(Init)
+	| Key(FL) ? Move(W) :(Init)
+	| Key(FD) ? Pop(-1) :(Init)
+	| Key(FR) ? Move(E) :(Init)
+	| Key(ENTER) ? Hit :(Init)
+	| True ? :(Init)
+}
+
+Goldfish(Forward){
+	* (Forward):
+	| Cell(F,V) ? Move :(Forward)
+	| Cell(F,A) ? Hit :(Flee)
+	| True ? 90% Wait / 10% Egg :(Forward)
+	
+	* (Flee):
+	| Cell(NE,A) ? Move(SW) :(Forward)
+	| Cell(NW,A) ? Move(SE) :(Forward)
+	| Cell(SE,A) ? Move(NW) :(Forward)
+	| Cell(SW,A) ? Move(NE) :(Forward)
+	| True ? :(Forward)	
+}
+
+Shark(Chase){
+	* (Chase):
+	| Cell(d,A) ? Hit(d) :(Chase)
+	| Closest(A,d) ? Move(d) :(Chase)
+	| True ? Move(_) :(Chase)
+}
+
+BackAndForth(Init){
+	* (Init):
+	| Cell(F,V) ? Move :(Init)
+	| True ? Move(B) :(Init)
+}
+
