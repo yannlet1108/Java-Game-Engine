@@ -23,9 +23,6 @@ public class Player extends Entity {
 		this.attackDamage = model.m_controller.getConfig().getIntValue("Player" + number, "attackDamage");
 		this.healthPoint = model.m_controller.getConfig().getIntValue("Player" + number, "healthPoint");
 		this.meleeRange = model.m_controller.getConfig().getIntValue("Player" + number, "meleeRange");
-		this.hitbox = new Rectangle2D.Double(position.getX(), position.getY(),
-				model.m_controller.getConfig().getIntValue("Player" + number, "width"),
-				model.m_controller.getConfig().getIntValue("Player" + number, "height"));
 		this.throwEntity = model.m_controller.getConfig().getStringValue("Player" + number, "throwBots");
 	}
 
