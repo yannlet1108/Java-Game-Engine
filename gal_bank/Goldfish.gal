@@ -2,7 +2,7 @@ Goldfish(Forward){
 	* (Forward):
 	| Cell(F,V) ? Move :(Forward)
 	| Cell(F,A) ? Hit :(Flee)
-	| True ? 98% Wait / 2% Egg :(Forward)
+	| True ? 90% Wait / 10% Egg :(Forward)
 	
 	* (Flee):
 	| Cell(NE,A) ? Move(SW) :(Forward)

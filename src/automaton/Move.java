@@ -6,14 +6,9 @@ import model.Direction;
 /**
  * Classe de l'action move
  */
-public class Move implements Action {
+class Move implements Action {
 
 	private Direction dir;
-	private boolean isDirectionPrecised;
-
-	Move() {
-		isDirectionPrecised = false;
-	}
 
 	/**
 	 * Parametre une action de mouvement
@@ -22,22 +17,27 @@ public class Move implements Action {
 	 */
 	Move(Direction dir) {
 		this.dir = dir;
-		isDirectionPrecised = true;
 	}
 
 	/**
-	 * Ne pas exécuter direct
+	 * Demande à l'entité d'exécuter l'action
 	 */
 	@Override
 	public void exec(Entity e) {
-		/*
-		if (isDirectionPrecised) {
-			e.move(dir);
+		if (dir == Direction.UNDERSCORE) {
+			Direction randomDirection = dir.getRandomDirection();
+			e.doMove(randomDirection);
 		} else {
-			e.move();
+			e.doMove(dir);
 		}
-		*/
-		return;
+	}
+
+	@Override
+	public String toString() {
+		if (dir == null) {
+			return "Move";
+		}
+		return "Hit(" + dir.toString() + ")";
 	}
 
 }

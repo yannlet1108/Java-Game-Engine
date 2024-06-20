@@ -2,20 +2,19 @@ package automaton;
 
 import model.Entity;
 
-class Explode implements Action {
+class Wait implements Action {
 
-	Explode() {
+	Wait() {
 		// Nothing to do here
 	}
 
 	@Override
 	public void exec(Entity e) {
-		e.doExplode();
+		e.doWait();
 	}
 
 	@Override
 	public String toString() {
-		return "Explode";
+		return "Wait";
 	}
-
 }

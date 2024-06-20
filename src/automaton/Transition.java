@@ -1,28 +1,52 @@
 package automaton;
 
-/**
- * Classe permettant d'ecrire un automate pour creer un comportement d'entite.
- */
-public class Transition {
+import model.Entity;
 
-	State start;
-	Condition cond;
-	Action action;
-	State end;
+/**
+ * Classe Transition
+ */
+class Transition {
+
+	private Condition cond;
+	private Action action;
+	private State end;
 
 	/**
 	 * Cree une nouvelle transition a partir d'une action et d'une condition.
 	 * 
-	 * @param start  : Etat initial
 	 * @param cond   : Condition de transition
 	 * @param action : Action resultante
 	 * @param end    : Etat final
 	 */
-	Transition(State start, Condition cond, Action action, State end) {
-		this.start = start;
+	Transition(Condition cond, Action action, State end) {
 		this.cond = cond;
 		this.action = action;
 		this.end = end;
+	}
+
+	/**
+	 * Demande à l'entité d'évaluer la condition de la transition
+	 */
+	boolean eval(Entity e) {
+		return cond.eval(e);
+	}
+
+	/**
+	 * Demande à l'entité d'exécuter l'action de la transition
+	 */
+	void exec(Entity e) {
+		if (action != null) {
+			action.exec(e);
+		}
+		e.getFSM.setState(end);
+	}
+
+	@Override
+	public String toString() {
+		if (action == null) {
+			return cond.toString() + "? ";
+		}
+		return cond.toString() + "? " + action.toString();
 	}
 
 }

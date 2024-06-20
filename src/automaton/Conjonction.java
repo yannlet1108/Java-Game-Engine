@@ -3,12 +3,12 @@ package automaton;
 import model.Entity;
 
 /**
- * Classe evaluant deux conditions avec un et
+ * Classe evaluant la conjonction (ET) de deux conditions
  */
 class Conjonction implements Condition {
 
-	Condition c1;
-	Condition c2;
+	private Condition c1;
+	private Condition c2;
 
 	/**
 	 * Enregistre les deux conditions a comparer
@@ -26,5 +26,10 @@ class Conjonction implements Condition {
 	 */
 	public boolean eval(Entity e) {
 		return c1.eval(e) && c2.eval(e);
+	}
+
+	@Override
+	public String toString() {
+		return c1.toString() + "&" + c2.toString();
 	}
 }

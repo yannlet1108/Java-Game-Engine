@@ -67,15 +67,15 @@ public class Controller implements GameCanvasListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		System.out.println("Mouse entered: (" + e.getX() + "," + e.getY() + ")");
-		System.out.println("   modifiers=" + e.getModifiersEx());
-		System.out.println("   buttons=" + e.getButton());
+		System.out.println(" modifiers=" + e.getModifiersEx());
+		System.out.println(" buttons=" + e.getButton());
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		System.out.println("Mouse exited: (" + e.getX() + "," + e.getY() + ")");
-		System.out.println("   modifiers=" + e.getModifiersEx());
-		System.out.println("   buttons=" + e.getButton());
+		System.out.println(" modifiers=" + e.getModifiersEx());
+		System.out.println(" buttons=" + e.getButton());
 	}
 
 	@Override

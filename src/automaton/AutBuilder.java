@@ -20,238 +20,293 @@ import gal.ast.UnaryOp;
 import gal.ast.Underscore;
 import gal.ast.Value;
 
-public class AutBuilder implements IVisitor{
-	
-	public AutBuilder(AST bot) {
-		// TO DO
+/**
+ * Visiteur qui construit une liste d'automates à partir d'un AST
+ */
+class AutBuilder implements IVisitor {
+
+	AutBuilder(AST bot) {
+		// Nothing to do here
 	}
 
 	@Override
-	public Object build(FunCall arg0, List<Object> arg1) {
-		// TODO Auto-generated method stub
+	public Object visit(Category cat) {
+		switch (cat.toString()) {
+		case "V":
+			return model.Category.VOID;
+		case "O":
+			return model.Category.OBSTACLE;
+		case "A":
+			return model.Category.ADVERSARY;
+		case "T":
+			return model.Category.TEAM_MEMBER;
+		/* On utilise Underscore comme une Direction */
+		case "_":
+			//System.out.println("Underscore found in Category");
+			return model.Direction.UNDERSCORE;
+		default:
+			throw new IllegalArgumentException("Category's name not recognised : " + cat.toString());
+		}
+	}
+
+	@Override
+	public Object visit(Direction dir) {
+		switch (dir.toString()) {
+		// Directions absolues
+		case "N":
+			return model.Direction.N;
+		case "S":
+			return model.Direction.S;
+		case "E":
+			return model.Direction.E;
+		case "W":
+			return model.Direction.W;
+		case "NW":
+			return model.Direction.NW;
+		case "NE":
+			return model.Direction.NE;
+		case "SW":
+			return model.Direction.SW;
+		case "SE":
+			return model.Direction.SE;
+		// Directions relatives
+		case "H":
+			return model.Direction.HERE;
+		case "F":
+			return model.Direction.FORWARD;
+		case "B":
+			return model.Direction.BACKWARD;
+		case "L":
+			return model.Direction.LEFT;
+		case "R":
+			return model.Direction.RIGHT;
+		// Directions spéciales
+		case "d":
+			return model.Direction.d;
+		default:
+			throw new IllegalArgumentException("Direction's name not recognised : " + dir.toString());
+		}
+	}
+
+	/**
+	 * TO DO : Voir avec le controlleur
+	 */
+	@Override
+	public Object visit(Key key) {
 		return null;
 	}
 
+	/**
+	 * On utilise directement des int
+	 */
 	@Override
-	public Object build(UnaryOp arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		return null;
+	public Object visit(Value v) {
+		return v.value;
+	}
+
+	/**
+	 * Seems to never be called
+	 */
+	@Override
+	public Object visit(Underscore u) {
+		System.out.println("Underscore found in Underscore");
+		return model.Direction.UNDERSCORE;
+	}
+
+	// FUNCALL
+
+	@Override
+	public void enter(FunCall funcall) {
 	}
 
 	@Override
-	public Object build(Condition arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		return null;
+	public void visit(FunCall funcall) {
 	}
 
 	@Override
-	public Object build(AST arg0, List<Object> arg1) {
-		// TODO Auto-generated method stub
-		return null;
+	public void exit(FunCall funcall) {
+	}
+
+	/**
+	 * For now : Key uses Strings
+	 */
+	@Override
+	public Object build(FunCall funcall, List<Object> parameters) {
+		switch (funcall.name) {
+		// Conditions
+		case "Cell":
+			return new Cell((model.Direction) parameters.get(0), (model.Category) parameters.get(1));
+		case "Closest":
+			return new Closest((model.Category) parameters.get(0), (model.Direction) parameters.get(1));
+		case "Key":
+			return new automaton.Key(((Key) funcall.parameters.get(0)).toString());
+		// Actions
+		case "Move":
+			if (parameters.isEmpty()) {
+				return new Move(null);
+			}
+			return new Move((model.Direction) parameters.get(0));
+		case "Explode":
+			return new Explode();
+		case "Hit":
+			if (parameters.isEmpty()) {
+				return new Hit(null);
+			}
+			return new Hit((model.Direction) parameters.get(0));
+		case "Pop":
+			return new Pop((int) parameters.get(0));
+		case "Egg":
+			if (parameters.isEmpty()) {
+				return new Egg(null);
+			}
+			return new Egg((model.Direction) parameters.get(0));
+		case "Wait":
+			return new Wait();
+		// TrueCondition
+		case "True":
+			return new TrueCondition();
+		default:
+			throw new IllegalArgumentException("Function's name not recognised : " + funcall.name);
+		}
+	}
+
+	// BINOP
+
+	@Override
+	public void enter(BinaryOp binop) {
 	}
 
 	@Override
-	public Object build(BinaryOp arg0, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
-		return null;
+	public void visit(BinaryOp binop) {
 	}
 
 	@Override
-	public Object build(Mode arg0, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
-		return null;
+	public void exit(BinaryOp binop) {
 	}
 
 	@Override
-	public Object build(Actions arg0, String arg1, List<Object> arg2) {
-		// TODO Auto-generated method stub
-		return null;
+	public Object build(BinaryOp binop, Object left, Object right) {
+		switch (binop.operator) {
+		case "&":
+			return new Conjonction((automaton.Condition) right, (automaton.Condition) left);
+		case "/":
+			return new Disjonction((automaton.Condition) right, (automaton.Condition) left);
+		default:
+			throw new IllegalArgumentException("Binary operator not recognised : " + binop.toString());
+		}
+	}
+
+	// UNOP
+
+	@Override
+	public void enter(UnaryOp unop) {
 	}
 
 	@Override
-	public Object build(Automaton arg0, Object arg1, List<Object> arg2) {
-		// TODO Auto-generated method stub
-		return null;
+	public void exit(UnaryOp unop) {
 	}
 
 	@Override
-	public Object build(Transition arg0, Object arg1, Object arg2, Object arg3) {
-		// TODO Auto-generated method stub
-		return null;
+	public Object build(UnaryOp unop, Object expression) {
+		return new Negation((automaton.Condition) expression);
 	}
 
-	@Override
-	public void enter(FunCall arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	// STATE
 
 	@Override
-	public void enter(BinaryOp arg0) {
-		// TODO Auto-generated method stub
-		
+	public Object visit(State state) {
+		return new automaton.State(state.toString());
 	}
 
-	@Override
-	public void enter(UnaryOp arg0) {
-		// TODO Auto-generated method stub
-		
+	// MODE
+
+	public void enter(Mode mode) {
 	}
 
-	@Override
-	public void enter(Mode arg0) {
-		// TODO Auto-generated method stub
-		
+	public void visit(Mode mode) {
 	}
 
-	@Override
-	public void enter(Condition arg0) {
-		// TODO Auto-generated method stub
-		
+	public void exit(Mode mode) {
 	}
 
-	@Override
-	public void enter(Actions arg0) {
-		// TODO Auto-generated method stub
-		
+	public Object build(Mode mode, Object source_state, Object behaviour) {
+		return new automaton.Mode((automaton.State) source_state, (automaton.Behaviour) behaviour);
 	}
 
-	@Override
-	public void enter(Transition arg0) {
-		// TODO Auto-generated method stub
-		
+	// BEHAVIOUR
+
+	public Object visit(Behaviour behaviour, List<Object> transitions) {
+		return new automaton.Behaviour(transitions);
 	}
 
-	@Override
-	public void enter(Automaton arg0) {
-		// TODO Auto-generated method stub
-		
+	// CONDITION
+
+	public void enter(Condition condition) {
 	}
 
-	@Override
-	public void enter(AST arg0) {
-		// TODO Auto-generated method stub
-		
+	public void exit(Condition condition) {
 	}
 
-	@Override
-	public void exit(FunCall arg0) {
-		// TODO Auto-generated method stub
-		
+	public Object build(Condition condition, Object expression) {
+		return (automaton.Condition) expression;
 	}
 
-	@Override
-	public void exit(BinaryOp arg0) {
-		// TODO Auto-generated method stub
-		
+	// ACTION
+
+	public void enter(Actions action) {
 	}
 
-	@Override
-	public void exit(UnaryOp arg0) {
-		// TODO Auto-generated method stub
-		
+	public void visit(Actions action) {
 	}
 
-	@Override
-	public void exit(Mode arg0) {
-		// TODO Auto-generated method stub
-		
+	public void exit(Actions action) {
 	}
 
-	@Override
-	public void exit(Condition arg0) {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * À modifier si on veut des listes d'actions
+	 */
+	public Object build(Actions action, String operator, List<Object> funcalls) {
+		if (funcalls.isEmpty()) {
+			return null;
+		}
+		return (automaton.Action) funcalls.get(0);
 	}
 
-	@Override
-	public void exit(Actions arg0) {
-		// TODO Auto-generated method stub
-		
+	// TRANSITION
+
+	public void enter(Transition transition) {
 	}
 
-	@Override
-	public void exit(Transition arg0) {
-		// TODO Auto-generated method stub
-		
+	public void exit(Transition transition) {
 	}
 
-	@Override
-	public void exit(Automaton arg0) {
-		// TODO Auto-generated method stub
-		
+	public Object build(Transition transition, Object condition, Object action, Object target_state) {
+		return new automaton.Transition((automaton.Condition) condition, (automaton.Action) action,
+				(automaton.State) target_state);
 	}
 
-	@Override
-	public void exit(AST arg0) {
-		// TODO Auto-generated method stub
-		
+	// AUTOMATON
+
+	public void enter(Automaton automaton) {
 	}
 
-	@Override
-	public Object visit(Category arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public void exit(Automaton automaton) {
 	}
 
-	@Override
-	public Object visit(Direction arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Object build(Automaton automaton, Object initial_state, List<Object> modes) {
+		return new automaton.Automaton(automaton.name, (automaton.State) initial_state, modes);
 	}
 
-	@Override
-	public Object visit(Key arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	// AST
+
+	public void enter(AST ast) {
 	}
 
-	@Override
-	public Object visit(Value arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public void exit(AST ast) {
 	}
 
-	@Override
-	public Object visit(Underscore arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void visit(FunCall arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(BinaryOp arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object visit(State arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void visit(Mode arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(Actions arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object visit(Behaviour arg0, List<Object> arg1) {
-		// TODO Auto-generated method stub
-		return null;
+	public Object build(AST ast, List<Object> automata) {
+		return new automaton.AutomatonBank(automata);
 	}
 
 }

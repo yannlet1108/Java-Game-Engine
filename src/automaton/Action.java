@@ -5,8 +5,13 @@ import model.Entity;
 /**
  * Interface des actions liees aux transitions des automates
  */
-public interface Action {
+interface Action {
 
-	public void exec(Entity e);
+	/**
+	 * Cette méthode demande à l'Entity E d'effectuer l'action requise
+	 * 
+	 * @param Entity e
+	 */
+	void exec(Entity e);
 
 }
