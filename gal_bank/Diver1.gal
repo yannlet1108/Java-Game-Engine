@@ -1,0 +1,9 @@
+Diver1(Init){
+	* (Init):
+	| Key(z) ? Pop(1) :(Init)
+	| Key(q) ? Move(W) :(Init)
+	| Key(s) ? Pop(-1) :(Init)
+	| Key(d) ? Move(E) :(Init)
+	| Key(SPACE) ? Hit :(Init)
+	| True ? :(Init)
+}
