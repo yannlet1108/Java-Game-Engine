@@ -19,6 +19,7 @@ public class SpriteBank {
 	private View m_view;
 
 	private LinkedList<BufferedImage[]> spritesBank;
+	private boolean canDisplay;
 
 	/**
 	 * Initialise la banque de sprite
@@ -29,13 +30,24 @@ public class SpriteBank {
 		this.m_view = m_view;
 		m_view.setBank(this);
 		this.spritesBank = new LinkedList<BufferedImage[]>();
-		loadBackground();
+		canDisplay = false;
+	}
+
+	/**
+	 * Retourne true si suffisement de sprite sont chargés pour permettre le display
+	 * d'avoir lieu
+	 * 
+	 * @return vrai ou faux en fonction de la capacité a afficher les sprites
+	 *         chargés
+	 */
+	boolean canDisplay() {
+		return canDisplay;
 	}
 
 	/**
 	 * Charge le sprite correspondant au background
 	 */
-	void loadBackground() {
+	public void loadBackground() {
 		try {
 			spritesBank.add(0, loadSprite(getBackgroundFile(), 1, 1));
 			BufferedImage background = spritesBank.remove()[0];
@@ -58,6 +70,8 @@ public class SpriteBank {
 		} catch (ArrayIndexOutOfBoundsException e2) {
 			System.err.println("Nombre de colonnes/lignes non spécifié pour " + ViewCst.SPRITES_FILES[0]);
 		}
+
+		canDisplay = true;
 	}
 
 	/**
@@ -136,6 +150,15 @@ public class SpriteBank {
 	 */
 	BufferedImage getBackground() {
 		return spritesBank.get(0)[0];
+	}
+
+	/**
+	 * Retourne le scale de l'image du background
+	 * 
+	 * @return scale avant application du scaling du viewport
+	 */
+	float getBackgroundRawScale() {
+		return (float) (spritesBank.get(0)[0].getHeight() / m_view.getSimHeight());
 	}
 
 	/**

@@ -3,7 +3,9 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,7 +51,7 @@ public class View {
 		System.out.println("  - setting up the frame...");
 		setupFrame();
 		initViewport();
-		setBank(new SpriteBank(this));
+		new SpriteBank(this);
 		initAvatar();
 	}
 
@@ -71,6 +73,13 @@ public class View {
 		m_frame.setLocationRelativeTo(null);
 
 		m_frame.setVisible(true);
+	}
+
+	/**
+	 * Initialise la banque d'avatar après la création du model
+	 */
+	public void initBackgroundSprite() {
+		bank.loadBackground();
 	}
 
 	/**
@@ -142,10 +151,12 @@ public class View {
 		if (m_model != null)
 			viewport.updateViewport(m_model.getPlayersPos());
 		viewport.resize();
-		fillBackground(g);
-		Iterator<Avatar> avatarIterator = getAvatarIterator();
-		while (avatarIterator.hasNext()) {
-			avatarIterator.next().paint(g);
+		if(bank.canDisplay()) {
+			fillBackground(g);
+			Iterator<Avatar> avatarIterator = getAvatarIterator();
+			while (avatarIterator.hasNext()) {
+				avatarIterator.next().paint(g);
+			}
 		}
 	}
 
@@ -155,9 +166,12 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	private void fillBackground(Graphics g) {
-		g.setColor(ViewCst.BACKGROUND_DEFAULT);
-		g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
-		// TODO implementer une version fonctionnelle avec une image scalée
+		float scale = viewport.backgroundScale(bank.getBackgroundRawScale());
+		BufferedImage background = bank.getBackground();
+		Point origin = viewport.backgroundPos(getSimWidth(), getSimHeight(), background.getHeight() * scale,
+				background.getWidth() * scale);
+		g.drawImage(bank.getSprite(0, 0), origin.x, origin.y, (int) (background.getWidth() * scale),
+				(int) (background.getHeight() * scale), null);
 	}
 
 	/**

@@ -106,6 +106,24 @@ public class Viewport {
 	}
 
 	/**
+	 * Calcul du scale propre au background
+	 * 
+	 * @param baseScale : scale brut du background
+	 * @return scale après application du viewport actuel
+	 */
+	float backgroundScale(float baseScale) {
+		return (1 / baseScale) * (reverseScale() - 1 / ViewCst.MIN_SCALING) * ViewCst.PARALLAX;
+	}
+
+	Point backgroundPos(double simX, double simY, float height, float whidth) {
+		double xRatio = viewbox.getX() / simX;
+		double xIn = whidth * xRatio;
+		double yRatio = viewbox.getY() / simY;
+		double yIn = height * yRatio;
+		return new Point((int) (viewbox.getX() - xIn), (int) (viewbox.getY() - yIn));
+	}
+
+	/**
 	 * Retourne le scaling du viewport
 	 * 
 	 * @return scaling de dessin
