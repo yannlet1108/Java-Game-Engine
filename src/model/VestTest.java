@@ -10,7 +10,7 @@ public class VestTest {
 		View v = new View(cntrl);
 		Model mod = new Model(cntrl, v);
 		Point2D pts = new Point2D.Double(100, 100);
-		Player P1 = new Player(pts, Direction.N, mod);
+		Player P1 = new Player(pts, Direction.N, mod, 1);
 		int x = 100;
 		while (x > 0) {
 			System.out.println("Density = " + P1.density + " ,Oxygen = " + P1.getOxygen() + " ,Air in vest = "

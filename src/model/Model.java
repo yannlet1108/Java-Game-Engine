@@ -36,14 +36,14 @@ public class Model {
 	public Model(Controller m_controller, View m_view) {
 		this.m_controller = m_controller;
 		this.m_view = m_view;
-		worldHeight = ModelConstants.WORLD_HEIGHT;
-		worldWidth = ModelConstants.WORLD_WIDTH;
-		density = ModelConstants.WORLD_DENSITY;
-		viscosity = ModelConstants.WORLD_VISCOSITY;
+		worldHeight = this.m_controller.getConfig().getIntValue("world", "height");
+		worldWidth = this.m_controller.getConfig().getIntValue("world", "width");
+		density = this.m_controller.getConfig().getIntValue("world", "density");
+		viscosity = this.m_controller.getConfig().getIntValue("world", "viscosity");
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
-		new Player(getWorldCenter(), Direction.N, this);
+		new Player(getWorldCenter(), Direction.N, this, 1);
 		m_view.setModel(this);
 		automatonBank = new AutomatonBank();
 	}
@@ -256,16 +256,22 @@ public class Model {
 	}
 
 	public void mapGenerator() {
-		Random r = new Random(ModelConstants.SEED);
-		for (int i = 0; i < ModelConstants.WORLD_WIDTH; i = i + EntityConstants.OBSTACLE_WIDTH) {
-			for (int j = 0; j < ModelConstants.WORLD_HEIGHT; j = j + EntityConstants.OBSTACLE_HEIGHT) {
-				if (r.nextDouble() < ModelConstants.OBSTACLE_PROBABILITY) {
+		Random r = new Random(this.m_controller.getConfig().getIntValue("world", "seed"));
+		for (int i = 0; i < this.getBoardWidth(); i = i
+				+ this.m_controller.getConfig().getIntValue("obstacle", "width")) {
+			for (int j = 0; j < this.getBoardHeight(); j = j
+					+ this.m_controller.getConfig().getIntValue("obstacle", "height")) {
+				if (r.nextDouble() < this.m_controller.getConfig().getFloatValue("obstacle", "probability")) {
 					new Obstacle(new Point2D.Double(i, j), null, this);
 				}
 			}
 		}
-		Rectangle2D safezone = new Rectangle2D.Double(ModelConstants.PLAYER_SPAWN_X - ModelConstants.SAFE_AREA,
-				ModelConstants.PLAYER_SPAWN_Y, ModelConstants.SAFE_AREA, ModelConstants.SAFE_AREA);
+		Rectangle2D safezone = new Rectangle2D.Double(
+				this.m_controller.getConfig().getIntValue("world", "playerSpawnX")
+						- this.m_controller.getConfig().getIntValue("world", "safeZone"),
+				this.m_controller.getConfig().getIntValue("world", "playerSpawnY"),
+				this.m_controller.getConfig().getIntValue("world", "safeZone"),
+				this.m_controller.getConfig().getIntValue("world", "safeZone"));
 		Iterator<Entity> it = this.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
