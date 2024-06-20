@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 
 import java.util.*;
 
+import config.Config;
 import info3.game.graphics.GameCanvasListener;
 import model.Model;
 import view.View;
@@ -20,6 +21,7 @@ public class Controller implements GameCanvasListener {
 	Controller m_controller;
 	View m_view;
 	Model m_model;
+	Config m_config;
 	private long tick;
 	private List<Integer> keyList;
 
@@ -29,6 +31,7 @@ public class Controller implements GameCanvasListener {
 	private Controller() {
 		m_controller = this;
 		m_view = new View(this);
+		m_config = new Config("config.json");
 		m_model = new Model(this, m_view);
 		this.tick = 0;
 		this.keyList = new LinkedList<Integer>();
