@@ -163,8 +163,12 @@ public class Controller implements GameCanvasListener {
 	 * 
 	 * @return le model
 	 */
-	public Model getM_model() {
+	public Model getModel() {
 		return m_model;
+	}
+
+	public Config getConfig() {
+		return m_config;
 	}
 
 }

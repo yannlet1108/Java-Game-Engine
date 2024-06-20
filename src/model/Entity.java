@@ -22,9 +22,12 @@ public abstract class Entity {
 	private double volume;
 
 	protected int healthPoint;
-	protected int team;
-	protected int meleeRange; // a definir
-	protected int attackDamage; // a definir
+	protected Category team;
+	protected int meleeRange; 
+	protected int attackDamage;
+	protected int number;
+	protected Entity throwEntity;
+	
 	protected State state;
 
 	/**
@@ -58,7 +61,15 @@ public abstract class Entity {
 		return hitbox.getY();
 
 	}
-
+	
+	public double getHeight() {
+		return hitbox.getHeight();
+	}
+	
+	public double getWidth() {
+		return hitbox.getWidth();
+	}
+ 
 	public Point2D getCenter() {
 		return new Point2D.Double(hitbox.getCenterX(), hitbox.getCenterY());
 	}
@@ -80,9 +91,7 @@ public abstract class Entity {
 	}
 
 	public Rectangle2D getHitbox() {
-		Rectangle2D hitbox = new Rectangle2D.Double();
-		hitbox.setRect(this.hitbox);
-		return hitbox;
+		return this.hitbox;
 	}
 
 	/**
@@ -384,7 +393,7 @@ public abstract class Entity {
 		Iterator<Entity> it = this.model.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
-			if (e.getTeam() != this.getTeam()) {
+			if (e.getTeam().isSameTeam(this.getTeam())) {
 				if (e.getHitbox().intersects(hitRange)) {
 					e.getHit(this.attackDamage);
 				}
@@ -425,7 +434,7 @@ public abstract class Entity {
 		Iterator<Entity> it = this.model.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
-			if (e.getTeam() != this.getTeam()) {
+			if (e.getTeam().isSameTeam(this.getTeam())) {
 				if (e.getHitbox().intersects(hitRange)) {
 					e.getHit(this.attackDamage);
 				}
@@ -434,7 +443,7 @@ public abstract class Entity {
 		this.model.removeEntityToRemove();
 	}
 
-	public int getTeam() {
+	public Category getTeam() {
 		return team;
 	}
 

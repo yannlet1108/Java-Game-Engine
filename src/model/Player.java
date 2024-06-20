@@ -10,20 +10,22 @@ public class Player extends Entity {
 	public Vest vest;
 	private int oxygen;
 
-	public Player(Point2D position, Direction direction, Model model) {
+	public Player(Point2D position, Direction direction, Model model, int number) {
 		super(position, direction, model);
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
-				PlayerConstants.PLAYER_HEIGHT);
-		category = Category.PLAYER;
-		density = PlayerConstants.PLAYER_DENSITY;
+		density = model.m_controller.getConfig().getIntValue("player" + number, "density");
 		oxygen = 100;
 		vest = new Vest();
-		this.team = PlayerConstants.PLAYER_TEAM;
+		this.number = number;
+		this.team = model.m_controller.getConfig().getCategory("player" + number, "category");
 		model.m_view.store(new PlayerAvatar(model.m_view, this, 1));
 		this.model.addPlayer(this);
-		this.meleeRange = PlayerConstants.PLAYER_MELEE_RANGE;
-		this.attackDamage = PlayerConstants.PLAYER_ATTACK_DAMAGE;
-		this.healthPoint = PlayerConstants.PLAYER_HEALTH_POINT;
+		this.attackDamage = model.m_controller.getConfig().getIntValue("player" + number, "attackDamage");
+		this.healthPoint = model.m_controller.getConfig().getIntValue("player" + number, "healthPoint");
+		this.meleeRange = model.m_controller.getConfig().getIntValue("player" + number, "meleeRange");
+		this.hitbox = new Rectangle2D.Double(position.getX(), position.getY(),
+				model.m_controller.getConfig().getIntValue("player" + number, "width"),
+				model.m_controller.getConfig().getIntValue("player" + number, "height"));
+		this.throwEntity = model.m_controller.getConfig().getStringValue("player" + number, "throwBots");
 	}
 
 	public class Vest {
@@ -110,23 +112,15 @@ public class Player extends Entity {
 	 * Methode qui créé un missile devant le joueur
 	 */
 
-	public void throwMissile() {
-		Direction d = this.getDirection();
+	public void throwMissile(Direction dir) {
 		Point2D pos = this.getCenter();
 		pos.setLocation(this.getX() + 5, this.getY());
-		Missile m = new Missile(pos, d, this.getModel());
+		Missile m = new Missile(pos, dir, this.getModel());
 	}
 
 	@Override
 	public void pick() {
 		throw new RuntimeException("Not Yet Implemented");
-	}
-
-	@Override
-	public Rectangle2D getHitbox() {
-		Rectangle2D hitbox = new Rectangle2D.Double(this.getX(), this.getY(), PlayerConstants.PLAYER_WIDTH,
-				PlayerConstants.PLAYER_HEIGHT);
-		return hitbox;
 	}
 
 	public void explode() {
