@@ -25,6 +25,7 @@ public abstract class Entity {
 	protected int team;
 	protected int meleeRange; // a definir
 	protected int attackDamage; // a definir
+	protected State state;
 
 	/**
 	 * @param position
@@ -37,6 +38,7 @@ public abstract class Entity {
 		this.model.addEntity(this);
 		force = new Vector();
 		speed = new Vector();
+		this.state = State.WAITING;
 	}
 
 	/**
@@ -435,5 +437,13 @@ public abstract class Entity {
 
 	public int getTeam() {
 		return team;
+	}
+
+	public State getState() {
+		return state;
+	}
+	
+	void setState(State newState) {
+		state = newState;
 	}
 }

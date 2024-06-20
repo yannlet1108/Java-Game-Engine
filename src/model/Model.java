@@ -40,7 +40,7 @@ public class Model {
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
-		new Player(getWorldCenter(), Direction.N, this);
+		new Player(getWorldCenter(), Direction.E, this);
 		m_view.setModel(this);
 	}
 
