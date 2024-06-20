@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import automaton.FSM;
 import view.PlayerAvatar;
 
 public abstract class Entity {
@@ -26,18 +27,24 @@ public abstract class Entity {
 	protected int meleeRange; // a definir
 	protected int attackDamage; // a definir
 	protected State state;
+	
+	private String name;
+	
+	private FSM myFSM;
 
 	/**
 	 * @param position
 	 * @param direction
 	 * @param model
 	 */
-	public Entity(Point2D position, Direction direction, Model model) {
+	public Entity(Point2D position, Direction direction, Model model, String name) {
 		this.direction = direction;
 		this.model = model;
 		this.model.addEntity(this);
 		force = new Vector();
 		speed = new Vector();
+		this.name = name;
+		myFSM = new FSM(this, model.getAutomatonBank().getAutomaton(model.getConfig().getStringValue(this.name, "automaton")));
 	}
 
 	/**
@@ -258,6 +265,7 @@ public abstract class Entity {
 	 * Met a jour l'etat de l'entite comme definit par son automate
 	 */
 	public void step() {
+		myFSM.step();
 	}
 
 	public void computeMovement() {
@@ -444,5 +452,9 @@ public abstract class Entity {
 	
 	void setState(State newState) {
 		state = newState;
+	}
+	
+	public FSM getFSM() {
+		return myFSM;
 	}
 }

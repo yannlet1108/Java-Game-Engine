@@ -34,7 +34,7 @@ public class AutomatonBank {
 		return automatons;
 	}
 
-	Automaton getAutomaton(String name) {
+	public Automaton getAutomaton(String name) {
 		for (Automaton automaton : automatons) {
 			if (automaton.hasName(name)) {
 				return automaton;
