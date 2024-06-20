@@ -166,64 +166,110 @@ public class Controller implements GameCanvasListener {
 	public Model getM_model() {
 		return m_model;
 	}
-	
+
 	public boolean isKeyPressed(String keyString) {
 		int keyCode = getKeyCodeFromString(keyString);
 		for (Integer code : keyList) {
-			if(keyCode == code) {
+			if (keyCode == code) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public int getKeyCodeFromString(String keyString) {
 		switch (keyString.toUpperCase()) {
-        case "A": return KeyEvent.VK_A;
-        case "B": return KeyEvent.VK_B;
-        case "C": return KeyEvent.VK_C;
-        case "D": return KeyEvent.VK_D;
-        case "E": return KeyEvent.VK_E;
-        case "F": return KeyEvent.VK_F;
-        case "G": return KeyEvent.VK_G;
-        case "H": return KeyEvent.VK_H;
-        case "I": return KeyEvent.VK_I;
-        case "J": return KeyEvent.VK_J;
-        case "K": return KeyEvent.VK_K;
-        case "L": return KeyEvent.VK_L;
-        case "M": return KeyEvent.VK_M;
-        case "N": return KeyEvent.VK_N;
-        case "O": return KeyEvent.VK_O;
-        case "P": return KeyEvent.VK_P;
-        case "Q": return KeyEvent.VK_Q;
-        case "R": return KeyEvent.VK_R;
-        case "S": return KeyEvent.VK_S;
-        case "T": return KeyEvent.VK_T;
-        case "U": return KeyEvent.VK_U;
-        case "V": return KeyEvent.VK_V;
-        case "W": return KeyEvent.VK_W;
-        case "X": return KeyEvent.VK_X;
-        case "Y": return KeyEvent.VK_Y;
-        case "Z": return KeyEvent.VK_Z;
-        case "0": return KeyEvent.VK_0;
-        case "1": return KeyEvent.VK_1;
-        case "2": return KeyEvent.VK_2;
-        case "3": return KeyEvent.VK_3;
-        case "4": return KeyEvent.VK_4;
-        case "5": return KeyEvent.VK_5;
-        case "6": return KeyEvent.VK_6;
-        case "7": return KeyEvent.VK_7;
-        case "8": return KeyEvent.VK_8;
-        case "9": return KeyEvent.VK_9;
-        case "SPACE": return KeyEvent.VK_SPACE;
-        case "ENTER": return KeyEvent.VK_ENTER;
-        case "FU": return KeyEvent.VK_UP;
-        case "FD": return KeyEvent.VK_DOWN;
-        case "FR": return KeyEvent.VK_RIGHT;
-        case "FL": return KeyEvent.VK_LEFT;
-        default: throw new IllegalArgumentException("Unknown key: " + keyString);
-    }
+		case "A":
+			return KeyEvent.VK_A;
+		case "B":
+			return KeyEvent.VK_B;
+		case "C":
+			return KeyEvent.VK_C;
+		case "D":
+			return KeyEvent.VK_D;
+		case "E":
+			return KeyEvent.VK_E;
+		case "F":
+			return KeyEvent.VK_F;
+		case "G":
+			return KeyEvent.VK_G;
+		case "H":
+			return KeyEvent.VK_H;
+		case "I":
+			return KeyEvent.VK_I;
+		case "J":
+			return KeyEvent.VK_J;
+		case "K":
+			return KeyEvent.VK_K;
+		case "L":
+			return KeyEvent.VK_L;
+		case "M":
+			return KeyEvent.VK_M;
+		case "N":
+			return KeyEvent.VK_N;
+		case "O":
+			return KeyEvent.VK_O;
+		case "P":
+			return KeyEvent.VK_P;
+		case "Q":
+			return KeyEvent.VK_Q;
+		case "R":
+			return KeyEvent.VK_R;
+		case "S":
+			return KeyEvent.VK_S;
+		case "T":
+			return KeyEvent.VK_T;
+		case "U":
+			return KeyEvent.VK_U;
+		case "V":
+			return KeyEvent.VK_V;
+		case "W":
+			return KeyEvent.VK_W;
+		case "X":
+			return KeyEvent.VK_X;
+		case "Y":
+			return KeyEvent.VK_Y;
+		case "Z":
+			return KeyEvent.VK_Z;
+		case "0":
+			return KeyEvent.VK_0;
+		case "1":
+			return KeyEvent.VK_1;
+		case "2":
+			return KeyEvent.VK_2;
+		case "3":
+			return KeyEvent.VK_3;
+		case "4":
+			return KeyEvent.VK_4;
+		case "5":
+			return KeyEvent.VK_5;
+		case "6":
+			return KeyEvent.VK_6;
+		case "7":
+			return KeyEvent.VK_7;
+		case "8":
+			return KeyEvent.VK_8;
+		case "9":
+			return KeyEvent.VK_9;
+		case "SPACE":
+			return KeyEvent.VK_SPACE;
+		case "ENTER":
+			return KeyEvent.VK_ENTER;
+		case "FU":
+			return KeyEvent.VK_UP;
+		case "FD":
+			return KeyEvent.VK_DOWN;
+		case "FR":
+			return KeyEvent.VK_RIGHT;
+		case "FL":
+			return KeyEvent.VK_LEFT;
+		default:
+			throw new IllegalArgumentException("Unknown key: " + keyString);
+		}
 	}
 
+	public Config getConfig() {
+		return m_config;
+	}
 
 }

@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
+import automaton.AutomatonBank;
+import config.Config;
 import controller.Controller;
 import view.View;
 
@@ -22,7 +24,8 @@ public class Model {
 	private Collection<Entity> entities;
 	private Collection<Player> players;
 	Collection<Entity> toRemove;
-
+	
+	private AutomatonBank automatonBank;
 	/**
 	 * Initialise la simulation en creant les entites d'origine et en definisant
 	 * leur etat d'initialisation.
@@ -42,6 +45,7 @@ public class Model {
 		toRemove = new LinkedList<Entity>();
 		new Player(getWorldCenter(), Direction.N, this);
 		m_view.setModel(this);
+		automatonBank = new AutomatonBank();
 	}
 
 	/**
@@ -276,5 +280,13 @@ public class Model {
 
 	public Collection<Entity> getEntities() {
 		return entities;
+	}
+	
+	public AutomatonBank getAutomatonBank() {
+		return automatonBank;
+	}
+	
+	public Config getConfig() {
+		return m_controller.getConfig();
 	}
 }

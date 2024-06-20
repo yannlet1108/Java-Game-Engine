@@ -11,7 +11,7 @@ public class Player extends Entity {
 	private int oxygen;
 
 	public Player(Point2D position, Direction direction, Model model) {
-		super(position, direction, model);
+		super(position, direction, model, "player" + number);
 		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
 				PlayerConstants.PLAYER_HEIGHT);
 		category = Category.PLAYER;
