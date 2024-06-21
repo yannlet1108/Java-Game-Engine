@@ -33,9 +33,11 @@ public abstract class Entity {
 	private String name;
 
 	private FSM myFSM;
+	private Direction lastDirectionRequested;
 
 	private boolean automatonAvailable = true;
 	private int range = 10;
+	private double explodeRange;
 
 	/**
 	 * @param position
@@ -114,7 +116,7 @@ public abstract class Entity {
 		if (direction == null) {
 			move();
 		} else {
-			move(direction);
+			move(getRightDirection(direction));
 		}
 		Timer timer = new Timer();
 		ActionTask endMoveTask = new EndMoveTask(this, 1000);
@@ -136,10 +138,9 @@ public abstract class Entity {
 
 	public void doWait() {
 		blockAutomaton();
-		config.Config cfg = this.model.getConfig();
 		Timer timer = new Timer();
-		ActionTask endMoveTask = new EndMoveTask(this, 1000 * cfg.getIntValue("Model", "waitingTime"));
-		timer.schedule(endMoveTask, endMoveTask.getDuration());
+		ActionTask endWaitTask = new EndWaitTask(this, 1000);
+		timer.schedule(endWaitTask, endWaitTask.getDuration());
 	}
 
 	public abstract void egg();
@@ -149,31 +150,63 @@ public abstract class Entity {
 	 */
 	public abstract void pick();
 
-	void doExplode(Direction direction) {
+	public void doExplode() {
 		blockAutomaton();
-		if (direction == null) {
-			move();
-		} else {
-			move(direction);
-		}
+		explode();
 		Timer timer = new Timer();
-		ActionTask endMoveTask = new EndMoveTask(this, 1000);
-		timer.schedule(endMoveTask, endMoveTask.getDuration());
+		ActionTask endExplodeTask = new EndExplodeTask(this, 1000);
+		timer.schedule(endExplodeTask, endExplodeTask.getDuration());
 	}
 
 	/**
 	 * Supprime l'entite
 	 */
-	public abstract void explode();
+	public void explode() {
+		Rectangle2D hitRange = new Rectangle2D.Double(this.hitbox.getX() - explodeRange,
+				this.hitbox.getY() - meleeRange, this.hitbox.getWidth() + 2 * explodeRange,
+				this.hitbox.getHeight() + 2 * explodeRange);
+		Iterator<Entity> it = this.model.entitiesIterator();
+		while (it.hasNext()) {
+			Entity e = it.next();
+			if (e.getHitbox().intersects(hitRange)) {
+				e.getHit(this.attackDamage);
+			}
+		}
+		this.model.removeEntityToRemove();
+	}
 
 	public boolean doCell(Direction direction, Category category) {
-		if (direction == null) {
-			direction = Direction.FORWARD;
-		}
+		// Catégorie par défaut
+		Category cat = category;
 		if (category == null) {
-			category = Category.VOID;
+			cat = Category.VOID;
 		}
-		return cell(direction, category, range);
+
+		// Direction par défaut
+		Direction dir = direction;
+		if (direction == null) {
+			dir = Direction.FORWARD;
+		} // Cas particulier de la direction d
+		else if (direction == Direction.d) {
+			dir = Direction.N; // Première direction qu'on vérifie
+			boolean isDirectionFound = cell(dir, cat, range);
+			boolean isTourCompleted = false;
+
+			while (!isDirectionFound && !isTourCompleted) {
+				dir = Direction.rotateSlightlyRight(dir);
+				isDirectionFound = cell(dir, cat, range);
+
+				if (dir == Direction.NW) {
+					isTourCompleted = true;
+				}
+			}
+			if (isDirectionFound) {
+				lastDirectionRequested = dir;
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -306,13 +339,37 @@ public abstract class Entity {
 	}
 
 	public boolean doClosest(Category category, Direction direction) {
-		if (direction == null) {
-			direction = Direction.FORWARD;
-		}
+		// Catégorie par défaut
+		Category cat = category;
 		if (category == null) {
-			category = Category.ADVERSARY;
+			cat = Category.ADVERSARY;
 		}
-		return closest(category, direction);
+
+		// Direction par défaut
+		Direction dir = direction;
+		if (direction == null) {
+			dir = Direction.FORWARD;
+		} // Cas particulier de la direction d
+		else if (direction == Direction.d) {
+			dir = Direction.N; // Première direction qu'on vérifie
+			boolean isDirectionFound = closest(cat, dir);
+			boolean isTourCompleted = false;
+
+			while (!isDirectionFound && !isTourCompleted) {
+				dir = Direction.rotateSlightlyRight(dir);
+				isDirectionFound = closest(cat, dir);
+
+				if (dir == Direction.NW) {
+					isTourCompleted = true;
+				}
+			}
+			if (isDirectionFound) {
+				lastDirectionRequested = dir;
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private boolean closest(Category category, Direction direction) {
@@ -526,13 +583,8 @@ public abstract class Entity {
 
 	public void doHit(Direction direction) {
 		blockAutomaton();
-		if (direction == null) {
-			move();
-		} else {
-			move(direction);
-		}
 		Timer timer = new Timer();
-		ActionTask hitTask = new HitTask(this, 1000 / 2);
+		ActionTask hitTask = new HitTask(this, 1000 / 2, getRightDirection(direction));
 		timer.schedule(hitTask, hitTask.getDuration());
 	}
 
@@ -648,5 +700,12 @@ public abstract class Entity {
 			e = new Mob(pos, this.direction, this.model, this.number);
 			break;
 		}
+	}
+
+	private Direction getRightDirection(Direction dir) {
+		if (dir == Direction.d) {
+			return lastDirectionRequested;
+		}
+		return dir;
 	}
 }

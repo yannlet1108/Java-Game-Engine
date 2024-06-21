@@ -10,6 +10,7 @@ public class EndExplodeTask extends ActionTask {
 	@Override
 	public void run() {
 		entity.destroy();
+		entity.freeAutomaton();
 	}
 
 }
