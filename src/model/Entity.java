@@ -38,6 +38,7 @@ public abstract class Entity {
 	private boolean automatonAvailable = true;
 	private int range = 10;
 	private double explodeRange;
+	private double moveForce;
 
 	/**
 	 * @param position
@@ -128,7 +129,7 @@ public abstract class Entity {
 	 * @param direction
 	 */
 	public void move(Direction direction) {
-		throw new RuntimeException("Not Yet Implemented");
+		setForce(Vector.getVectorUnitVectorFromDirection(direction).scalarMultiplication(moveForce));
 	}
 
 	public void move() {

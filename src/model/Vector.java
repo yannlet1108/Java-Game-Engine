@@ -96,4 +96,27 @@ public class Vector {
 	Line2D getLineFrom(Point2D p) {
 		return new Line2D.Double(p, add(p));
 	}
+
+	public static Vector getVectorUnitVectorFromDirection(Direction direction) {
+		Vector vector;
+		switch (direction) {
+		case N:
+			vector = new Vector(0, -1);
+		case S:
+			vector = new Vector(0, 1);
+		case E:
+			vector = new Vector(1, 0);
+		case W:
+			vector = new Vector(-1, 0);
+		case NW:
+			vector = new Vector(-1, -1);
+		case NE:
+			vector = new Vector(1, -1);
+		case SW:
+			vector = new Vector(-1, 1);
+		case SE:
+			vector = new Vector(1, 1);
+		}
+		return vector.unitVector();
+	}
 }
