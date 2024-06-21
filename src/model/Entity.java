@@ -185,127 +185,133 @@ public abstract class Entity {
 	 * @return true or false
 	 */
 	public boolean cell(Direction direction, Category category, int rayon) {
-		Entity entity;
 
 		Point2D currentPos = getCenter();
 		double x = currentPos.getX();
 		double y = currentPos.getY();
-		Iterator<Entity> entityIter = this.model.entitiesIterator();
+		List<Entity> entitiesOfCategory = getEntitiesOfCategory(category);
+		entitiesOfCategory.remove(this);
 
 		Direction absoluteDirection = Direction.relativeToAbsolute(getDirection(), direction);
 
-		while (entityIter.hasNext()) {
-			entity = entityIter.next();
-
-			if (entity.category == category && entity != this) {
-				// Cela test si un des points de rectangle est dans cette direction
-				double GBx, GBy;
-				for (int i = 0; i < 4; i++) {
-					if (i == 0) {
-						// Gauche bas point
-						GBx = entity.getHitbox().getMinX();
-						GBy = entity.getHitbox().getMaxY();
-					} else if (i == 1) {
-						// Gauche Haut point
-						GBx = entity.getHitbox().getMinX();
-						GBy = entity.getHitbox().getMinY();
-					} else if (i == 2) {
-						// Droit Haut point
-						GBx = entity.getHitbox().getMaxX();
-						GBy = entity.getHitbox().getMinY();
-					} else {
-						// Droit bas point
-						GBx = entity.getHitbox().getMaxX();
-						GBy = entity.getHitbox().getMaxY();
-					}
-					if (absoluteDirection == Direction.NE && GBx > x && GBx <= x + rayon && GBy < y && GBy >= y - rayon)
-						return true;
-					if (absoluteDirection == Direction.NW && GBx < x && GBx >= x - rayon && GBy < y && GBy >= y - rayon)
-						return true;
-					if (absoluteDirection == Direction.SW && GBx < x && GBx >= x - rayon && GBy > y && GBy <= y + rayon)
-						return true;
-					if (absoluteDirection == Direction.SE && GBx > x && GBx <= x + rayon && GBy > y && GBy <= y + rayon)
-						return true;
-					if (absoluteDirection == Direction.E
-							&& ((GBx > x && GBx <= x + rayon / 2 && absolute(GBx - y) < GBx - x) || (GBx <= x + rayon
-									&& GBx >= x + rayon / 2 && absolute(GBy - y) < x + rayon - GBx)))
-						return true;
-					if (absoluteDirection == Direction.W
-							&& ((GBx < x && GBx >= x - rayon / 2 && absolute(GBy - y) < x - GBx) || (GBx >= x - rayon
-									&& GBx <= x - rayon / 2 && absolute(GBy - y) < GBx - (x - rayon))))
-						return true;
-					if (absoluteDirection == Direction.N
-							&& ((GBy < y && GBy >= y - rayon / 2 && absolute(GBx - x) < y - GBy) || (GBy >= y - rayon
-									&& GBy <= y - rayon / 2 && absolute(GBx - x) < GBy - (y - rayon))))
-						return true;
-					if (absoluteDirection == Direction.S
-							&& ((GBy > y && GBy <= y + rayon / 2 && absolute(GBx - x) < GBy - y) || (GBy <= y + rayon
-									&& GBy >= y + rayon / 2 && absolute(GBx - x) < y + rayon - GBy)))
-						return true;
+		for (Entity entity : entitiesOfCategory) {
+			// Cela test si un des points de rectangle est dans cette direction
+			double GBx, GBy;
+			for (int i = 0; i < 4; i++) {
+				if (i == 0) {
+					// Gauche bas point
+					GBx = entity.getHitbox().getMinX();
+					GBy = entity.getHitbox().getMaxY();
+				} else if (i == 1) {
+					// Gauche Haut point
+					GBx = entity.getHitbox().getMinX();
+					GBy = entity.getHitbox().getMinY();
+				} else if (i == 2) {
+					// Droit Haut point
+					GBx = entity.getHitbox().getMaxX();
+					GBy = entity.getHitbox().getMinY();
+				} else {
+					// Droit bas point
+					GBx = entity.getHitbox().getMaxX();
+					GBy = entity.getHitbox().getMaxY();
 				}
-				// Cela test si le rectangle ou le losange de la direction a un point dans le
-				// hitbox d'entité
-				Rectangle2D hitBox = entity.getHitbox();
-				Point2D point1, point2, point3;
-				if (absoluteDirection == Direction.SE) {
-					point1 = new Point2D.Double(x + rayon, y);
-					point2 = new Point2D.Double(x, y + rayon);
-					point3 = new Point2D.Double(x + rayon, y + rayon);
-					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-						return true;
-				}
-				if (absoluteDirection == Direction.SW) {
-					point1 = new Point2D.Double(x - rayon, y);
-					point2 = new Point2D.Double(x, y + rayon);
-					point3 = new Point2D.Double(x - rayon, y + rayon);
-					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-						return true;
-				}
-				if (absoluteDirection == Direction.NW) {
-					point1 = new Point2D.Double(x - rayon, y);
-					point2 = new Point2D.Double(x, y - rayon);
-					point3 = new Point2D.Double(x - rayon, y - rayon);
-					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-						return true;
-				}
-				if (absoluteDirection == Direction.NE) {
-					point1 = new Point2D.Double(x + rayon, y);
-					point2 = new Point2D.Double(x, y - rayon);
-					point3 = new Point2D.Double(x + rayon, y - rayon);
-					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-						return true;
-				}
-				if (absoluteDirection == Direction.E) {
-					point1 = new Point2D.Double(x + rayon, y);
-					point2 = new Point2D.Double(x + rayon / 2, y + rayon / 2);
-					point3 = new Point2D.Double(x + rayon / 2, y - rayon / 2);
-					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-						return true;
-				}
-				if (absoluteDirection == Direction.W) {
-					point1 = new Point2D.Double(x - rayon, y);
-					point2 = new Point2D.Double(x - rayon / 2, y + rayon / 2);
-					point3 = new Point2D.Double(x - rayon / 2, y - rayon / 2);
-					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-						return true;
-				}
-				if (absoluteDirection == Direction.N) {
-					point1 = new Point2D.Double(x, y - rayon);
-					point2 = new Point2D.Double(x + rayon / 2, y - rayon / 2);
-					point3 = new Point2D.Double(x - rayon / 2, y - rayon / 2);
-					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-						return true;
-				}
-				if (absoluteDirection == Direction.S) {
-					point1 = new Point2D.Double(x, y + rayon);
-					point2 = new Point2D.Double(x + rayon / 2, y + rayon / 2);
-					point3 = new Point2D.Double(x - rayon / 2, y + rayon / 2);
-					if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-						return true;
-				}
+				if (absoluteDirection == Direction.NE && GBx > x && GBx <= x + rayon && GBy < y && GBy >= y - rayon)
+					return true;
+				if (absoluteDirection == Direction.NW && GBx < x && GBx >= x - rayon && GBy < y && GBy >= y - rayon)
+					return true;
+				if (absoluteDirection == Direction.SW && GBx < x && GBx >= x - rayon && GBy > y && GBy <= y + rayon)
+					return true;
+				if (absoluteDirection == Direction.SE && GBx > x && GBx <= x + rayon && GBy > y && GBy <= y + rayon)
+					return true;
+				if (absoluteDirection == Direction.E
+						&& ((GBx > x && GBx <= x + rayon / 2 && absolute(GBx - y) < GBx - x)
+								|| (GBx <= x + rayon && GBx >= x + rayon / 2 && absolute(GBy - y) < x + rayon - GBx)))
+					return true;
+				if (absoluteDirection == Direction.W
+						&& ((GBx < x && GBx >= x - rayon / 2 && absolute(GBy - y) < x - GBx)
+								|| (GBx >= x - rayon && GBx <= x - rayon / 2 && absolute(GBy - y) < GBx - (x - rayon))))
+					return true;
+				if (absoluteDirection == Direction.N
+						&& ((GBy < y && GBy >= y - rayon / 2 && absolute(GBx - x) < y - GBy)
+								|| (GBy >= y - rayon && GBy <= y - rayon / 2 && absolute(GBx - x) < GBy - (y - rayon))))
+					return true;
+				if (absoluteDirection == Direction.S
+						&& ((GBy > y && GBy <= y + rayon / 2 && absolute(GBx - x) < GBy - y)
+								|| (GBy <= y + rayon && GBy >= y + rayon / 2 && absolute(GBx - x) < y + rayon - GBy)))
+					return true;
+			}
+			// Cela test si le rectangle ou le losange de la direction a un point dans le
+			// hitbox d'entité
+			Rectangle2D hitBox = entity.getHitbox();
+			Point2D point1, point2, point3;
+			if (absoluteDirection == Direction.SE) {
+				point1 = new Point2D.Double(x + rayon, y);
+				point2 = new Point2D.Double(x, y + rayon);
+				point3 = new Point2D.Double(x + rayon, y + rayon);
+				if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+					return true;
+			}
+			if (absoluteDirection == Direction.SW) {
+				point1 = new Point2D.Double(x - rayon, y);
+				point2 = new Point2D.Double(x, y + rayon);
+				point3 = new Point2D.Double(x - rayon, y + rayon);
+				if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+					return true;
+			}
+			if (absoluteDirection == Direction.NW) {
+				point1 = new Point2D.Double(x - rayon, y);
+				point2 = new Point2D.Double(x, y - rayon);
+				point3 = new Point2D.Double(x - rayon, y - rayon);
+				if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+					return true;
+			}
+			if (absoluteDirection == Direction.NE) {
+				point1 = new Point2D.Double(x + rayon, y);
+				point2 = new Point2D.Double(x, y - rayon);
+				point3 = new Point2D.Double(x + rayon, y - rayon);
+				if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+					return true;
+			}
+			if (absoluteDirection == Direction.E) {
+				point1 = new Point2D.Double(x + rayon, y);
+				point2 = new Point2D.Double(x + rayon / 2, y + rayon / 2);
+				point3 = new Point2D.Double(x + rayon / 2, y - rayon / 2);
+				if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+					return true;
+			}
+			if (absoluteDirection == Direction.W) {
+				point1 = new Point2D.Double(x - rayon, y);
+				point2 = new Point2D.Double(x - rayon / 2, y + rayon / 2);
+				point3 = new Point2D.Double(x - rayon / 2, y - rayon / 2);
+				if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+					return true;
+			}
+			if (absoluteDirection == Direction.N) {
+				point1 = new Point2D.Double(x, y - rayon);
+				point2 = new Point2D.Double(x + rayon / 2, y - rayon / 2);
+				point3 = new Point2D.Double(x - rayon / 2, y - rayon / 2);
+				if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+					return true;
+			}
+			if (absoluteDirection == Direction.S) {
+				point1 = new Point2D.Double(x, y + rayon);
+				point2 = new Point2D.Double(x + rayon / 2, y + rayon / 2);
+				point3 = new Point2D.Double(x - rayon / 2, y + rayon / 2);
+				if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
+					return true;
 			}
 		}
 		return false;
+	}
+
+	public boolean doClosest(Category category, Direction direction) {
+		if (direction == null) {
+			direction = Direction.FORWARD;
+		}
+		if (category == null) {
+			category = Category.ADVERSARY;
+		}
+		return closest(category, direction);
 	}
 
 	private boolean closest(Category category, Direction direction) {
