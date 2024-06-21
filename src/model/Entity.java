@@ -57,10 +57,11 @@ public abstract class Entity {
 		this.moveForce = cfg.getFloatValue(name, "speed");
 		this.category = cfg.getCategory(name, "category");
 		this.name = name;
-		this.attackDamage = model.getConfig().getIntValue(name, "attackDamage");
-		this.healthPoint = model.getConfig().getIntValue(name, "healthPoint");
-		this.meleeRange = model.getConfig().getIntValue(name, "meleeRange");
+		this.attackDamage = cfg.getIntValue(name, "attackDamage");
+		this.healthPoint = cfg.getIntValue(name, "healthPoint");
+		this.meleeRange = cfg.getIntValue(name, "meleeRange");
 		this.throwEntity = cfg.getStringValue(name, "throwBots");
+		this.isPhysicObject = cfg.getBooleanValue(name, "isPhysicObject");
 		myFSM = new FSM(this,
 				model.getAutomatonBank().getAutomaton(model.getConfig().getStringValue(this.name, "automaton")));
 	}
@@ -707,5 +708,9 @@ public abstract class Entity {
 			return lastDirectionRequested;
 		}
 		return dir;
+	}
+
+	public boolean isPhysicObject() {
+		return isPhysicObject;
 	}
 }
