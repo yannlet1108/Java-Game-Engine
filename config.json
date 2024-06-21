@@ -3,7 +3,7 @@
     "debug": false
   },
 
-  "World": {
+  "world": {
     "width": 800,
     "height": 600,
     "density": 0.1,
