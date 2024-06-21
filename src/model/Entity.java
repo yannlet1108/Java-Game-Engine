@@ -53,6 +53,7 @@ public abstract class Entity {
 		force = new Vector();
 		speed = new Vector();
 		this.name = name;
+		this.throwEntity = cfg.getStringValue(name, "throwBots");
 		myFSM = new FSM(this,
 				model.getAutomatonBank().getAutomaton(model.getConfig().getStringValue(this.name, "automaton")));
 	}
@@ -628,5 +629,24 @@ public abstract class Entity {
 
 	public boolean doKey(String key) {
 		return model.getController().isKeyPressed(key);
+	}
+
+	/**
+	 * Crée une entité devant une entité
+	 * 
+	 * @param ekey
+	 */
+	public void throwEntity(String name) {
+		Point2D pos = this.getCenter();
+		pos.setLocation(this.getX() + 5, this.getY());
+		Entity e;
+		switch (name) {
+		case "Player":
+			e = new Player(pos, this.direction, this.model, this.number++);
+			break;
+		default:
+			e = new Mob(pos, this.direction, this.model, this.number);
+			break;
+		}
 	}
 }
