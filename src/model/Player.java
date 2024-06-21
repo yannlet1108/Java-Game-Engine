@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import view.PlayerAvatar;
 
@@ -50,7 +49,8 @@ public class Player extends Entity {
 	 */
 	public void breathe() {
 		if (oxygen > 0) {
-			oxygen -= model.getConfig().getIntValue("Player" + number, "oxygenBreathe");;
+			oxygen -= model.getConfig().getIntValue("Player" + number, "oxygenBreathe");
+			;
 		} else {
 			oxygen = 0;
 			this.getHit(15);
@@ -78,7 +78,8 @@ public class Player extends Entity {
 	 * le gilet
 	 */
 	private void swell() {
-		if (vest.getVestAir() + model.getConfig().getIntValue("Player" + number, "oxygenStep") < model.getConfig().getIntValue("Player" + number, "vestMaxAir")) {
+		if (vest.getVestAir() + model.getConfig().getIntValue("Player" + number, "oxygenStep") < model.getConfig()
+				.getIntValue("Player" + number, "vestMaxAir")) {
 			if (oxygen > model.getConfig().getIntValue("Player" + number, "oxygenStep")) {
 				oxygen -= model.getConfig().getIntValue("Player" + number, "oxygenStep");
 				vest.vestAir += model.getConfig().getIntValue("Player" + number, "oxygenStep");
@@ -97,16 +98,14 @@ public class Player extends Entity {
 	private void deflate() {
 		if (vest.getVestAir() > 0) {
 			if (oxygen < 100 - model.getConfig().getIntValue("Player" + number, "oxygenStep")) {
-				oxygen += model.getConfig().getIntValue("Player" + number, "oxygenStep");;
+				oxygen += model.getConfig().getIntValue("Player" + number, "oxygenStep");
+				;
 			}
-			vest.vestAir -= model.getConfig().getIntValue("Player" + number, "oxygenStep");;
-			this.density += model.getConfig().getIntValue("Player" + number, "stepDensity");;
+			vest.vestAir -= model.getConfig().getIntValue("Player" + number, "oxygenStep");
+			;
+			this.density += model.getConfig().getIntValue("Player" + number, "stepDensity");
+			;
 		}
-	}
-
-	@Override
-	public void pick() {
-		throw new RuntimeException("Not Yet Implemented");
 	}
 
 	public void explode() {

@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 public class Obstacle extends Entity {
 
@@ -16,17 +15,4 @@ public class Obstacle extends Entity {
 		// TODO Auto-generated method stub
 
 	}
-
-	@Override
-	public void pick() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void explode() {
-		// TODO Auto-generated method stub
-
-	}
-
 }

@@ -18,8 +18,6 @@ public abstract class Entity {
 	protected double density;
 	private Vector speed;
 	private Vector force;
-	private double mass;
-	private double volume;
 
 	protected int healthPoint;
 	protected Category team;
@@ -144,11 +142,6 @@ public abstract class Entity {
 	}
 
 	public abstract void egg();
-
-	/**
-	 * Execute l'action Pick comme definit par l'entite
-	 */
-	public abstract void pick();
 
 	public void doExplode() {
 		blockAutomaton();
