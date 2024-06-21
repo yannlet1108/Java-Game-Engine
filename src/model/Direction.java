@@ -1,7 +1,7 @@
 package model;
 
 public enum Direction {
-	N, S, E, W, NW, NE, SW, SE, HERE, FORWARD, BACKWARD, LEFT, RIGHT;
+	N, S, E, W, NW, NE, SW, SE, HERE, FORWARD, BACKWARD, LEFT, RIGHT, UNDERSCORE, d;
 
 	public static Direction relativeToAbsolute(Direction absoluteDirection, Direction relativeDirection) {
 		switch (relativeDirection) {
@@ -138,5 +138,41 @@ public enum Direction {
 		default:
 			return false;
 		}
+	}
+
+	/**
+	 * @return a random absolute direction between the 8 possible
+	 */
+	public Direction getRandomDirection() {
+		int randomInt = getRandomNumber(1, 8);
+		switch (randomInt) {
+		case 1:
+			return N;
+		case 2:
+			return S;
+		case 3:
+			return E;
+		case 4:
+			return W;
+		case 5:
+			return NW;
+		case 6:
+			return NE;
+		case 7:
+			return SW;
+		case 8:
+			return SE;
+		default:
+			throw new IllegalStateException("This should not happen, random number picked :" + randomInt);
+		}
+	}
+
+	/**
+	 * @param min
+	 * @param max
+	 * @return a random int between min and max (both included)
+	 */
+	private int getRandomNumber(int min, int max) {
+		return (int) ((Math.random() * (max - min)) + min);
 	}
 }

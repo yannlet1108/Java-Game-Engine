@@ -1,3 +1,37 @@
+### Mercredi 19 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Gwendal | Fichiers de config et chargement | En cours |
+| Yann | Visiteur | Done |
+| Yann | Automates | En cours |
+| Yohan | Sprites et animations | En cours |
+| Axel | Vue dynamique à deux joueurs | En cours |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Continuer les sprites et animations | Moyen | Yohan |
+| Faire les fichiers de config | Moyen | Gwendal |
+| Merge les automates avec le reste du projet | Elevé | Gwendal, Yann, Axel |
+
+### Mardi 18 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Matthieu | Génération de la map, fichiers de constantes | Done |
+| Moataz | Spawn d'enemis et gilet et test | Done |
+| Gwendal | Collisions finies | Done |
+| Yann | Visiteur et automates | En cours |
+| Yohan | Sprites et animations | En cours |
+| Axel | Vue dynamique et merge | Done |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Continuer le visiteur | Moyen | Yann |
+| Continuer les sprites et animations | Moyen | Yohan |
+| Ajouter les actions des automates | Moyen | Gwendal |
+
+
 ### Lundi 17 juin
 | Nom | Tache | Etat |
 |:-:|---|:-:|
