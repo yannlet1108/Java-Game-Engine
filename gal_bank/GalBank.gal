@@ -63,6 +63,19 @@ Baloon2(Init){
 	| True ? :(Init)
 }
 
+Missile(Forward){
+	* (Forward):
+	| Cell(F,V) ? Move :(Forward)
+	| True ? Explode :()
+}
+
+BouncingMissile(Forward){
+	* (Forward):
+	| Cell(F,V) ? Move :(Forward)
+	| Cell(F,O) ? Move(B) :(Forward)
+	| True ? Explode :()
+}
+
 
 
 
@@ -73,10 +86,10 @@ BackAndForth(Init){
 }
 
 
-RandomMove(Init){
-	* (Init):
+RandomMove(Forward){
+	* (Forward):
 	| True ? Move(_) :(Wait)
 	
 	* (Wait):
-	| True ? Wait :(Init)
+	| True ? Wait :(Forward)
 }

@@ -33,6 +33,7 @@ public abstract class Entity {
 	private String name;
 
 	private FSM myFSM;
+	private Direction lastDirectionRequested;
 
 	private boolean automatonAvailable = true;
 	private int range = 10;
@@ -166,13 +167,37 @@ public abstract class Entity {
 	public abstract void explode();
 
 	public boolean doCell(Direction direction, Category category) {
-		if (direction == null) {
-			direction = Direction.FORWARD;
-		}
+		// Catégorie par défaut
+		Category cat = category;
 		if (category == null) {
-			category = Category.VOID;
+			cat = Category.VOID;
 		}
-		return cell(direction, category, range);
+
+		// Direction par défaut
+		Direction dir = direction;
+		if (direction == null) {
+			dir = Direction.FORWARD;
+		} // Cas particulier de la direction d
+		else if (direction == Direction.d) {
+			dir = Direction.N; // Première direction qu'on vérifie
+			boolean isDirectionFound = cell(dir, cat, range);
+			boolean isTourCompleted = false;
+
+			while (!isDirectionFound && !isTourCompleted) {
+				dir = Direction.rotateSlightlyRight(dir);
+				isDirectionFound = cell(dir, cat, range);
+
+				if (dir == Direction.NW) {
+					isTourCompleted = true;
+				}
+			}
+			if (isDirectionFound) {
+				lastDirectionRequested = dir;
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -305,13 +330,37 @@ public abstract class Entity {
 	}
 
 	public boolean doClosest(Category category, Direction direction) {
-		if (direction == null) {
-			direction = Direction.FORWARD;
-		}
+		// Catégorie par défaut
+		Category cat = category;
 		if (category == null) {
-			category = Category.ADVERSARY;
+			cat = Category.ADVERSARY;
 		}
-		return closest(category, direction);
+
+		// Direction par défaut
+		Direction dir = direction;
+		if (direction == null) {
+			dir = Direction.FORWARD;
+		} // Cas particulier de la direction d
+		else if (direction == Direction.d) {
+			dir = Direction.N; // Première direction qu'on vérifie
+			boolean isDirectionFound = closest(cat, dir);
+			boolean isTourCompleted = false;
+
+			while (!isDirectionFound && !isTourCompleted) {
+				dir = Direction.rotateSlightlyRight(dir);
+				isDirectionFound = closest(cat, dir);
+
+				if (dir == Direction.NW) {
+					isTourCompleted = true;
+				}
+			}
+			if (isDirectionFound) {
+				lastDirectionRequested = dir;
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private boolean closest(Category category, Direction direction) {
@@ -628,5 +677,12 @@ public abstract class Entity {
 
 	public boolean doKey(String key) {
 		return model.getController().isKeyPressed(key);
+	}
+
+	private Direction getRightDirection(Direction dir) {
+		if (dir == Direction.d) {
+			return lastDirectionRequested;
+		}
+		return dir;
 	}
 }
