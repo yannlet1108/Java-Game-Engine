@@ -15,12 +15,6 @@ public class Mob extends Entity {
 	}
 
 	@Override
-	public void egg() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void pick() {
 		// TODO Auto-generated method stub
 
@@ -29,7 +23,13 @@ public class Mob extends Entity {
 	@Override
 	public void explode() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void pop(int val) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -143,12 +143,59 @@ public abstract class Entity {
 		timer.schedule(endWaitTask, endWaitTask.getDuration());
 	}
 
-	public abstract void egg();
+	public void egg(Direction direct) {
+		Point2D pts = null;
+		int marge = 3;
+		config.Config cfg = model.getConfig();
+		Direction direction = Direction.relativeToAbsolute(this.direction, direct);
+		if (direction == Direction.N)
+			pts = new Point2D.Double(this.getX(), this.getY() - cfg.getIntValue(this.name, "height") - marge);
+		if (direction == Direction.S)
+			pts = new Point2D.Double(this.getX(), this.getY() + cfg.getIntValue(this.name, "height") + marge);
+		if (direction == Direction.E)
+			pts = new Point2D.Double(this.getX() + cfg.getIntValue(this.name, "width") + marge, this.getY());
+		if (direction == Direction.W)
+			pts = new Point2D.Double(this.getX() - cfg.getIntValue(this.name, "width") - marge, this.getY());
+		if (direction == Direction.SE)
+			pts = new Point2D.Double(this.getX() + cfg.getIntValue(this.name, "width") + marge,
+					this.getY() + cfg.getIntValue(this.name, "height") + marge);
+		if (direction == Direction.SW)
+			pts = new Point2D.Double(this.getX() - cfg.getIntValue(this.name, "width") - marge,
+					this.getY() + cfg.getIntValue(this.name, "height") + marge);
+		if (direction == Direction.NW)
+			pts = new Point2D.Double(this.getX() - cfg.getIntValue(this.name, "width") - marge,
+					this.getY() - cfg.getIntValue(this.name, "height") - marge);
+		if (direction == Direction.NE)
+			pts = new Point2D.Double(this.getX() + cfg.getIntValue(this.name, "width") + marge,
+					this.getY() - cfg.getIntValue(this.name, "height") - marge);
+
+		Rectangle2D futurHitBox = new Rectangle2D.Double(pts.getX(), pts.getY(), cfg.getFloatValue(name, "width"),
+				cfg.getFloatValue(name, "height"));
+		Iterator<Entity> iter = this.model.entitiesIterator();
+		Entity e;
+		while (iter.hasNext()) {
+			e = iter.next();
+			if (e.hitbox.intersects(futurHitBox))
+				return;
+		}
+		new Mob(pts, direction, this.model, this.number);
+	}
 
 	/**
 	 * Execute l'action Pick comme definit par l'entite
 	 */
 	public abstract void pick();
+
+	public void doPop(int val) {
+		blockAutomaton();
+		if (val == 1 && val == -1)
+			pop(val);
+		Timer timer = new Timer();
+		ActionTask endPopTask = new EndPopTask(this, 1000);
+		timer.schedule(endPopTask, endPopTask.getDuration());
+	}
+
+	public abstract void pop(int val);
 
 	public void doExplode() {
 		blockAutomaton();
