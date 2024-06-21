@@ -1,3 +1,19 @@
+### Jeudi 20 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Gwendal | Fichiers de config et chargement | En cours |
+| Matthieu | Restructuration des entités et deplacement des constantes dans la config | En cours |
+| Yohan & Axel | Sprites et animations | En cours |
+| Yann & Gwendal | Liaison automate et modele | En cours |
+| Moataz | Adaptation du spawn d'enemis et gilet | Done |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Continuer les sprites et animations | Moyen | Yohan, Axel |
+| Finir missile et throwEntity | Moyen | Matthieu |
+| Merge les automates avec le reste du projet | Elevé | Gwendal, Yann |
+
 ### Mercredi 19 juin
 | Nom | Tache | Etat |
 |:-:|---|:-:|
