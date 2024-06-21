@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 public class Mob extends Entity {
 
@@ -13,6 +12,5 @@ public class Mob extends Entity {
 		this.meleeRange = model.getConfig().getIntValue("mob" + this.number, "meleeRange");
 		// TODO Auto-generated constructor stub
 	}
-
 
 }

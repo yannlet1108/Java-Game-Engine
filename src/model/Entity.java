@@ -18,8 +18,6 @@ public abstract class Entity {
 	protected double density;
 	private Vector speed;
 	private Vector force;
-	private double mass;
-	private double volume;
 
 	protected int healthPoint;
 	protected Category team;
@@ -143,7 +141,6 @@ public abstract class Entity {
 		ActionTask endWaitTask = new EndWaitTask(this, 1000);
 		timer.schedule(endWaitTask, endWaitTask.getDuration());
 	}
-
 
 	private void egg() {
 		egg(Direction.BACKWARD);

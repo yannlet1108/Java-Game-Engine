@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import view.PlayerAvatar;
 
@@ -104,16 +103,6 @@ public class Player extends Entity {
 			vest.vestAir -= model.getConfig().getIntValue("Player" + number, "oxygenStep");
 			this.density += model.getConfig().getIntValue("Player" + number, "stepDensity");
 		}
-	}
-
-	/**
-	 * Methode qui créé un missile devant le joueur
-	 */
-
-	public void throwMissile(Direction dir) {
-		Point2D pos = this.getCenter();
-		pos.setLocation(this.getX() + 5, this.getY());
-		Missile m = new Missile(pos, dir, this.getModel());
 	}
 
 }
