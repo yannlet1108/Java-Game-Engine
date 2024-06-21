@@ -104,5 +104,4 @@ public class Player extends Entity {
 			this.density += model.getConfig().getIntValue("Player" + number, "stepDensity");
 		}
 	}
-
 }

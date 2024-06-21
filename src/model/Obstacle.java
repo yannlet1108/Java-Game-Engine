@@ -9,5 +9,4 @@ public class Obstacle extends Entity {
 		this.healthPoint = model.getConfig().getIntValue("obstacle", "healthPoint");
 		// TODO Auto-generated constructor stub
 	}
-
 }

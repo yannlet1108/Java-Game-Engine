@@ -146,12 +146,63 @@ public abstract class Entity {
 		egg(Direction.BACKWARD);
 	}
 
+	public void egg(Direction direct) {
+		Point2D pts = null;
+		int marge = 3;
+		config.Config cfg = model.getConfig();
+		Direction direction = Direction.relativeToAbsolute(this.direction, direct);
+		if (direction == Direction.N)
+			pts = new Point2D.Double(this.getX(), this.getY() - cfg.getIntValue(this.name, "height") - marge);
+		if (direction == Direction.S)
+			pts = new Point2D.Double(this.getX(), this.getY() + cfg.getIntValue(this.name, "height") + marge);
+		if (direction == Direction.E)
+			pts = new Point2D.Double(this.getX() + cfg.getIntValue(this.name, "width") + marge, this.getY());
+		if (direction == Direction.W)
+			pts = new Point2D.Double(this.getX() - cfg.getIntValue(this.name, "width") - marge, this.getY());
+		if (direction == Direction.SE)
+			pts = new Point2D.Double(this.getX() + cfg.getIntValue(this.name, "width") + marge,
+					this.getY() + cfg.getIntValue(this.name, "height") + marge);
+		if (direction == Direction.SW)
+			pts = new Point2D.Double(this.getX() - cfg.getIntValue(this.name, "width") - marge,
+					this.getY() + cfg.getIntValue(this.name, "height") + marge);
+		if (direction == Direction.NW)
+			pts = new Point2D.Double(this.getX() - cfg.getIntValue(this.name, "width") - marge,
+					this.getY() - cfg.getIntValue(this.name, "height") - marge);
+		if (direction == Direction.NE)
+			pts = new Point2D.Double(this.getX() + cfg.getIntValue(this.name, "width") + marge,
+					this.getY() - cfg.getIntValue(this.name, "height") - marge);
+
+		Rectangle2D futurHitBox = new Rectangle2D.Double(pts.getX(), pts.getY(), cfg.getFloatValue(name, "width"),
+				cfg.getFloatValue(name, "height"));
+		Iterator<Entity> iter = this.model.entitiesIterator();
+		Entity e;
+		while (iter.hasNext()) {
+			e = iter.next();
+			if (e.hitbox.intersects(futurHitBox))
+				return;
+		}
+		new Mob(pts, direction, this.model, this.number);
+
+	}
+
 	public void doEgg(Direction direction) {
 		blockAutomaton();
 		egg(getRightDirection(direction));
 		Timer timer = new Timer();
 		ActionTask endEggTask = new EndEggTask(this, 1000);
 		timer.schedule(endEggTask, endEggTask.getDuration());
+	}
+
+	public void doPop(int val) {
+		blockAutomaton();
+		pop(val);
+		Timer timer = new Timer();
+		ActionTask endPopTask = new EndPopTask(this, 1000);
+		timer.schedule(endPopTask, endPopTask.getDuration());
+	}
+
+	private void pop(int val) {
+		((Player) this).pop(val);
 	}
 
 	public void doExplode() {
@@ -695,10 +746,44 @@ public abstract class Entity {
 	 * 
 	 * @param ekey
 	 */
-	public void throwEntity(String name) {
-		Point2D pos = this.getCenter();
-		pos.setLocation(this.getX() + 5, this.getY());
+	private void throwEntity(String name) {
+		Direction direction = Direction.relativeToAbsolute(this.direction, Direction.FORWARD);
+		Point2D pos = null;
+		int marge = 3;
+		config.Config cfg = model.getConfig();
+		if (direction == Direction.N)
+			pos = new Point2D.Double(this.getX(), this.getY() - cfg.getIntValue(this.name, "height") - marge);
+		if (direction == Direction.S)
+			pos = new Point2D.Double(this.getX(), this.getY() + cfg.getIntValue(this.name, "height") + marge);
+		if (direction == Direction.E)
+			pos = new Point2D.Double(this.getX() + cfg.getIntValue(this.name, "width") + marge, this.getY());
+		if (direction == Direction.W)
+			pos = new Point2D.Double(this.getX() - cfg.getIntValue(this.name, "width") - marge, this.getY());
+		if (direction == Direction.SE)
+			pos = new Point2D.Double(this.getX() + cfg.getIntValue(this.name, "width") + marge,
+					this.getY() + cfg.getIntValue(this.name, "height") + marge);
+		if (direction == Direction.SW)
+			pos = new Point2D.Double(this.getX() - cfg.getIntValue(this.name, "width") - marge,
+					this.getY() + cfg.getIntValue(this.name, "height") + marge);
+		if (direction == Direction.NW)
+			pos = new Point2D.Double(this.getX() - cfg.getIntValue(this.name, "width") - marge,
+					this.getY() - cfg.getIntValue(this.name, "height") - marge);
+		if (direction == Direction.NE)
+			pos = new Point2D.Double(this.getX() + cfg.getIntValue(this.name, "width") + marge,
+					this.getY() - cfg.getIntValue(this.name, "height") - marge);
+
+		Rectangle2D futurHitBox = new Rectangle2D.Double(pos.getX(), pos.getY(), cfg.getFloatValue(name, "width"),
+				cfg.getFloatValue(name, "height"));
+		Iterator<Entity> iter = this.model.entitiesIterator();
 		Entity e;
+		boolean isAnEntityInHitbox = false;
+		while (iter.hasNext()) {
+			e = iter.next();
+			if (e.hitbox.intersects(futurHitBox)) {
+				isAnEntityInHitbox = true;
+				break;
+			}
+		}
 		switch (name) {
 		case "Player":
 			e = new Player(pos, this.direction, this.model, this.number++);
@@ -707,6 +792,10 @@ public abstract class Entity {
 			e = new Mob(pos, this.direction, this.model, this.number);
 			break;
 		}
+
+		if (isAnEntityInHitbox) {
+			e.doExplode();
+		}
 	}
 
 	private Direction getRightDirection(Direction dir) {
@@ -714,5 +803,16 @@ public abstract class Entity {
 			return lastDirectionRequested;
 		}
 		return dir;
+	}
+
+	public void doThrow(Direction direction) {
+		blockAutomaton();
+		if (direction != null) {
+			this.direction = direction;
+		}
+		throwEntity(throwEntity);
+		Timer timer = new Timer();
+		ActionTask endThrowTask = new EndThrowTask(this, 1000);
+		timer.schedule(endThrowTask, endThrowTask.getDuration());
 	}
 }
