@@ -50,6 +50,7 @@ public class Model {
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
 		new Player(getWorldCenter(), Direction.N, this, "Player1");
+
 		m_view.setModel(this);
 		automatonBank = new AutomatonBank();
 		mapGenerator();

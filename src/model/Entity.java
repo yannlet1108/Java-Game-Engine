@@ -64,6 +64,8 @@ public abstract class Entity {
 		this.isPhysicObject = cfg.getBooleanValue(name, "isPhysicObject");
 		myFSM = new FSM(this,
 				model.getAutomatonBank().getAutomaton(model.getConfig().getStringValue(this.name, "automaton")));
+
+		this.state = State.WAITING;
 	}
 
 	/**
