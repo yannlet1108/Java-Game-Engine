@@ -22,14 +22,13 @@ public class Player extends Entity {
 		this.attackDamage = model.getConfig().getIntValue("Player" + number, "attackDamage");
 		this.healthPoint = model.getConfig().getIntValue("Player" + number, "healthPoint");
 		this.meleeRange = model.getConfig().getIntValue("Player" + number, "meleeRange");
-		this.throwEntity = model.getConfig().getStringValue("Player" + number, "throwBots");
 	}
 
 	public class Vest {
 		public int vestAir; // va de 0 à 100
 
 		Vest() {
-			vestAir = PlayerConstants.VEST_MAX_AIR;
+			vestAir = model.getConfig().getIntValue("Player" + number, "vestMaxAir");
 		}
 
 		public int getVestAir() {
@@ -51,7 +50,7 @@ public class Player extends Entity {
 	 */
 	public void breathe() {
 		if (oxygen > 0) {
-			oxygen -= PlayerConstants.OXYGEN_BREATHE;
+			oxygen -= model.getConfig().getIntValue("Player" + number, "oxygenBreathe");;
 		} else {
 			oxygen = 0;
 			this.getHit(15);
@@ -79,11 +78,11 @@ public class Player extends Entity {
 	 * le gilet
 	 */
 	private void swell() {
-		if (vest.getVestAir() + PlayerConstants.VEST_STEP_AIR < PlayerConstants.VEST_MAX_AIR) {
-			if (oxygen > PlayerConstants.OXYGEN_STEP) {
-				oxygen -= PlayerConstants.OXYGEN_STEP;
-				vest.vestAir += PlayerConstants.VEST_STEP_AIR;
-				this.density -= PlayerConstants.DENSITY_STEP;
+		if (vest.getVestAir() + model.getConfig().getIntValue("Player" + number, "oxygenStep") < model.getConfig().getIntValue("Player" + number, "vestMaxAir")) {
+			if (oxygen > model.getConfig().getIntValue("Player" + number, "oxygenStep")) {
+				oxygen -= model.getConfig().getIntValue("Player" + number, "oxygenStep");
+				vest.vestAir += model.getConfig().getIntValue("Player" + number, "oxygenStep");
+				this.density -= model.getConfig().getIntValue("Player" + number, "densityStep");
 			} else {
 				oxygen = 0;
 				this.getHit(15);
@@ -97,22 +96,12 @@ public class Player extends Entity {
 	 */
 	private void deflate() {
 		if (vest.getVestAir() > 0) {
-			if (oxygen < 100 - PlayerConstants.OXYGEN_STEP) {
-				oxygen += PlayerConstants.OXYGEN_STEP;
+			if (oxygen < 100 - model.getConfig().getIntValue("Player" + number, "oxygenStep")) {
+				oxygen += model.getConfig().getIntValue("Player" + number, "oxygenStep");;
 			}
-			vest.vestAir -= PlayerConstants.VEST_STEP_AIR;
-			this.density += PlayerConstants.DENSITY_STEP;
+			vest.vestAir -= model.getConfig().getIntValue("Player" + number, "oxygenStep");;
+			this.density += model.getConfig().getIntValue("Player" + number, "stepDensity");;
 		}
-	}
-
-	/**
-	 * Methode qui créé un missile devant le joueur
-	 */
-
-	public void throwMissile(Direction dir) {
-		Point2D pos = this.getCenter();
-		pos.setLocation(this.getX() + 5, this.getY());
-		Missile m = new Missile(pos, dir, this.getModel());
 	}
 
 	@Override
