@@ -34,7 +34,7 @@
 | Nom | Tache | Etat |
 |:-:|---|:-:|
 | Matthieu | Génération de la map, fichiers de constantes | Done |
-| Moataz | Spawn d'enemis et gilet | Done |
+| Moataz | Spawn d'enemis et gilet et test | Done |
 | Gwendal | Collisions finies | Done |
 | Yann | Visiteur et automates | En cours |
 | Yohan | Sprites et animations | En cours |
@@ -46,7 +46,6 @@
 | Continuer le visiteur | Moyen | Yann |
 | Continuer les sprites et animations | Moyen | Yohan |
 | Ajouter les actions des automates | Moyen | Gwendal |
-| Test des fonctions d'oxygene | Moyen | Moataz |
 
 
 ### Lundi 17 juin

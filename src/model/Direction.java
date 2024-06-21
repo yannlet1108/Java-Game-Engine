@@ -86,6 +86,29 @@ public enum Direction {
 		}
 	}
 
+	public static Direction rotateSlightlyRight(Direction absoluteDirection) {
+		switch (absoluteDirection) {
+		case N:
+			return NE;
+		case E:
+			return SE;
+		case S:
+			return NW;
+		case W:
+			return NW;
+		case NW:
+			return N;
+		case NE:
+			return E;
+		case SE:
+			return S;
+		case SW:
+			return W;
+		default:
+			throw new IllegalArgumentException("Absolute direction expected, got : " + absoluteDirection);
+		}
+	}
+
 	public static Direction rotateLeft(Direction direction) {
 		switch (direction) {
 		case N:
@@ -119,6 +142,27 @@ public enum Direction {
 		}
 	}
 
+	public static boolean angleInDirection(double angle, Direction direction) {
+		switch (direction) {
+		case N:
+			return angle < 45 || angle > 315;
+		case NE:
+			return angle < 90 && angle > 0;
+		case NW:
+			return angle > 270;
+		case S:
+			return angle < 225 && angle > 135;
+		case SE:
+			return angle < 180 && angle > 90;
+		case SW:
+			return angle < 270 && angle > 180;
+		case W:
+			return angle < 315 && angle > 225;
+		default:
+			return false;
+		}
+	}
+
 	/**
 	 * @return a random absolute direction between the 8 possible
 	 */
@@ -147,6 +191,8 @@ public enum Direction {
 	}
 
 	/**
+	 * Function used in getRandomDirection()
+	 * 
 	 * @param min
 	 * @param max
 	 * @return a random int between min and max (both included)
