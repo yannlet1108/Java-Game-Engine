@@ -5,7 +5,7 @@ import java.util.Timer;
 public class HitTask extends ActionTask {
 	Direction direction;
 
-	public HitTask(Entity entity, long duration) {
+	public HitTask(Entity entity, long duration, Direction direction) {
 		super(entity, duration);
 		this.direction = direction;
 	}

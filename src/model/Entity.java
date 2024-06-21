@@ -36,6 +36,7 @@ public abstract class Entity {
 
 	private boolean automatonAvailable = true;
 	private int range = 10;
+	private double explodeRange;
 
 	/**
 	 * @param position
@@ -135,10 +136,9 @@ public abstract class Entity {
 
 	public void doWait() {
 		blockAutomaton();
-		config.Config cfg = this.model.getConfig();
 		Timer timer = new Timer();
-		ActionTask endMoveTask = new EndMoveTask(this, 1000 * cfg.getIntValue("Model", "waitingTime"));
-		timer.schedule(endMoveTask, endMoveTask.getDuration());
+		ActionTask endWaitTask = new EndWaitTask(this, 1000);
+		timer.schedule(endWaitTask, endWaitTask.getDuration());
 	}
 
 	public abstract void egg();
@@ -148,22 +148,30 @@ public abstract class Entity {
 	 */
 	public abstract void pick();
 
-	void doExplode(Direction direction) {
+	public void doExplode() {
 		blockAutomaton();
-		if (direction == null) {
-			move();
-		} else {
-			move(direction);
-		}
+		explode();
 		Timer timer = new Timer();
-		ActionTask endMoveTask = new EndMoveTask(this, 1000);
-		timer.schedule(endMoveTask, endMoveTask.getDuration());
+		ActionTask endExplodeTask = new EndExplodeTask(this, 1000);
+		timer.schedule(endExplodeTask, endExplodeTask.getDuration());
 	}
 
 	/**
 	 * Supprime l'entite
 	 */
-	public abstract void explode();
+	public void explode() {
+		Rectangle2D hitRange = new Rectangle2D.Double(this.hitbox.getX() - explodeRange,
+				this.hitbox.getY() - meleeRange, this.hitbox.getWidth() + 2 * explodeRange,
+				this.hitbox.getHeight() + 2 * explodeRange);
+		Iterator<Entity> it = this.model.entitiesIterator();
+		while (it.hasNext()) {
+			Entity e = it.next();
+			if (e.getHitbox().intersects(hitRange)) {
+				e.getHit(this.attackDamage);
+			}
+		}
+		this.model.removeEntityToRemove();
+	}
 
 	public boolean doCell(Direction direction, Category category) {
 		if (direction == null) {
@@ -525,13 +533,8 @@ public abstract class Entity {
 
 	public void doHit(Direction direction) {
 		blockAutomaton();
-		if (direction == null) {
-			move();
-		} else {
-			move(direction);
-		}
 		Timer timer = new Timer();
-		ActionTask hitTask = new HitTask(this, 1000 / 2);
+		ActionTask hitTask = new HitTask(this, 1000 / 2, direction);
 		timer.schedule(hitTask, hitTask.getDuration());
 	}
 
