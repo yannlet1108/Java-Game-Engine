@@ -52,7 +52,7 @@ public class Model {
 		new Player(getWorldCenter(), Direction.N, this, "Player1");
 		m_view.setModel(this);
 		automatonBank = new AutomatonBank();
-
+		mapGenerator();
 		playerSpawnX = getConfig().getIntValue("world", "playerSpawnX");
 		playerSpawnY = getConfig().getIntValue("world", "playerSpawnY");
 		seed = getConfig().getIntValue("world", "seed");
@@ -84,7 +84,7 @@ public class Model {
 	public void step() {
 		for (Entity entity : entities) {
 			entity.step();
-			if(entity.isPhysicObject()) {
+			if (entity.isPhysicObject()) {
 				entity.computeMovement();
 			}
 		}
