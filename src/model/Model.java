@@ -13,7 +13,7 @@ import controller.Controller;
 import view.View;
 
 public class Model {
-	Controller m_controller;
+	private Controller m_controller;
 	View m_view;
 
 	private double worldHeight;
@@ -90,12 +90,12 @@ public class Model {
 		config.Config cfg = this.m_controller.getConfig();
 		Random yesOrNotRand = new Random();
 		int yesOrNot = yesOrNotRand.nextInt(1000); // 1000 à modif
-		if (yesOrNot <  ModelConstants.IN_GENERAL) {
+		if (yesOrNot < ModelConstants.IN_GENERAL) {
 			Random ranWhatFish = new Random();
 			int mobProb = ranWhatFish.nextInt(100);
 			int mobnum = -1;
 			double width = 0, height = 0;
-			if (mobProb < cfg.getIntValue("mob0" , "spawnProba") ) {
+			if (mobProb < cfg.getIntValue("mob0", "spawnProba")) {
 				mobnum = 0;
 			} else if (mobProb >= ModelConstants.GOLDENFISH_PROBA
 					&& mobProb < ModelConstants.GOLDENFISH_PROBA + ModelConstants.SHARK_PROBA) {
@@ -103,8 +103,8 @@ public class Model {
 			} else {
 				return null;
 			}
-			width = cfg.getIntValue("mob" + mobnum , "width");
-			height = cfg.getIntValue("mob" + mobnum , "height");
+			width = cfg.getIntValue("mob" + mobnum, "width");
+			height = cfg.getIntValue("mob" + mobnum, "height");
 			boolean isGood = false;
 			int x = 0, y = 0;
 			Point2D pts = new Point2D.Double(x, y);
@@ -133,12 +133,12 @@ public class Model {
 				whileCounter++;
 			}
 			Mob nue = new Mob(pts, Direction.E, this, mobnum);
-				// Pour test
-				// System.out.println("Goldfish added at x = " + pts.getX() + ", y = " +
-				// pts.getY() + ".");
-				return nue;
-			}
-			return null;
+			// Pour test
+			// System.out.println("Goldfish added at x = " + pts.getX() + ", y = " +
+			// pts.getY() + ".");
+			return nue;
+		}
+		return null;
 
 	}
 
@@ -285,5 +285,9 @@ public class Model {
 
 	public Config getConfig() {
 		return m_controller.getConfig();
+	}
+
+	public Controller getController() {
+		return m_controller;
 	}
 }

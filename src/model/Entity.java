@@ -1,6 +1,5 @@
 package model;
 
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
@@ -9,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import automaton.FSM;
-import view.PlayerAvatar;
 
 public abstract class Entity {
 	protected Rectangle2D hitbox;
@@ -25,11 +23,11 @@ public abstract class Entity {
 
 	protected int healthPoint;
 	protected Category team;
-	protected int meleeRange; 
+	protected int meleeRange;
 	protected int attackDamage;
 	protected int number;
-	protected Entity throwEntity;
-	
+	protected String throwEntity;
+
 	protected State state;
 
 	private String name;
@@ -46,7 +44,7 @@ public abstract class Entity {
 	 */
 
 	public Entity(Point2D position, Direction direction, Model model, String name) {
-		config.Config cfg = model.m_controller.getConfig();
+		config.Config cfg = model.getConfig();
 		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), cfg.getFloatValue(name, "width"),
 				cfg.getFloatValue(name, "height"));
 		this.direction = direction;
@@ -77,15 +75,15 @@ public abstract class Entity {
 		return hitbox.getY();
 
 	}
-	
+
 	public double getHeight() {
 		return hitbox.getHeight();
 	}
-	
+
 	public double getWidth() {
 		return hitbox.getWidth();
 	}
- 
+
 	public Point2D getCenter() {
 		return new Point2D.Double(hitbox.getCenterX(), hitbox.getCenterY());
 	}
@@ -110,7 +108,7 @@ public abstract class Entity {
 		return this.hitbox;
 	}
 
-	void doMove(Direction direction) {
+	public void doMove(Direction direction) {
 		blockAutomaton();
 		if (direction == null) {
 			move();
@@ -135,14 +133,14 @@ public abstract class Entity {
 		move(Direction.FORWARD);
 	}
 
-	void doWait() {
+	public void doWait() {
 		blockAutomaton();
 		config.Config cfg = this.model.getConfig();
 		Timer timer = new Timer();
-		ActionTask endMoveTask = new EndMoveTask(this, 1000 * cfg.getIntValue("Model", "waitingTime") );
+		ActionTask endMoveTask = new EndMoveTask(this, 1000 * cfg.getIntValue("Model", "waitingTime"));
 		timer.schedule(endMoveTask, endMoveTask.getDuration());
 	}
-	
+
 	public abstract void egg();
 
 	/**
@@ -450,7 +448,7 @@ public abstract class Entity {
 		this.modifyHealthPoint(-val);
 	}
 
-	void doHit(Direction direction) {
+	public void doHit(Direction direction) {
 		blockAutomaton();
 		if (direction == null) {
 			move();
@@ -551,5 +549,9 @@ public abstract class Entity {
 
 	public void destroy() {
 		model.removeEntity(this);
+	}
+
+	public boolean doKey(String key) {
+		return model.getController().isKeyPressed(key);
 	}
 }

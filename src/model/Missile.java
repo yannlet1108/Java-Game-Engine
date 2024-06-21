@@ -7,9 +7,9 @@ public class Missile extends Entity {
 
 	public Missile(Point2D position, Direction direction, Model model) {
 		super(position, direction, model, "missile");
-		this.attackDamage = model.m_controller.getConfig().getIntValue("missile", "attackDamage");
-		this.healthPoint = model.m_controller.getConfig().getIntValue("missile", "healthPoint");
-		this.meleeRange = model.m_controller.getConfig().getIntValue("missile", "meleeRange");
+		this.attackDamage = model.getConfig().getIntValue("missile", "attackDamage");
+		this.healthPoint = model.getConfig().getIntValue("missile", "healthPoint");
+		this.meleeRange = model.getConfig().getIntValue("missile", "meleeRange");
 		// TODO Auto-generated constructor stub
 	}
 
@@ -28,7 +28,7 @@ public class Missile extends Entity {
 	@Override
 	public void explode() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

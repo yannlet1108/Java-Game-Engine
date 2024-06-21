@@ -167,7 +167,6 @@ public class Controller implements GameCanvasListener {
 		return m_model;
 	}
 
-<<<<<<< HEAD
 	public boolean isKeyPressed(String keyString) {
 		int keyCode = getKeyCodeFromString(keyString);
 		for (Integer code : keyList) {
@@ -269,8 +268,6 @@ public class Controller implements GameCanvasListener {
 		}
 	}
 
-=======
->>>>>>> Ma_model
 	public Config getConfig() {
 		return m_config;
 	}

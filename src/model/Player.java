@@ -10,20 +10,19 @@ public class Player extends Entity {
 	public Vest vest;
 	private int oxygen;
 
-	
 	public Player(Point2D position, Direction direction, Model model, int number) {
 		super(position, direction, model, "Player" + number);
-		density = model.m_controller.getConfig().getIntValue("Player" + number, "density");
+		density = model.getConfig().getIntValue("Player" + number, "density");
 		oxygen = 100;
 		vest = new Vest();
 		this.number = number;
-		this.team = model.m_controller.getConfig().getCategory("Player" + number, "category");
+		this.team = model.getConfig().getCategory("Player" + number, "category");
 		model.m_view.store(new PlayerAvatar(model.m_view, this, 1));
 		this.model.addPlayer(this);
-		this.attackDamage = model.m_controller.getConfig().getIntValue("Player" + number, "attackDamage");
-		this.healthPoint = model.m_controller.getConfig().getIntValue("Player" + number, "healthPoint");
-		this.meleeRange = model.m_controller.getConfig().getIntValue("Player" + number, "meleeRange");
-		this.throwEntity = model.m_controller.getConfig().getStringValue("Player" + number, "throwBots");
+		this.attackDamage = model.getConfig().getIntValue("Player" + number, "attackDamage");
+		this.healthPoint = model.getConfig().getIntValue("Player" + number, "healthPoint");
+		this.meleeRange = model.getConfig().getIntValue("Player" + number, "meleeRange");
+		this.throwEntity = model.getConfig().getStringValue("Player" + number, "throwBots");
 	}
 
 	public class Vest {
