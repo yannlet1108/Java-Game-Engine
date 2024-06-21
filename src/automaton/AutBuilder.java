@@ -161,6 +161,11 @@ class AutBuilder implements IVisitor {
 				return new Egg(null);
 			}
 			return new Egg((model.Direction) parameters.get(0));
+		case "Throw":
+			if (parameters.isEmpty()) {
+				return new Throw(null);
+			}
+			return new Throw((model.Direction) parameters.get(0));
 		case "Wait":
 			return new Wait();
 		// TrueCondition
