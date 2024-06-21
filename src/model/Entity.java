@@ -115,7 +115,7 @@ public abstract class Entity {
 		if (direction == null) {
 			move();
 		} else {
-			move(direction);
+			move(getRightDirection(direction));
 		}
 		Timer timer = new Timer();
 		ActionTask endMoveTask = new EndMoveTask(this, 1000);
@@ -583,7 +583,7 @@ public abstract class Entity {
 	public void doHit(Direction direction) {
 		blockAutomaton();
 		Timer timer = new Timer();
-		ActionTask hitTask = new HitTask(this, 1000 / 2, direction);
+		ActionTask hitTask = new HitTask(this, 1000 / 2, getRightDirection(direction));
 		timer.schedule(hitTask, hitTask.getDuration());
 	}
 
