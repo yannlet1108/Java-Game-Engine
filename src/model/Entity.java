@@ -38,6 +38,7 @@ public abstract class Entity {
 	private boolean automatonAvailable = true;
 	private int range = 10;
 	private double explodeRange;
+	private double moveForce;
 
 	/**
 	 * @param position
@@ -55,6 +56,7 @@ public abstract class Entity {
 		force = new Vector();
 		speed = new Vector();
 		this.name = name;
+		this.throwEntity = cfg.getStringValue(name, "throwBots");
 		myFSM = new FSM(this,
 				model.getAutomatonBank().getAutomaton(model.getConfig().getStringValue(this.name, "automaton")));
 	}
@@ -128,7 +130,7 @@ public abstract class Entity {
 	 * @param direction
 	 */
 	public void move(Direction direction) {
-		throw new RuntimeException("Not Yet Implemented");
+		setForce(Vector.getVectorUnitVectorFromDirection(direction).scalarMultiplication(moveForce));
 	}
 
 	public void move() {
@@ -142,7 +144,6 @@ public abstract class Entity {
 		timer.schedule(endWaitTask, endWaitTask.getDuration());
 	}
 
-	public abstract void egg();
 
 	private void egg() {
 		egg(Direction.BACKWARD);
@@ -683,10 +684,32 @@ public abstract class Entity {
 
 	public void destroy() {
 		model.removeEntity(this);
+		if (this instanceof Player) {
+			model.removePlayer((Player) this);
+		}
 	}
 
 	public boolean doKey(String key) {
 		return model.getController().isKeyPressed(key);
+	}
+
+	/**
+	 * Crée une entité devant une entité
+	 * 
+	 * @param ekey
+	 */
+	public void throwEntity(String name) {
+		Point2D pos = this.getCenter();
+		pos.setLocation(this.getX() + 5, this.getY());
+		Entity e;
+		switch (name) {
+		case "Player":
+			e = new Player(pos, this.direction, this.model, this.number++);
+			break;
+		default:
+			e = new Mob(pos, this.direction, this.model, this.number);
+			break;
+		}
 	}
 
 	private Direction getRightDirection(Direction dir) {

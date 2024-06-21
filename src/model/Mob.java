@@ -11,22 +11,8 @@ public class Mob extends Entity {
 		this.attackDamage = model.getConfig().getIntValue("mob" + this.number, "attackDamage");
 		this.healthPoint = model.getConfig().getIntValue("mob" + this.number, "healthPoint");
 		this.meleeRange = model.getConfig().getIntValue("mob" + this.number, "meleeRange");
-		this.hitbox = new Rectangle2D.Double(position.getX(), position.getY(),
-				model.getConfig().getIntValue("mob" + this.number, "mobWidth"),
-				model.getConfig().getIntValue("mob" + this.number, "mobHeight"));
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public void egg() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void explode() {
-		// TODO Auto-generated method stub
-
-	}
 
 }
