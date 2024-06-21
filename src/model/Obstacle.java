@@ -8,10 +8,4 @@ public class Obstacle extends Entity {
 		super(position, direction, model, "obstacle");
 		// TODO Auto-generated constructor stub
 	}
-
-	@Override
-	public void egg() {
-		// TODO Auto-generated method stub
-
-	}
 }

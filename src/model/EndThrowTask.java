@@ -1,8 +1,8 @@
 package model;
 
-public class EndHitTask extends ActionTask {
+class EndThrowTask extends ActionTask {
 
-	public EndHitTask(Entity entity, long duration) {
+	public EndThrowTask(Entity entity, long duration) {
 		super(entity, duration);
 	}
 
@@ -10,5 +10,5 @@ public class EndHitTask extends ActionTask {
 	public void run() {
 		entity.freeAutomaton();
 	}
-
+	
 }

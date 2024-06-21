@@ -1,8 +1,8 @@
 package model;
 
-public class EndHitTask extends ActionTask {
+class EndPopTask extends ActionTask {
 
-	public EndHitTask(Entity entity, long duration) {
+	public EndPopTask(Entity entity, long duration) {
 		super(entity, duration);
 	}
 

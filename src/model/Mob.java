@@ -9,9 +9,4 @@ public class Mob extends Entity {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public void egg() {
-		// TODO Auto-generated method stub
-
-	}
 }

@@ -9,7 +9,7 @@ public class TestAutomaton {
 		AutomatonBank automatonBank = loadAutomatons("gal_bank/GalBank.gal");
 
 		// Only one automaton
-		Automaton oneAutomaton = loadAutomaton("gal_bank/GalBank.gal", "Goldfish");
+		Automaton oneAutomaton = loadAutomaton("gal_bank/Goldfish.gal", "Goldfish");
 	}
 
 	private static AutomatonBank loadAutomatons(String path_file) throws Exception {

@@ -37,7 +37,7 @@ class Move implements Action {
 		if (dir == null) {
 			return "Move";
 		}
-		return "Hit(" + dir.toString() + ")";
+		return "Move(" + dir.toString() + ")";
 	}
 
 }
