@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
@@ -25,6 +26,8 @@ public abstract class Avatar {
 
 	private Queue<Integer> animationSprite; // file de sprites pour l'animation
 
+	private Color debugColor;
+
 	/**
 	 * Crée et initialise les champs communs des avatars. Doit être appellé par une
 	 * sous-classe charge le set de sprites associé à l'entité
@@ -33,12 +36,11 @@ public abstract class Avatar {
 	 * @param e          : entité associé à l'avatar
 	 * @param entityType : numero de l'entité dans la config
 	 */
-	protected Avatar(View m_view, Entity e, int entityType) {
+	protected Avatar(View m_view, Entity e, String entityConfig) {
 		this.m_view = m_view;
 		instanceEntity = e;
-
-		spriteSetNumber = m_view.getBank().loadSpritesSet(getSpritesFile(entityType), getSpritesNrows(entityType),
-				getSpritesNcols(entityType));
+		spriteSetNumber = m_view.getBank().getSpritesSetNumber(entityConfig);
+		debugColor = m_view.getBank().getDebugColor(spriteSetNumber);
 		this.animationSprite = new PriorityQueue<Integer>();
 		m_view.store(this);
 		setInvisible();
@@ -162,37 +164,6 @@ public abstract class Avatar {
 		default:
 			break;
 		}
-	}
-
-	/**
-	 * Cherche le nom fichier de sprites associé à l'entité dans la config
-	 * 
-	 * @param entityType : numero de l'entité dans la config
-	 * @return nom du fichier de sprites
-	 */
-	String getSpritesFile(int entityType) {
-		return ViewCst.SPRITES_FILES[entityType];
-	}
-
-	/**
-	 * Cherche le nombre de lignes de sprites associé au fichier dans la config
-	 * 
-	 * @param entityType : numero de l'entité dans la config
-	 * @return nombre de lignes de sprites
-	 */
-	int getSpritesNrows(int entityType) {
-		return ViewCst.SPRITES_NROWS[entityType];
-	}
-
-	/**
-	 * Cherche le nombre de colonnes de sprites associé au fichier dans la config
-	 * 
-	 * @param entityType : numero de l'entité dans la config
-	 * @return nombre de colonnes de sprites
-	 */
-	int getSpritesNcols(int entityType) {
-		return ViewCst.SPRITES_NCOLS[entityType];
-
 	}
 
 	/**

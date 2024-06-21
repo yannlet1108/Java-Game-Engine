@@ -23,6 +23,7 @@ import model.Model;
 public class View {
 
 	private Model m_model;
+	private Controller m_controller;
 	private GameCanvas m_canvas;
 	private JFrame m_frame;
 	private JLabel m_text;
@@ -42,6 +43,7 @@ public class View {
 	public View(Controller m_controller) {
 
 		m_canvas = new GameCanvas(m_controller);
+		this.m_controller = m_controller;
 
 		System.out.println("  - creating frame...");
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -204,6 +206,10 @@ public class View {
 	 */
 	Viewport getViewport() {
 		return viewport;
+	}
+	
+	Controller getController() {
+		return m_controller;
 	}
 
 }
