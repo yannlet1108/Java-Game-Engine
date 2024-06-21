@@ -84,6 +84,9 @@ public class Model {
 	public void step() {
 		for (Entity entity : entities) {
 			entity.step();
+			if(entity.isPhysicObject()) {
+				entity.computeMovement();
+			}
 		}
 		spawnEnemy();
 	}
