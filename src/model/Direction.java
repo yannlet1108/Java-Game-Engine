@@ -118,4 +118,25 @@ public enum Direction {
 			throw new IllegalArgumentException("Unknown direction: " + direction);
 		}
 	}
+
+	public static boolean angleInDirection(double angle, Direction direction) {
+		switch (direction) {
+		case N:
+			return angle<45 || angle>315;
+		case NE:
+			return angle<90 && angle>0;
+		case NW:
+			return angle>270;
+		case S:
+			return angle<225 && angle>135;
+		case SE:
+			return angle<180 && angle>90;
+		case SW:
+			return angle<270 && angle>180;
+		case W:
+			return angle<315 && angle>225;
+		default:
+			return false;
+		}
+	}
 }

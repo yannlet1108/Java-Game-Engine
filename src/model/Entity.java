@@ -238,6 +238,67 @@ public abstract class Entity {
 		return false;
 	}
 
+	private boolean closest(Category category, Direction direction) {
+		Direction absoluteDirection = Direction.relativeToAbsolute(getDirection(), direction);
+		List<Entity> entitiesOfCategory = getEntitiesOfCategory(category);
+		entitiesOfCategory.remove(this);
+		Entity closestEntity = getClosestEntity(entitiesOfCategory);
+		double angle = angleTo(closestEntity);
+		return Direction.angleInDirection(angle, absoluteDirection);
+	}
+
+	private Entity getClosestEntity(List<Entity> entities) {
+		double minimalDistance = distance(entities.get(0));
+		Entity closestEntity = entities.get(0);
+		for (Entity entity : entities) {
+			double distance = distance(entity);
+			if (distance < minimalDistance) {
+				minimalDistance = distance;
+				closestEntity = entity;
+			}
+		}
+		return closestEntity;
+	}
+
+	private List<Entity> getEntitiesOfCategory(Category category) {
+		List<Entity> entitiesOfCategory = new LinkedList<Entity>();
+		switch (category) {
+		case ADVERSARY:
+			for (Iterator<Entity> iterator = model.entitiesIterator(); iterator.hasNext();) {
+				Entity entity = (Entity) iterator.next();
+				if (!entity.getCategory().equals(category) && category.isAbsoluteTeam()) {
+					entitiesOfCategory.add(entity);
+				}
+			}
+			break;
+
+		default:
+			for (Iterator<Entity> iterator = model.entitiesIterator(); iterator.hasNext();) {
+				Entity entity = (Entity) iterator.next();
+				if (entity.getCategory().equals(category)) {
+					entitiesOfCategory.add(entity);
+				}
+			}
+		}
+		return entitiesOfCategory;
+	}
+
+	private Category getCategory() {
+		return category;
+	}
+
+	private double angleTo(Entity entity) {
+		double relativeXPosition = entity.getCenter().getX() - getCenter().getX();
+		double relativeYPosition = entity.getCenter().getY() - getCenter().getY();
+
+		return Math.toDegrees(Math.atan2(relativeXPosition, relativeYPosition)) % 360;
+
+	}
+
+	private double distance(Entity entity) {
+		return getCenter().distance(entity.getCenter());
+	}
+
 	/**
 	 * @return la direction de l'entité
 	 */
@@ -441,7 +502,7 @@ public abstract class Entity {
 	public State getState() {
 		return state;
 	}
-	
+
 	void setState(State newState) {
 		state = newState;
 	}
