@@ -20,12 +20,6 @@ public class Missile extends Entity {
 	}
 
 	@Override
-	public void pick() {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not Yet Implemented");
-	}
-
-	@Override
 	public void explode() {
 		// TODO Auto-generated method stub
 

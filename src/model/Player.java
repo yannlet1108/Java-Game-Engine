@@ -115,11 +115,6 @@ public class Player extends Entity {
 		Missile m = new Missile(pos, dir, this.getModel());
 	}
 
-	@Override
-	public void pick() {
-		throw new RuntimeException("Not Yet Implemented");
-	}
-
 	public void explode() {
 		this.getModel().removeEntity(this);
 		this.getModel().removePlayer(this);

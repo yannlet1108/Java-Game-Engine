@@ -24,15 +24,9 @@ public class Mob extends Entity {
 	}
 
 	@Override
-	public void pick() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void explode() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

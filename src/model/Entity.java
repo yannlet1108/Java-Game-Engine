@@ -144,10 +144,17 @@ public abstract class Entity {
 
 	public abstract void egg();
 
-	/**
-	 * Execute l'action Pick comme definit par l'entite
-	 */
-	public abstract void pick();
+	private void egg() {
+		egg(Direction.BACKWARD);
+	}
+
+	public void doEgg(Direction direction) {
+		blockAutomaton();
+		egg(getRightDirection(direction));
+		Timer timer = new Timer();
+		ActionTask endEggTask = new EndEggTask(this, 1000);
+		timer.schedule(endEggTask, endEggTask.getDuration());
+	}
 
 	public void doExplode() {
 		blockAutomaton();
