@@ -18,6 +18,7 @@ public abstract class Entity {
 	protected double density;
 	private Vector speed;
 	private Vector force;
+	private boolean isPhysicObject;
 
 	protected int healthPoint;
 	protected Category team;
@@ -28,7 +29,7 @@ public abstract class Entity {
 
 	protected State state;
 
-	private String name;
+	protected String name;
 
 	private FSM myFSM;
 	private Direction lastDirectionRequested;
@@ -53,7 +54,12 @@ public abstract class Entity {
 		this.model.addEntity(this);
 		force = new Vector();
 		speed = new Vector();
+		this.moveForce = cfg.getFloatValue(name, "speed");
+		this.category = cfg.getCategory(name, "category");
 		this.name = name;
+		this.attackDamage = model.getConfig().getIntValue(name, "attackDamage");
+		this.healthPoint = model.getConfig().getIntValue(name, "healthPoint");
+		this.meleeRange = model.getConfig().getIntValue(name, "meleeRange");
 		this.throwEntity = cfg.getStringValue(name, "throwBots");
 		myFSM = new FSM(this,
 				model.getAutomatonBank().getAutomaton(model.getConfig().getStringValue(this.name, "automaton")));
@@ -688,10 +694,10 @@ public abstract class Entity {
 		Entity e;
 		switch (name) {
 		case "Player":
-			e = new Player(pos, this.direction, this.model, this.number++);
+			e = new Player(pos, this.direction, this.model, this.name);
 			break;
 		default:
-			e = new Mob(pos, this.direction, this.model, this.number);
+			e = new Mob(pos, this.direction, this.model, this.name);
 			break;
 		}
 	}

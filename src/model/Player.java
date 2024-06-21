@@ -9,25 +9,27 @@ public class Player extends Entity {
 	public Vest vest;
 	private int oxygen;
 
-	public Player(Point2D position, Direction direction, Model model, int number) {
-		super(position, direction, model, "Player" + number);
-		density = model.getConfig().getIntValue("Player" + number, "density");
+	public Player(Point2D position, Direction direction, Model model, String name) {
+		super(position, direction, model, name);
+		density = model.getConfig().getIntValue(name, "density");
 		oxygen = 100;
 		vest = new Vest();
-		this.number = number;
-		this.team = model.getConfig().getCategory("Player" + number, "category");
+		this.team = model.getConfig().getCategory(name, "category");
 		model.m_view.store(new PlayerAvatar(model.m_view, this, 1));
 		this.model.addPlayer(this);
-		this.attackDamage = model.getConfig().getIntValue("Player" + number, "attackDamage");
-		this.healthPoint = model.getConfig().getIntValue("Player" + number, "healthPoint");
-		this.meleeRange = model.getConfig().getIntValue("Player" + number, "meleeRange");
 	}
 
 	public class Vest {
 		public int vestAir; // va de 0 à 100
+		public int densityStep;
+		public int oxygenBreath;
+		public int oxygenStep;
 
 		Vest() {
-			vestAir = model.getConfig().getIntValue("Player" + number, "vestMaxAir");
+			vestAir = model.getConfig().getIntValue(name, "vestMaxAir");
+			densityStep =model.getConfig().getIntValue(name, "stepDensity");
+			oxygenBreath = model.getConfig().getIntValue(name, "oxygenBreathe");
+			oxygenStep = model.getConfig().getIntValue(name, "oxygenStep");
 		}
 
 		public int getVestAir() {
@@ -49,7 +51,7 @@ public class Player extends Entity {
 	 */
 	public void breathe() {
 		if (oxygen > 0) {
-			oxygen -= model.getConfig().getIntValue("Player" + number, "oxygenBreathe");
+			oxygen -= vest.oxygenBreath;
 			;
 		} else {
 			oxygen = 0;
@@ -78,12 +80,11 @@ public class Player extends Entity {
 	 * le gilet
 	 */
 	private void swell() {
-		if (vest.getVestAir() + model.getConfig().getIntValue("Player" + number, "oxygenStep") < model.getConfig()
-				.getIntValue("Player" + number, "vestMaxAir")) {
-			if (oxygen > model.getConfig().getIntValue("Player" + number, "oxygenStep")) {
-				oxygen -= model.getConfig().getIntValue("Player" + number, "oxygenStep");
-				vest.vestAir += model.getConfig().getIntValue("Player" + number, "oxygenStep");
-				this.density -= model.getConfig().getIntValue("Player" + number, "densityStep");
+		if (vest.getVestAir() + vest.oxygenStep < vest.getVestAir()) {
+			if (oxygen > vest.oxygenStep) {
+				oxygen -= vest.oxygenStep;
+				vest.vestAir += vest.oxygenStep;
+				this.density -=  vest.densityStep;
 			} else {
 				oxygen = 0;
 				this.getHit(15);
@@ -97,13 +98,13 @@ public class Player extends Entity {
 	 */
 	private void deflate() {
 		if (vest.getVestAir() > 0) {
-			if (oxygen < 100 - model.getConfig().getIntValue("Player" + number, "oxygenStep")) {
-				oxygen += model.getConfig().getIntValue("Player" + number, "oxygenStep");
+			if (oxygen < 100 - vest.oxygenStep) {
+				oxygen += vest.oxygenStep;
 				;
 			}
-			vest.vestAir -= model.getConfig().getIntValue("Player" + number, "oxygenStep");
+			vest.vestAir -= vest.oxygenStep;
 			;
-			this.density += model.getConfig().getIntValue("Player" + number, "stepDensity");
+			this.density += vest.densityStep;
 			;
 		}
 	}

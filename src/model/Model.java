@@ -25,6 +25,11 @@ public class Model {
 	private Collection<Player> players;
 	Collection<Entity> toRemove;
 
+	private int playerSpawnX;
+	private int playerSpawnY;
+	private int seed;
+	private int safeZone;
+
 	private AutomatonBank automatonBank;
 
 	/**
@@ -44,9 +49,14 @@ public class Model {
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
-		new Player(getWorldCenter(), Direction.N, this, 1);
+		new Player(getWorldCenter(), Direction.N, this, "Player1");
 		m_view.setModel(this);
 		automatonBank = new AutomatonBank();
+
+		playerSpawnX = getConfig().getIntValue("world", "playerSpawnX");
+		playerSpawnY = getConfig().getIntValue("world", "playerSpawnY");
+		seed = getConfig().getIntValue("world", "seed");
+		safeZone = getConfig().getIntValue("world", "safeZone");
 	}
 
 	/**
@@ -132,7 +142,7 @@ public class Model {
 				}
 				whileCounter++;
 			}
-			Mob nue = new Mob(pts, Direction.E, this, mobnum);
+			Mob nue = new Mob(pts, Direction.E, this, "mob" + mobnum);
 			// Pour test
 			// System.out.println("Goldfish added at x = " + pts.getX() + ", y = " +
 			// pts.getY() + ".");
@@ -247,22 +257,18 @@ public class Model {
 	}
 
 	public void mapGenerator() {
-		Random r = new Random(this.m_controller.getConfig().getIntValue("world", "seed"));
-		for (int i = 0; i < this.getBoardWidth(); i = i
-				+ this.m_controller.getConfig().getIntValue("obstacle", "width")) {
-			for (int j = 0; j < this.getBoardHeight(); j = j
-					+ this.m_controller.getConfig().getIntValue("obstacle", "height")) {
-				if (r.nextDouble() < this.m_controller.getConfig().getFloatValue("obstacle", "probability")) {
+		Random r = new Random(seed);
+		int obstacleWidth = getConfig().getIntValue("obstacle", "width");
+		int obstacleHeight = getConfig().getIntValue("obstacle", "height");
+		float obstacleProbability = getConfig().getFloatValue("obstacle", "probability");
+		for (int i = 0; i < this.getBoardWidth(); i = i + obstacleWidth) {
+			for (int j = 0; j < this.getBoardHeight(); j = j + obstacleHeight) {
+				if (r.nextDouble() < obstacleProbability) {
 					new Obstacle(new Point2D.Double(i, j), null, this);
 				}
 			}
 		}
-		Rectangle2D safezone = new Rectangle2D.Double(
-				this.m_controller.getConfig().getIntValue("world", "playerSpawnX")
-						- this.m_controller.getConfig().getIntValue("world", "safeZone"),
-				this.m_controller.getConfig().getIntValue("world", "playerSpawnY"),
-				this.m_controller.getConfig().getIntValue("world", "safeZone"),
-				this.m_controller.getConfig().getIntValue("world", "safeZone"));
+		Rectangle2D safezone = new Rectangle2D.Double(playerSpawnX - safeZone, playerSpawnY, safeZone, safeZone);
 		Iterator<Entity> it = this.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
@@ -289,5 +295,9 @@ public class Model {
 
 	public Controller getController() {
 		return m_controller;
+	}
+
+	public int getSafeZone() {
+		return safeZone;
 	}
 }
