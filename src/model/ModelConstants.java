@@ -4,7 +4,7 @@ import java.time.Duration;
 
 public class ModelConstants {
 
-	public static Duration PHYSICS_STEP_DELAY = Duration.ofMillis(250);
+	public static Duration PHYSICS_STEP_DELAY = Duration.ofMillis(10);
 
 
 	public static int IN_GENERAL = 1;

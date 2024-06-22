@@ -9,6 +9,7 @@ import java.util.*;
 import config.Config;
 import info3.game.graphics.GameCanvasListener;
 import model.Model;
+import model.ModelConstants;
 import view.View;
 
 /**
@@ -127,7 +128,7 @@ public class Controller implements GameCanvasListener {
 	public void tick(long elapsed) {
 		if (m_view != null)
 			m_view.tick(elapsed);
-		if (tick >= 100) {
+		if (tick >= ModelConstants.PHYSICS_STEP_DELAY.toMillis()) {
 			if (m_model != null)
 				m_model.step();
 			tick = 0;

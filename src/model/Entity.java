@@ -573,7 +573,7 @@ public abstract class Entity {
 	private Vector computeFriction() {
 		Vector unitVector = speed.unitVector().scalarMultiplication(-1);
 		double speedNorm = speed.norm();
-		double vs2 = model.getViscosity() * (Math.pow(speedNorm, 2));
+		double vs2 = model.getViscosity() * (speedNorm);
 		return unitVector.scalarMultiplication(vs2);
 	}
 
