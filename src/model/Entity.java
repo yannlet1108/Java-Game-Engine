@@ -17,6 +17,7 @@ public abstract class Entity {
 
 	protected double density;
 	private Vector speed;
+
 	private Vector force;
 	private boolean isPhysicObject;
 
@@ -37,6 +38,7 @@ public abstract class Entity {
 	private boolean automatonAvailable = true;
 	private int range = 10;
 	private double explodeRange;
+
 	private double moveForce;
 
 	/**
@@ -64,6 +66,8 @@ public abstract class Entity {
 		this.isPhysicObject = cfg.getBooleanValue(name, "isPhysicObject");
 		myFSM = new FSM(this,
 				model.getAutomatonBank().getAutomaton(model.getConfig().getStringValue(this.name, "automaton")));
+
+		this.state = State.WAITING;
 	}
 
 	/**
@@ -83,6 +87,14 @@ public abstract class Entity {
 	public double getY() {
 		return hitbox.getY();
 
+	}
+
+	public Vector getForce() {
+		return force;
+	}
+
+	public void setSpeed(Vector speed) {
+		this.speed = speed;
 	}
 
 	public double getHeight() {
@@ -114,7 +126,7 @@ public abstract class Entity {
 	}
 
 	public Rectangle2D getHitbox() {
-		return this.hitbox;
+		return new Rectangle2D.Double(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
 
 	public void doMove(Direction direction) {
@@ -523,6 +535,10 @@ public abstract class Entity {
 	 * Met a jour l'etat de l'entite comme definit par son automate
 	 */
 	public void step() {
+		if (this instanceof Player) {
+			Player player = (Player) this;
+			player.breathe();
+		}
 		if (automatonAvailable) {
 			myFSM.step();
 		}

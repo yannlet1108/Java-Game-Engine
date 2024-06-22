@@ -17,7 +17,6 @@ public class PlayerAvatar extends Avatar {
 	 */
 	public PlayerAvatar(View m_view, Entity player, int entityType) {
 		super(m_view, player, entityType);
-		m_view.store(this);
 	}
 
 	/**

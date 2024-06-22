@@ -16,7 +16,7 @@ public class AutomatonBank {
 	 * Constructeur de banque d'automate pour le modèle (à la création du monde)
 	 */
 	public AutomatonBank() {
-		loadAutomatons("gal_bank/BackAndForth.gal");
+		loadAutomatons("gal_bank/GalBank.gal");
 	}
 
 	/**

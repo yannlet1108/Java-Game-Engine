@@ -93,3 +93,8 @@ RandomMove(Forward){
 	* (Wait):
 	| True ? Wait :(Forward)
 }
+
+Block(Wait){
+	* (Wait):
+	| True ? Wait :(Wait)
+} 
