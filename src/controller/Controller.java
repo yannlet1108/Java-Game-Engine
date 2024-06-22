@@ -28,11 +28,11 @@ public class Controller implements GameCanvasListener {
 	 */
 	private Controller() {
 		m_controller = this;
+		this.keyList = new LinkedList<Integer>();
 		m_view = new View(this);
 		m_model = new Model(this, m_view);
 		m_view.initBackgroundSprite();
 		this.tick = 0;
-		this.keyList = new LinkedList<Integer>();
 	}
 
 	/**

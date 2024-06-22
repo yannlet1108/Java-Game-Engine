@@ -51,17 +51,18 @@ public class SpriteBank {
 		try {
 			spritesBank.add(0, loadSprite(getBackgroundFile(), 1, 1));
 			BufferedImage background = spritesBank.remove()[0];
-			double xRatio = background.getWidth() / m_view.getSimWidth();
-			double yRatio = background.getHeight() / m_view.getSimHeight();
+			double xRatio = background.getWidth() / m_view.getScreenWidth();
+			double yRatio = background.getHeight() / m_view.getScreenHeight();
 			double ratio = Math.min(xRatio, yRatio);
 			double newWidth = background.getWidth();
 			double newHeight = background.getHeight();
 			int offset = background.getMinX();
-			if (xRatio > ratio)
-				newWidth = (int) ((yRatio * background.getWidth()) / ratio);
-			offset = (int) ((background.getWidth() - newWidth) / 2);
+			if (xRatio > ratio) {
+				newWidth = (int) ((ratio * background.getWidth()) / xRatio);
+				offset = (int) ((background.getWidth() - newWidth) / 2);
+			}
 			if (yRatio > ratio)
-				newHeight = (int) ((xRatio * background.getHeight()) / ratio);
+				newHeight = (int) ((ratio * background.getHeight()) / yRatio);
 			BufferedImage newBackground[] = new BufferedImage[1];
 			newBackground[0] = background.getSubimage(offset, background.getMinY(), (int) newWidth, (int) newHeight);
 			spritesBank.add(0, newBackground);
@@ -150,15 +151,6 @@ public class SpriteBank {
 	 */
 	BufferedImage getBackground() {
 		return spritesBank.get(0)[0];
-	}
-
-	/**
-	 * Retourne le scale de l'image du background
-	 * 
-	 * @return scale avant application du scaling du viewport
-	 */
-	float getBackgroundRawScale() {
-		return (float) (spritesBank.get(0)[0].getHeight() / m_view.getSimHeight());
 	}
 
 	/**

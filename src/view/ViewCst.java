@@ -10,10 +10,10 @@ public class ViewCst {
 	public static final boolean DEBUG = false;
 
 	/* Calcul du scaling */
-	public static final float MAX_SCALING = 16f;
+	public static final float MAX_SCALING = 10f;
 	public static final float MIN_SCALING = 0.1f;
 	public static final int MARGIN = 20;
-	public static final float PARALLAX = 1.5f;
+	public static final float PARALLAX = 0.5f;
 
 	/* Lissage des déplacements */
 	public static final float MOVE_FACTOR = 0.06f;
