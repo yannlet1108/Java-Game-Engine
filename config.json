@@ -3,7 +3,7 @@
     "debug": false
   },
 
-  "World": {
+  "world": {
     "width": 800,
     "height": 600,
     "density": 0.1,
@@ -32,7 +32,7 @@
     "automaton": "Diver1",
     "vestMaxAir": 100,
     "vestStepAir": 5,
-    "densityStep": 0.05,
+    "stepDensity": 0.05,
     "oxygenBreathe": 2,
     "oxygenStep": 10,
     "DensityBreathe": 1,
@@ -52,20 +52,24 @@
     "automaton": "Diver2",
     "vestMaxAir": 100,
     "vestStepAir": 5,
-    "densityStep": 0.05,
+    "stepDensity": 0.05,
     "oxygenBreathe": 2,
     "oxygenStep": 10,
     "DensityBreathe": 1,
     "isPhysicObject": true
   },
-  "Block": {
+  "obstacle": {
     "width": 50,
     "height": 50,
+    "speed": 2,
     "spriteFile": "block.png",
     "category": "OBSTACLE",
     "healthPoint": 1000000,
     "automaton": "Block",
     "probability": 0.5,
+          "attackDamage": 5,
+      "meleeRange": 4,
+      "throwBots": "mob2",
     "isPhysicObject": false
   },
   "mobs": [

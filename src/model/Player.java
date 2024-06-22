@@ -37,11 +37,6 @@ public class Player extends Entity {
 		}
 	}
 
-	@Override
-	public void step() {
-		this.breathe();
-	}
-
 	public int getOxygen() {
 		return oxygen;
 	}

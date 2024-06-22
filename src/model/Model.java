@@ -49,13 +49,14 @@ public class Model {
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
-		new Player(getWorldCenter(), Direction.N, this, "Player1");
-
-		m_view.setModel(this);
 		automatonBank = new AutomatonBank();
-		mapGenerator();
 		playerSpawnX = getConfig().getIntValue("world", "playerSpawnX");
 		playerSpawnY = getConfig().getIntValue("world", "playerSpawnY");
+		new Player(new Point2D.Double(playerSpawnX, playerSpawnY), Direction.N, this, "Player1");
+		new Player(new Point2D.Double(playerSpawnX+200, playerSpawnY), Direction.N, this, "Player2");
+
+		m_view.setModel(this);
+		//mapGenerator();
 		seed = getConfig().getIntValue("world", "seed");
 		safeZone = getConfig().getIntValue("world", "safeZone");
 	}

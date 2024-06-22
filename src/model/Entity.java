@@ -116,7 +116,7 @@ public abstract class Entity {
 	}
 
 	public Rectangle2D getHitbox() {
-		return this.hitbox;
+		return new Rectangle2D.Double(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
 
 	public void doMove(Direction direction) {
@@ -525,6 +525,10 @@ public abstract class Entity {
 	 * Met a jour l'etat de l'entite comme definit par son automate
 	 */
 	public void step() {
+		if (this instanceof Player) {
+			Player player = (Player) this;
+			player.breathe();
+		}
 		if (automatonAvailable) {
 			myFSM.step();
 		}

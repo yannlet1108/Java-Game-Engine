@@ -7,7 +7,7 @@ import java.awt.Color;
  */
 public class ViewCst {
 
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 
 	/* Calcul du scaling */
 	public static final float MAX_SCALING = 16f;
