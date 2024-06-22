@@ -244,6 +244,10 @@ public abstract class Avatar {
 		}
 	}
 	
+	private double roundValue(double value, int numberOfDecimals) {
+		return Math.round( value * Math.pow(10, numberOfDecimals) ) / Math.pow(10, numberOfDecimals);
+	}
+	
 	void uidPaint(Graphics g) {
 		Rectangle2D collisionBox = instanceEntity.getHitbox();
 		Point origin = m_view.getViewport().toViewport(collisionBox);
@@ -253,7 +257,7 @@ public abstract class Avatar {
 		g.setColor(Color.BLACK);
 		g.drawString("Speed: " + instanceEntity.getSpeed(), origin.x, origin.y+ g.getFontMetrics().getHeight());
 		g.drawString("Force: " + instanceEntity.getForce(), origin.x, origin.y + g.getFontMetrics().getHeight()*2);
-		g.drawString("Position: " + "(" + instanceEntity.getX() + "," + instanceEntity.getY() + ")", origin.x,
+		g.drawString("Position: " + "(" + roundValue(instanceEntity.getX(), 3) + "," + roundValue(instanceEntity.getY(), 3) + ")", origin.x,
 				origin.y + g.getFontMetrics().getHeight() * 3);
 	}
 
