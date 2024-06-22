@@ -7,7 +7,7 @@
     "width": 800,
     "height": 600,
     "density": 1,
-    "viscosity": 1,
+    "viscosity": 0.2,
     "spawnMobProba": 1,
     "NbBots": 2,
     "spriteFile": "background.jpg",
