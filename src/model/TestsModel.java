@@ -1,10 +1,8 @@
 package model;
 
 import java.awt.geom.Point2D;
-import java.util.Iterator;
 
 import controller.Controller;
-import view.View;
 
 public class TestsModel {
 	public static void main(String[] args) {
