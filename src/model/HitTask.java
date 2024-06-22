@@ -18,8 +18,8 @@ public class HitTask extends ActionTask {
 			entity.hit(direction);
 		}
 		Timer timer = new Timer();
-		ActionTask endMoveTask = new EndHitTask(entity, duration);
-		timer.schedule(endMoveTask, endMoveTask.getDuration());
+		ActionTask endHitTask = new EndHitTask(entity, duration);
+		timer.schedule(endHitTask, endHitTask.getDuration());
 	}
 
 }
