@@ -205,7 +205,12 @@ public abstract class Entity {
 
 	public void doEgg(Direction direction) {
 		blockAutomaton();
-		egg(getRightDirection(direction));
+		if (direction == null) {
+			egg();
+		}
+		else {
+			egg(getRightDirection(direction));
+		}
 		Timer timer = new Timer();
 		ActionTask endEggTask = new EndEggTask(this, 1000);
 		timer.schedule(endEggTask, endEggTask.getDuration());

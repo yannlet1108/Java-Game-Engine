@@ -1,6 +1,5 @@
 package automaton;
 
-import java.util.Iterator;
 import java.util.List;
 
 import gal.ast.AST;
