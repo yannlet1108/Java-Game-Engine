@@ -41,8 +41,8 @@ public class Config {
 	}
 
 	private JSONObject getJSONElement(String element) {
-		if (element.matches("mob[0-9]")) {
-			return config.getJSONArray("mobs").getJSONObject(element.charAt(3) - 48);
+		if (element.matches("Mob[0-9]")) {
+			return config.getJSONArray("Mobs").getJSONObject(element.charAt(3) - 48);
 		}
 		return config.getJSONObject(element);
 	}

@@ -25,8 +25,10 @@ public class Model {
 	private Collection<Player> players;
 	Collection<Entity> toRemove;
 
-	private int playerSpawnX;
-	private int playerSpawnY;
+	private int player1SpawnX;
+	private int player1SpawnY;
+	private int player2SpawnX;
+	private int player2SpawnY;
 	private int seed;
 	private int safeZone;
 
@@ -42,21 +44,24 @@ public class Model {
 	public Model(Controller m_controller, View m_view) {
 		this.m_controller = m_controller;
 		this.m_view = m_view;
-		worldHeight = this.m_controller.getConfig().getIntValue("world", "height");
-		worldWidth = this.m_controller.getConfig().getIntValue("world", "width");
-		density = this.m_controller.getConfig().getIntValue("world", "density");
-		viscosity = this.m_controller.getConfig().getFloatValue("world", "viscosity");
+		worldHeight = this.m_controller.getConfig().getIntValue("World", "height");
+		worldWidth = this.m_controller.getConfig().getIntValue("World", "width");
+		density = this.m_controller.getConfig().getIntValue("World", "density");
+		viscosity = this.m_controller.getConfig().getIntValue("World", "viscosity");
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
 		automatonBank = new AutomatonBank();
-		playerSpawnX = getConfig().getIntValue("world", "playerSpawnX");
-		playerSpawnY = getConfig().getIntValue("world", "playerSpawnY");
-		seed = getConfig().getIntValue("world", "seed");
-		safeZone = getConfig().getIntValue("world", "safeZone");
+
+		player1SpawnX = getConfig().getIntValue("World", "player1SpawnX");
+		player1SpawnY = getConfig().getIntValue("World", "player1SpawnY");
+		player2SpawnX = getConfig().getIntValue("World", "player2SpawnX");
+		player2SpawnY = getConfig().getIntValue("World", "player2SpawnY");
+		seed = getConfig().getIntValue("World", "seed");
+		safeZone = getConfig().getIntValue("World", "safeZone");
 		mapGenerator();
-		new Player(new Point2D.Double(playerSpawnX, playerSpawnY), Direction.N, this, "Player1");
-		new Player(new Point2D.Double(playerSpawnX+200, playerSpawnY), Direction.N, this, "Player2");
+		new Player(new Point2D.Double(player1SpawnX, player1SpawnY), Direction.N, this, "Player1");
+		new Player(new Point2D.Double(player2SpawnX, player2SpawnY), Direction.N, this, "Player2");
 		m_view.setModel(this);
 	}
 
@@ -109,7 +114,7 @@ public class Model {
 			int mobProb = ranWhatFish.nextInt(100);
 			int mobnum = -1;
 			double width = 0, height = 0;
-			if (mobProb < cfg.getIntValue("mob0", "spawnProba")) {
+			if (mobProb < cfg.getIntValue("Mob0", "spawnProba")) {
 				mobnum = 0;
 			} else if (mobProb >= ModelConstants.GOLDENFISH_PROBA
 					&& mobProb < ModelConstants.GOLDENFISH_PROBA + ModelConstants.SHARK_PROBA) {
@@ -117,8 +122,8 @@ public class Model {
 			} else {
 				return null;
 			}
-			width = cfg.getIntValue("mob" + mobnum, "width");
-			height = cfg.getIntValue("mob" + mobnum, "height");
+			width = cfg.getIntValue("Mob" + mobnum, "width");
+			height = cfg.getIntValue("Mob" + mobnum, "height");
 			boolean isGood = false;
 			int x = 0, y = 0;
 			Point2D pts = new Point2D.Double(x, y);
@@ -146,7 +151,7 @@ public class Model {
 				}
 				whileCounter++;
 			}
-			Mob nue = new Mob(pts, Direction.E, this, "mob" + mobnum);
+			Mob nue = new Mob(pts, Direction.E, this, "Mob" + mobnum);
 			// Pour test
 			// System.out.println("Goldfish added at x = " + pts.getX() + ", y = " +
 			// pts.getY() + ".");
@@ -262,27 +267,22 @@ public class Model {
 
 	public void mapGenerator() {
 		Random r = new Random(seed);
-		int obstacleWidth = getConfig().getIntValue("obstacle", "width");
-		int obstacleHeight = getConfig().getIntValue("obstacle", "height");
-		float obstacleProbability = getConfig().getFloatValue("obstacle", "probability");
+		int obstacleWidth = getConfig().getIntValue("Obstacle", "width");
+		int obstacleHeight = getConfig().getIntValue("Obstacle", "height");
+		int playerWidth = getConfig().getIntValue("Player1", "width");
+		float obstacleProbability = getConfig().getFloatValue("Obstacle", "probability");
+		Rectangle2D safezone = new Rectangle2D.Double(player1SpawnX - safeZone, player1SpawnY,
+				(player2SpawnX - player1SpawnX) + 2 * safeZone + 2 * playerWidth, 2 * safeZone);
 		for (int i = 0; i < this.getBoardWidth(); i = i + obstacleWidth) {
 			for (int j = 0; j < this.getBoardHeight(); j = j + obstacleHeight) {
-				if (r.nextDouble() < obstacleProbability) {
-					new Obstacle(new Point2D.Double(i, j), Direction.E, this);
+				Rectangle2D block = new Rectangle2D.Double(i, j, obstacleWidth, obstacleHeight);
+				if (!(safezone.intersects(block))) {
+					if (r.nextDouble() < obstacleProbability) {
+						new Obstacle(new Point2D.Double(i, j), Direction.E, this);
+					}
 				}
 			}
 		}
-		Rectangle2D safezone = new Rectangle2D.Double(playerSpawnX - safeZone, playerSpawnY, safeZone, safeZone);
-		Iterator<Entity> it = this.entitiesIterator();
-		while (it.hasNext()) {
-			Entity e = it.next();
-			if (e instanceof Obstacle) {
-				if (e.getHitbox().intersects(safezone)) {
-					this.addEntityToRemove(e);
-				}
-			}
-		}
-		this.removeEntityToRemove();
 	}
 
 	public Collection<Entity> getEntities() {

@@ -23,6 +23,7 @@ import model.Model;
 public class View {
 
 	private Model m_model;
+	private Controller m_controller;
 	private GameCanvas m_canvas;
 	private JFrame m_frame;
 	private JLabel m_text;
@@ -40,8 +41,9 @@ public class View {
 	 * @param m_controller : Instance courante du controller
 	 */
 	public View(Controller m_controller) {
-
+		new ViewCst(m_controller.getConfig());
 		m_canvas = new GameCanvas(m_controller);
+		this.m_controller = m_controller;
 
 		System.out.println("  - creating frame...");
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -155,7 +157,7 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	private void fillBackground(Graphics g) {
-		g.setColor(ViewCst.BACKGROUND_DEFAULT);
+		g.setColor(getBank().getBackgroundset().getDebugColor());
 		g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
 
 		// TODO implementer une version fonctionnelle avec une image scalée
@@ -204,6 +206,10 @@ public class View {
 	 */
 	Viewport getViewport() {
 		return viewport;
+	}
+	
+	Controller getController() {
+		return m_controller;
 	}
 
 }

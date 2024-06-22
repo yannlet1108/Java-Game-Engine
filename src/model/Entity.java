@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import automaton.FSM;
-import view.PlayerAvatar;
+import view.Avatar;
 
 public abstract class Entity {
 	protected Rectangle2D hitbox;
@@ -68,7 +68,7 @@ public abstract class Entity {
 
 		this.density = model.getDensity();
 
-		new PlayerAvatar(model.m_view, this, 1);
+		new Avatar(model.m_view, this, name);
 
 		myFSM = new FSM(this,
 				model.getAutomatonBank().getAutomaton(model.getConfig().getStringValue(this.name, "automaton")));

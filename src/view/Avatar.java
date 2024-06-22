@@ -1,9 +1,11 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -13,7 +15,7 @@ import model.Entity;
 /**
  * Classe réunissant les champs et méthodes communes à tout les avatars
  */
-public abstract class Avatar {
+public class Avatar {
 
 	protected View m_view;
 
@@ -26,6 +28,8 @@ public abstract class Avatar {
 
 	private Queue<Integer> animationSprite; // file de sprites pour l'animation
 
+	private Color debugColor;
+
 	/**
 	 * Crée et initialise les champs communs des avatars. Doit être appellé par une
 	 * sous-classe charge le set de sprites associé à l'entité
@@ -34,12 +38,11 @@ public abstract class Avatar {
 	 * @param e          : entité associé à l'avatar
 	 * @param entityType : numero de l'entité dans la config
 	 */
-	public Avatar(View m_view, Entity e, int entityType) {
+	public Avatar(View m_view, Entity e, String entityConfig) {
 		this.m_view = m_view;
 		instanceEntity = e;
-
-		spriteSetNumber = m_view.getBank().loadSpritesSet(getSpritesFile(entityType), getSpritesNrows(entityType),
-				getSpritesNcols(entityType));
+		spriteSetNumber = m_view.getBank().getSpritesSetNumber(entityConfig);
+		debugColor = m_view.getBank().getDebugColor(spriteSetNumber);
 		this.animationSprite = new PriorityQueue<Integer>();
 		m_view.store(this);
 		setInvisible();
@@ -166,37 +169,6 @@ public abstract class Avatar {
 	}
 
 	/**
-	 * Cherche le nom fichier de sprites associé à l'entité dans la config
-	 * 
-	 * @param entityType : numero de l'entité dans la config
-	 * @return nom du fichier de sprites
-	 */
-	String getSpritesFile(int entityType) {
-		return ViewCst.SPRITES_FILES[entityType];
-	}
-
-	/**
-	 * Cherche le nombre de lignes de sprites associé au fichier dans la config
-	 * 
-	 * @param entityType : numero de l'entité dans la config
-	 * @return nombre de lignes de sprites
-	 */
-	int getSpritesNrows(int entityType) {
-		return ViewCst.SPRITES_NROWS[entityType];
-	}
-
-	/**
-	 * Cherche le nombre de colonnes de sprites associé au fichier dans la config
-	 * 
-	 * @param entityType : numero de l'entité dans la config
-	 * @return nombre de colonnes de sprites
-	 */
-	int getSpritesNcols(int entityType) {
-		return ViewCst.SPRITES_NCOLS[entityType];
-
-	}
-
-	/**
 	 * Retourne l'entité associé a l'avatar
 	 * 
 	 * @return instance de l'entité associé
@@ -235,7 +207,8 @@ public abstract class Avatar {
 			if (origin == null) {
 				return;
 			}
-			g.drawImage(m_view.getBank().getSprite(spriteSetNumber, getNextSpriteNumber()), origin.x, origin.y,
+			BufferedImage sprite = m_view.getBank().getSprite(spriteSetNumber, getNextSpriteNumber());
+			g.drawImage(sprite, origin.x, origin.y,
 					(int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
 					(int) (collisionBox.getHeight() * m_view.getViewport().getScale()), null);
 		}
@@ -256,6 +229,8 @@ public abstract class Avatar {
 		}
 		int numberOfDecimals = 3;
 		g.setColor(Color.BLACK);
+
+		g.setFont(new Font("SansSerif",Font.PLAIN,11));
 		g.drawString("Name: " + instanceEntity.toString(), origin.x, origin.y + g.getFontMetrics().getHeight());
 		g.drawString("Position: " + "(" + roundValue(instanceEntity.getX(), numberOfDecimals) + ","
 				+ roundValue(instanceEntity.getY(), numberOfDecimals) + ")", origin.x, origin.y + g.getFontMetrics().getHeight() * 2);
@@ -270,6 +245,14 @@ public abstract class Avatar {
 	 * 
 	 * @param g
 	 */
-	abstract void debugPaint(Graphics g);
+	void debugPaint(Graphics g) {
+		Rectangle2D collisionBox = instanceEntity.getHitbox();
+		g.setColor(debugColor);
+		Point origin = m_view.getViewport().toViewport(collisionBox);
+		if (origin == null)
+			return;
+		g.fillRect(origin.x, origin.y, (int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
+				(int) (collisionBox.getHeight() * m_view.getViewport().getScale()));
+	};
 
 }

@@ -1,9 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +15,7 @@ public class SpriteBank {
 
 	private View m_view;
 
-	private LinkedList<BufferedImage[]> spritesBank;
+	private LinkedList<SpriteSet> spritesBank;
 
 	/**
 	 * Initialise la banque de sprite
@@ -28,49 +25,55 @@ public class SpriteBank {
 	SpriteBank(View m_view) {
 		this.m_view = m_view;
 		m_view.setBank(this);
-		this.spritesBank = new LinkedList<BufferedImage[]>();
-		loadBackground();
+		this.spritesBank = new LinkedList<SpriteSet>();
+		loadSpritesSets();
 	}
 
 	/**
-	 * Charge le sprite correspondant au background
-	 */
-	void loadBackground() {
-		try {
-			spritesBank.add(0, loadSprite(getBackgroundFile(), 1, 1));
-		} catch (IOException e) {
-			System.err.println("Erreur de chargement pour " + ViewCst.SPRITES_FILES[0]);
-		} catch (ArrayIndexOutOfBoundsException e2) {
-			System.err.println("Nombre de colonnes/lignes non spécifié pour " + ViewCst.SPRITES_FILES[0]);
-		}
-	}
-
-	/**
-	 * Retourne le fichier contenant le sprite du background
-	 *
-	 * @return nom du fichier de sprite
-	 */
-	String getBackgroundFile() {
-		return ViewCst.SPRITES_FILES[0];
-	}
-
-	/**
-	 * Charge un sprite enregistré sous forme de matrice
 	 * 
-	 * @param fileName : nom du fichier
-	 * @param nrows    : nombre de ligne de sprite
-	 * @param ncols    : nombre de collone de sprite
-	 * @return numero du sprite enragistré
+	 * @param fileName
+	 * @return
 	 */
-	int loadSpritesSet(String fileName, int nrows, int ncols) {
-		try {
-			spritesBank.add(loadSprite(fileName, nrows, ncols));
-		} catch (IOException e) {
-			System.err.println("Erreur de chargement pour " + fileName);
-		} catch (ArrayIndexOutOfBoundsException e2) {
-			System.err.println("Nombre de colonnes/lignes non spécifié pour " + fileName);
+	int getSpritesSetNumber(String entityType) {
+		String fileName = getconfStr(entityType, "spriteFile");
+		for (int i = 0; i < spritesBank.size(); i++) {
+			if (spritesBank.get(i).getName().equals(fileName)) {
+				return i;
+			}
 		}
-		return spritesBank.size() - 1;
+		return -1;
+
+	}
+
+	
+	void loadSpritesSets() {
+
+		String currentFile = "";
+		try {
+			/* background */
+			currentFile = getconfStr("World", "spriteFile");
+			spritesBank.add(0, loadSprite(currentFile, 0, 0, new Color(getconfInt("World", "debugColor"))));
+			/* player1 */
+			currentFile = getconfStr("Player1", "spriteFile");
+			spritesBank.add(1, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+					getconfInt("World", "spriteNcols"), new Color(getconfInt("Player1", "debugColor"))));
+			/* player2 */
+			currentFile = getconfStr("Player2", "spriteFile");
+			spritesBank.add(2, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+					getconfInt("World", "spriteNcols"), new Color(getconfInt("Player2", "debugColor"))));
+			/* block */
+			currentFile = getconfStr("Obstacle", "spriteFile");
+			spritesBank.add(3, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+					getconfInt("World", "spriteNcols"), new Color(getconfInt("Obstacle", "debugColor"))));
+			/* Mobs */
+			for (int i = 0; i < getconfInt("World", "nbBots"); i++) {
+				currentFile = getconfStr("Mob" + i, "spriteFile");
+				spritesBank.add(loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+						getconfInt("World", "spriteNcols"), new Color(getconfInt("Mob" + i, "debugColor"))));
+			}
+		} catch (IOException e) {
+			System.err.println("Erreur de chargement pour " + currentFile);
+		}
 	}
 
 	/**
@@ -82,8 +85,8 @@ public class SpriteBank {
 	 * @return : le tableau des sprites du fichier
 	 * @throws IOException
 	 */
-	public static BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {
-		File imageFile = new File(filename);
+	public static SpriteSet loadSprite(String filename, int nrows, int ncols, Color debugColor) throws IOException {
+		File imageFile = new File("sprites/"+filename);
 		if (imageFile.exists()) {
 			BufferedImage image = ImageIO.read(imageFile);
 			int width = image.getWidth(null) / ncols;
@@ -97,9 +100,10 @@ public class SpriteBank {
 					images[(i * ncols) + j] = image.getSubimage(x, y, width, height);
 				}
 			}
-			return images;
+
+			return new SpriteSet(images, filename, debugColor);
 		}
-		return null;
+		return new SpriteSet(null, filename, debugColor);
 	}
 
 	/**
@@ -110,8 +114,17 @@ public class SpriteBank {
 	 * @return : le sprite de l'avatar
 	 */
 	BufferedImage getSprite(int numSetSprite, int numSprite) {
-		return spritesBank.get(numSetSprite)[numSprite];
+		return spritesBank.get(numSetSprite).getSprite(numSprite);
 
+	}
+	
+	/**
+	 * Renvoie la couleur de debug du spriteset
+	 * @param numSetSprite
+	 * @return
+	 */
+	Color getDebugColor(int numSetSprite) {
+		return spritesBank.get(numSetSprite).getDebugColor();
 	}
 
 	/**
@@ -119,24 +132,31 @@ public class SpriteBank {
 	 * 
 	 * @return buffered image du background
 	 */
-	BufferedImage getBackground() {
-		return spritesBank.get(0)[0];
+	SpriteSet getBackgroundset() {
+		return spritesBank.get(0);
+	}
+
+
+	/**
+	 * Raccourci pour trouver des elements string dans la config
+	 * 
+	 * @param elem
+	 * @param param
+	 * @return
+	 */
+	private String getconfStr(String elem, String param) {
+		return m_view.getController().getConfig().getStringValue(elem, param);
 	}
 
 	/**
-	 * Affiche la boite de collision de l'entité
+	 * Raccourci pour trouver des element int dans la config
 	 * 
-	 * @param g            : inctance graphique du canvas
-	 * @param c            : couleur de la boite de collision
-	 * @param collisionBox : coordonnées et taille de la boite de collision
+	 * @param elem
+	 * @param param
+	 * @return
 	 */
-	void debugCollisions(Graphics g, Color c, Rectangle2D collisionBox) {
-		g.setColor(c);
-		Point origin = m_view.getViewport().toViewport(collisionBox);
-		if (origin == null)
-			return;
-		g.drawRect(origin.x, origin.y, (int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
-				(int) (collisionBox.getHeight() * m_view.getViewport().getScale()));
+	private int getconfInt(String elem, String param) {
+		return m_view.getController().getConfig().getIntValue(elem, param);
 	}
 
 }
