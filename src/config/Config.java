@@ -27,6 +27,10 @@ public class Config {
 	public String getStringValue(String element, String parameter) {
 		return getJSONElement(element).getString(parameter);
 	}
+	
+	public boolean getBooleanValue(String element, String parameter) {
+		return getJSONElement(element).getBoolean(parameter);
+	}
 
 	public float getFloatValue(String element, String parameter) {
 		return getJSONElement(element).getFloat(parameter);

@@ -1,0 +1,118 @@
+{
+  "General": {
+    "debug": false
+  },
+
+  "world": {
+    "width": 800,
+    "height": 600,
+    "density": 0.1,
+    "viscosity": 1,
+    "spawnMobProba": 1,
+    "NbBots": 2,
+    "spriteFile": "background.jpg",
+    "spriteNrows": 3,
+    "spriteNcols": 4,
+    "seed": 12,
+    "playerSpawnX": 400,
+    "playerSpawnY": 0,
+    "safeZone": 50
+  },
+  "Player1": {
+    "width": 50,
+    "height": 50,
+    "speed": 5,
+    "density": 2.5,
+    "spriteFile": "player1.png",
+    "category": "TEAM1",
+    "attackDamage": 20,
+    "meleeRange": 10,
+    "healthPoint": 100,
+    "throwBots": "missile",
+    "automaton": "Diver1",
+    "vestMaxAir": 100,
+    "vestStepAir": 5,
+    "stepDensity": 0.05,
+    "oxygenBreathe": 2,
+    "oxygenStep": 10,
+    "DensityBreathe": 1,
+    "isPhysicObject": true
+  },
+  "Player2": {
+    "width": 50,
+    "height": 50,
+    "speed": 5,
+    "density": 2.2,
+    "spriteFile": "player2.png",
+    "category": "TEAM1",
+    "attackDamage": 50,
+    "meleeRange": 15,
+    "healthPoint": 200,
+    "throwBots": "missile",
+    "automaton": "Diver2",
+    "vestMaxAir": 100,
+    "vestStepAir": 5,
+    "stepDensity": 0.05,
+    "oxygenBreathe": 2,
+    "oxygenStep": 10,
+    "DensityBreathe": 1,
+    "isPhysicObject": true
+  },
+  "obstacle": {
+    "width": 50,
+    "height": 50,
+    "speed": 2,
+    "spriteFile": "block.png",
+    "category": "OBSTACLE",
+    "healthPoint": 1000000,
+    "automaton": "Block",
+    "probability": 0.5,
+          "attackDamage": 5,
+      "meleeRange": 4,
+      "throwBots": "mob2",
+    "isPhysicObject": false
+  },
+  "mobs": [
+    {
+      "width": 50,
+      "height": 50,
+      "speed": 2,
+      "spriteFile": "mob0.png",
+      "category": "TEAM2",
+      "attackDamage": 5,
+      "meleeRange": 4,
+      "healthPoint": 30,
+      "throwBots": "mob2",
+      "automaton": "Goldfish",
+      "spawnProba": 80,
+      "isPhysicObject": true
+    },
+    {
+      "width": 50,
+      "height": 50,
+      "speed": 2,
+      "spriteFile": "mob1.png",
+      "category": "TEAM2",
+      "attackDamage": 50,
+      "meleeRange": 15,
+      "healthPoint": 200,
+      "throwBots": "mob2",
+      "automaton": "Shark",
+      "spawnProba": 20,
+      "isPhysicObject": true
+    },
+    {
+      "width": 5,
+      "height": 2,
+      "speed": 2,
+      "spriteFile": "missile.png",
+      "category": "TEAM3",
+      "attackDamage": 75,
+      "meleeRange": 5,
+      "healthPoint": 20,
+      "throwBots": "mob2",
+      "automaton": "Missile",
+      "isPhysicObject": true
+    }
+  ]
+}

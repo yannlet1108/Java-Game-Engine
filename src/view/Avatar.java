@@ -36,7 +36,7 @@ public abstract class Avatar {
 	 * @param e          : entité associé à l'avatar
 	 * @param entityType : numero de l'entité dans la config
 	 */
-	protected Avatar(View m_view, Entity e, String entityConfig) {
+	public Avatar(View m_view, Entity e, String entityConfig) {
 		this.m_view = m_view;
 		instanceEntity = e;
 		spriteSetNumber = m_view.getBank().getSpritesSetNumber(entityConfig);
@@ -209,6 +209,22 @@ public abstract class Avatar {
 					(int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
 					(int) (collisionBox.getHeight() * m_view.getViewport().getScale()), null);
 		}
+		if (ViewCst.UID) {
+			uidPaint(g);
+		}
+	}
+	
+	void uidPaint(Graphics g) {
+		Rectangle2D collisionBox = instanceEntity.getHitbox();
+		Point origin = m_view.getViewport().toViewport(collisionBox);
+		if(origin == null) {
+			return;
+		}
+		g.setColor(Color.BLACK);
+		g.drawString("Speed: " + instanceEntity.getSpeed(), origin.x, origin.y+ g.getFontMetrics().getHeight());
+		g.drawString("Force: " + instanceEntity.getForce(), origin.x, origin.y + g.getFontMetrics().getHeight()*2);
+		g.drawString("Position: " + "(" + instanceEntity.getX() + "," + instanceEntity.getY() + ")", origin.x,
+				origin.y + g.getFontMetrics().getHeight() * 3);
 	}
 
 	/**

@@ -1,8 +1,8 @@
 package model;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
+import view.Avatar;
 import view.PlayerAvatar;
 
 public class Player extends Entity {
@@ -10,37 +10,32 @@ public class Player extends Entity {
 	public Vest vest;
 	private int oxygen;
 
-	public Player(Point2D position, Direction direction, Model model) {
-		super(position, direction, model);
-		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), PlayerConstants.PLAYER_WIDTH,
-				PlayerConstants.PLAYER_HEIGHT);
-		category = Category.PLAYER;
-		density = PlayerConstants.PLAYER_DENSITY;
+	public Player(Point2D position, Direction direction, Model model, String name) {
+		super(position, direction, model, name);
+		density = model.getConfig().getIntValue(name, "density");
 		oxygen = 100;
 		vest = new Vest();
-		this.team = PlayerConstants.PLAYER_TEAM;
-		model.m_view.store(new PlayerAvatar(model.m_view, this, 1));
+		this.team = model.getConfig().getCategory(name, "category");
+		new PlayerAvatar(model.m_view, this, 1);
 		this.model.addPlayer(this);
-		this.meleeRange = PlayerConstants.PLAYER_MELEE_RANGE;
-		this.attackDamage = PlayerConstants.PLAYER_ATTACK_DAMAGE;
-		this.healthPoint = PlayerConstants.PLAYER_HEALTH_POINT;
 	}
 
 	public class Vest {
 		public int vestAir; // va de 0 à 100
+		public int densityStep;
+		public int oxygenBreath;
+		public int oxygenStep;
 
 		Vest() {
-			vestAir = PlayerConstants.VEST_MAX_AIR;
+			vestAir = model.getConfig().getIntValue(name, "vestMaxAir");
+			densityStep = model.getConfig().getIntValue(name, "stepDensity");
+			oxygenBreath = model.getConfig().getIntValue(name, "oxygenBreathe");
+			oxygenStep = model.getConfig().getIntValue(name, "oxygenStep");
 		}
 
 		public int getVestAir() {
 			return vestAir;
 		}
-	}
-
-	@Override
-	public void step() {
-		this.breathe();
 	}
 
 	public int getOxygen() {
@@ -52,7 +47,8 @@ public class Player extends Entity {
 	 */
 	public void breathe() {
 		if (oxygen > 0) {
-			oxygen -= PlayerConstants.OXYGEN_BREATHE;
+			oxygen -= vest.oxygenBreath;
+			;
 		} else {
 			oxygen = 0;
 			this.getHit(15);
@@ -80,11 +76,11 @@ public class Player extends Entity {
 	 * le gilet
 	 */
 	private void swell() {
-		if (vest.getVestAir() + PlayerConstants.VEST_STEP_AIR < PlayerConstants.VEST_MAX_AIR) {
-			if (oxygen > PlayerConstants.OXYGEN_STEP) {
-				oxygen -= PlayerConstants.OXYGEN_STEP;
-				vest.vestAir += PlayerConstants.VEST_STEP_AIR;
-				this.density -= PlayerConstants.DENSITY_STEP;
+		if (vest.getVestAir() + vest.oxygenStep < vest.getVestAir()) {
+			if (oxygen > vest.oxygenStep) {
+				oxygen -= vest.oxygenStep;
+				vest.vestAir += vest.oxygenStep;
+				this.density -= vest.densityStep;
 			} else {
 				oxygen = 0;
 				this.getHit(15);
@@ -98,45 +94,12 @@ public class Player extends Entity {
 	 */
 	private void deflate() {
 		if (vest.getVestAir() > 0) {
-			if (oxygen < 100 - PlayerConstants.OXYGEN_STEP) {
-				oxygen += PlayerConstants.OXYGEN_STEP;
+			if (oxygen < 100 - vest.oxygenStep) {
+				oxygen += vest.oxygenStep;
 			}
-			vest.vestAir -= PlayerConstants.VEST_STEP_AIR;
-			this.density += PlayerConstants.DENSITY_STEP;
+			vest.vestAir -= vest.oxygenStep;
+
+			this.density += vest.densityStep;
 		}
-	}
-
-	/**
-	 * Methode qui créé un missile devant le joueur
-	 */
-
-	public void throwMissile() {
-		Direction d = this.getDirection();
-		Point2D pos = this.getCenter();
-		pos.setLocation(this.getX() + 5, this.getY());
-		Missile m = new Missile(pos, d, this.getModel());
-	}
-
-	@Override
-	public void pick() {
-		throw new RuntimeException("Not Yet Implemented");
-	}
-
-	@Override
-	public Rectangle2D getHitbox() {
-		Rectangle2D hitbox = new Rectangle2D.Double(this.getX(), this.getY(), PlayerConstants.PLAYER_WIDTH,
-				PlayerConstants.PLAYER_HEIGHT);
-		return hitbox;
-	}
-
-	public void explode() {
-		this.getModel().removeEntity(this);
-		this.getModel().removePlayer(this);
-	}
-
-	@Override
-	public void egg() {
-		// TODO Auto-generated method stub
-
 	}
 }

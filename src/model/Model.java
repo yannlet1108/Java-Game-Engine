@@ -7,11 +7,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
+import automaton.AutomatonBank;
+import config.Config;
 import controller.Controller;
 import view.View;
 
 public class Model {
-	Controller m_controller;
+	private Controller m_controller;
 	View m_view;
 
 	private double worldHeight;
@@ -23,6 +25,13 @@ public class Model {
 	private Collection<Player> players;
 	Collection<Entity> toRemove;
 
+	private int playerSpawnX;
+	private int playerSpawnY;
+	private int seed;
+	private int safeZone;
+
+	private AutomatonBank automatonBank;
+
 	/**
 	 * Initialise la simulation en creant les entites d'origine et en definisant
 	 * leur etat d'initialisation.
@@ -33,15 +42,23 @@ public class Model {
 	public Model(Controller m_controller, View m_view) {
 		this.m_controller = m_controller;
 		this.m_view = m_view;
-		worldHeight = ModelConstants.WORLD_HEIGHT;
-		worldWidth = ModelConstants.WORLD_WIDTH;
-		density = ModelConstants.WORLD_DENSITY;
-		viscosity = ModelConstants.WORLD_VISCOSITY;
+		worldHeight = this.m_controller.getConfig().getIntValue("world", "height");
+		worldWidth = this.m_controller.getConfig().getIntValue("world", "width");
+		density = this.m_controller.getConfig().getIntValue("world", "density");
+		viscosity = this.m_controller.getConfig().getIntValue("world", "viscosity");
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
-		new Player(getWorldCenter(), Direction.E, this);
+		automatonBank = new AutomatonBank();
+		playerSpawnX = getConfig().getIntValue("world", "playerSpawnX");
+		playerSpawnY = getConfig().getIntValue("world", "playerSpawnY");
+		new Player(new Point2D.Double(playerSpawnX, playerSpawnY), Direction.N, this, "Player1");
+		new Player(new Point2D.Double(playerSpawnX+200, playerSpawnY), Direction.N, this, "Player2");
+
 		m_view.setModel(this);
+		//mapGenerator();
+		seed = getConfig().getIntValue("world", "seed");
+		safeZone = getConfig().getIntValue("world", "safeZone");
 	}
 
 	/**
@@ -69,6 +86,9 @@ public class Model {
 	public void step() {
 		for (Entity entity : entities) {
 			entity.step();
+			if (entity.isPhysicObject()) {
+				entity.computeMovement();
+			}
 		}
 		spawnEnemy();
 	}
@@ -81,26 +101,25 @@ public class Model {
 	 * @return le poisson
 	 * @author MO ER
 	 */
-	private Fish spawnEnemy() {
+	private Mob spawnEnemy() {
+		config.Config cfg = this.m_controller.getConfig();
 		Random yesOrNotRand = new Random();
 		int yesOrNot = yesOrNotRand.nextInt(1000); // 1000 à modif
 		if (yesOrNot < ModelConstants.IN_GENERAL) {
 			Random ranWhatFish = new Random();
-			int fishProb = ranWhatFish.nextInt(100);
-			int fish = -1;
+			int mobProb = ranWhatFish.nextInt(100);
+			int mobnum = -1;
 			double width = 0, height = 0;
-			if (fishProb < ModelConstants.GOLDENFISH_PROBA) {
-				fish = 0;
-				width = FishConstants.GOLDFISH_WIDTH;
-				height = FishConstants.GOLDFISH_HEIGHT;
-			} else if (fishProb >= ModelConstants.GOLDENFISH_PROBA
-					&& fishProb < ModelConstants.GOLDENFISH_PROBA + ModelConstants.SHARK_PROBA) {
-				fish = 1;
-				width = FishConstants.SHARK_WIDTH;
-				height = FishConstants.SHARK_HEIGHT;
+			if (mobProb < cfg.getIntValue("mob0", "spawnProba")) {
+				mobnum = 0;
+			} else if (mobProb >= ModelConstants.GOLDENFISH_PROBA
+					&& mobProb < ModelConstants.GOLDENFISH_PROBA + ModelConstants.SHARK_PROBA) {
+				mobnum = 1;
 			} else {
 				return null;
 			}
+			width = cfg.getIntValue("mob" + mobnum, "width");
+			height = cfg.getIntValue("mob" + mobnum, "height");
 			boolean isGood = false;
 			int x = 0, y = 0;
 			Point2D pts = new Point2D.Double(x, y);
@@ -128,23 +147,14 @@ public class Model {
 				}
 				whileCounter++;
 			}
-			Fish nue;
-			if (fish == 0) {
-				nue = new Goldfish(pts, Direction.E, this);
-				// Pour test
-				// System.out.println("Goldfish added at x = " + pts.getX() + ", y = " +
-				// pts.getY() + ".");
-				return nue;
-			} else if (fish == 1) {
-				nue = new Shark(pts, Direction.E, this);
-				// Pour test
-				// System.out.println("Shark added at x = " + pts.getX() + ", y = " + pts.getY()
-				// + ".");
-				return nue;
-			}
-			return null;
+			Mob nue = new Mob(pts, Direction.E, this, "mob" + mobnum);
+			// Pour test
+			// System.out.println("Goldfish added at x = " + pts.getX() + ", y = " +
+			// pts.getY() + ".");
+			return nue;
 		}
 		return null;
+
 	}
 
 	/**
@@ -252,16 +262,18 @@ public class Model {
 	}
 
 	public void mapGenerator() {
-		Random r = new Random(ModelConstants.SEED);
-		for (int i = 0; i < ModelConstants.WORLD_WIDTH; i = i + EntityConstants.OBSTACLE_WIDTH) {
-			for (int j = 0; j < ModelConstants.WORLD_HEIGHT; j = j + EntityConstants.OBSTACLE_HEIGHT) {
-				if (r.nextDouble() < ModelConstants.OBSTACLE_PROBABILITY) {
+		Random r = new Random(seed);
+		int obstacleWidth = getConfig().getIntValue("obstacle", "width");
+		int obstacleHeight = getConfig().getIntValue("obstacle", "height");
+		float obstacleProbability = getConfig().getFloatValue("obstacle", "probability");
+		for (int i = 0; i < this.getBoardWidth(); i = i + obstacleWidth) {
+			for (int j = 0; j < this.getBoardHeight(); j = j + obstacleHeight) {
+				if (r.nextDouble() < obstacleProbability) {
 					new Obstacle(new Point2D.Double(i, j), null, this);
 				}
 			}
 		}
-		Rectangle2D safezone = new Rectangle2D.Double(ModelConstants.PLAYER_SPAWN_X - ModelConstants.SAFE_AREA,
-				ModelConstants.PLAYER_SPAWN_Y, ModelConstants.SAFE_AREA, ModelConstants.SAFE_AREA);
+		Rectangle2D safezone = new Rectangle2D.Double(playerSpawnX - safeZone, playerSpawnY, safeZone, safeZone);
 		Iterator<Entity> it = this.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
@@ -276,5 +288,21 @@ public class Model {
 
 	public Collection<Entity> getEntities() {
 		return entities;
+	}
+
+	public AutomatonBank getAutomatonBank() {
+		return automatonBank;
+	}
+
+	public Config getConfig() {
+		return m_controller.getConfig();
+	}
+
+	public Controller getController() {
+		return m_controller;
+	}
+
+	public int getSafeZone() {
+		return safeZone;
 	}
 }

@@ -16,7 +16,7 @@ public class AutomatonBank {
 	 * Constructeur de banque d'automate pour le modèle (à la création du monde)
 	 */
 	public AutomatonBank() {
-		loadAutomatons("gal_bank/BackAndForth.gal");
+		loadAutomatons("gal_bank/GalBank.gal");
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class AutomatonBank {
 		return automatons;
 	}
 
-	Automaton getAutomaton(String name) {
+	public Automaton getAutomaton(String name) {
 		for (Automaton automaton : automatons) {
 			if (automaton.hasName(name)) {
 				return automaton;
