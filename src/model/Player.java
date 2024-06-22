@@ -2,6 +2,7 @@ package model;
 
 import java.awt.geom.Point2D;
 
+import view.Avatar;
 import view.PlayerAvatar;
 
 public class Player extends Entity {
