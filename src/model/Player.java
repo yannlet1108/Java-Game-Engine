@@ -2,7 +2,6 @@ package model;
 
 import java.awt.geom.Point2D;
 
-import view.Avatar;
 import view.PlayerAvatar;
 
 public class Player extends Entity {
@@ -93,9 +92,9 @@ public class Player extends Entity {
 	 * dans le gilet
 	 */
 	private void deflate() {
-			density += vest.densityStep;
-			if (density > vest.maxDensity) {
-				density = vest.maxDensity;
-			}
+		density += vest.densityStep;
+		if (density > vest.maxDensity) {
+			density = vest.maxDensity;
+		}
 	}
 }

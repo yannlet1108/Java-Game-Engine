@@ -71,6 +71,11 @@ public abstract class Entity {
 
 		this.state = State.WAITING;
 	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 
 	/**
 	 * Retourne la coordonnee X de l'entite dans la simulation
@@ -128,6 +133,10 @@ public abstract class Entity {
 
 	public Rectangle2D getHitbox() {
 		return new Rectangle2D.Double(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
+	}
+	
+	public double getDensity() {
+		return density;
 	}
 
 	public void doMove(Direction direction) {
@@ -207,7 +216,12 @@ public abstract class Entity {
 
 	public void doEgg(Direction direction) {
 		blockAutomaton();
-		egg(getRightDirection(direction));
+		if (direction == null) {
+			egg();
+		}
+		else {
+			egg(getRightDirection(direction));
+		}
 		Timer timer = new Timer();
 		ActionTask endEggTask = new EndEggTask(this, 1000);
 		timer.schedule(endEggTask, endEggTask.getDuration());
