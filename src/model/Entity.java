@@ -21,7 +21,7 @@ public abstract class Entity {
 
 	private Vector force;
 	private boolean isPhysicObject;
-
+ 
 	protected int healthPoint;
 	protected Category team;
 	protected int meleeRange;
@@ -145,6 +145,7 @@ public abstract class Entity {
 
 	public void doMove(Direction direction) {
 		blockAutomaton();
+		state = State.MOVING;
 		if (direction == null) {
 			move();
 		} else {
@@ -170,6 +171,7 @@ public abstract class Entity {
 
 	public void doWait() {
 		blockAutomaton();
+		setState(State.WAITING);
 		Timer timer = new Timer();
 		ActionTask endWaitTask = new EndWaitTask(this, 1000);
 		timer.schedule(endWaitTask, endWaitTask.getDuration());
@@ -232,6 +234,7 @@ public abstract class Entity {
 
 	public void doPop(int val) {
 		blockAutomaton();
+		setState(State.FILLING);
 		pop(val);
 		Timer timer = new Timer();
 		ActionTask endPopTask = new EndPopTask(this, 1000);
@@ -244,6 +247,7 @@ public abstract class Entity {
 
 	public void doExplode() {
 		blockAutomaton();
+		setState(State.DYING);
 		explode();
 		Timer timer = new Timer();
 		ActionTask endExplodeTask = new EndExplodeTask(this, 1000);
@@ -679,6 +683,7 @@ public abstract class Entity {
 
 	public void doHit(Direction direction) {
 		blockAutomaton();
+		setState(State.HITTING);
 		Timer timer = new Timer();
 		ActionTask hitTask = new HitTask(this, 1000 / 2, getRightDirection(direction));
 		timer.schedule(hitTask, hitTask.getDuration());
@@ -852,6 +857,7 @@ public abstract class Entity {
 
 	public void doThrow(Direction direction) {
 		blockAutomaton();
+		setState(State.WAITING);
 		if (direction != null) {
 			this.direction = direction;
 		}
