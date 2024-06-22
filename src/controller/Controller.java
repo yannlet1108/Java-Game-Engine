@@ -27,8 +27,8 @@ public class Controller implements GameCanvasListener {
 	 * Crée une instance du controller. Initialise la view et le model
 	 */
 	private Controller() {
-		m_view = new View(this);
 		m_config = new Config("config.json");
+		m_view = new View(this);
 		m_model = new Model(this, m_view);
 		this.tick = 0;
 		this.keyList = new LinkedList<Integer>();

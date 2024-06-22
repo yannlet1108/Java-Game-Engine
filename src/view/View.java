@@ -41,7 +41,7 @@ public class View {
 	 * @param m_controller : Instance courante du controller
 	 */
 	public View(Controller m_controller) {
-
+		new ViewCst(m_controller.getConfig());
 		m_canvas = new GameCanvas(m_controller);
 		this.m_controller = m_controller;
 
@@ -157,7 +157,7 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	private void fillBackground(Graphics g) {
-		g.setColor(ViewCst.BACKGROUND_DEFAULT);
+		g.setColor(getBank().getBackgroundset().getDebugColor());
 		g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
 
 		// TODO implementer une version fonctionnelle avec une image scalée

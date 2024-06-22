@@ -3,7 +3,6 @@ package model;
 import java.awt.geom.Point2D;
 
 import view.Avatar;
-import view.PlayerAvatar;
 
 public class Player extends Entity {
 
@@ -16,7 +15,7 @@ public class Player extends Entity {
 		oxygen = 100;
 		vest = new Vest();
 		this.team = model.getConfig().getCategory(name, "category");
-		new PlayerAvatar(model.m_view, this, 1);
+		new Avatar(model.m_view, this, "Player1");
 		this.model.addPlayer(this);
 	}
 

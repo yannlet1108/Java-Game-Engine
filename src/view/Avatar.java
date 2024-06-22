@@ -1,9 +1,11 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -13,7 +15,7 @@ import model.Entity;
 /**
  * Classe réunissant les champs et méthodes communes à tout les avatars
  */
-public abstract class Avatar {
+public class Avatar {
 
 	protected View m_view;
 
@@ -205,7 +207,8 @@ public abstract class Avatar {
 			if (origin == null) {
 				return;
 			}
-			g.drawImage(m_view.getBank().getSprite(spriteSetNumber, getNextSpriteNumber()), origin.x, origin.y,
+			BufferedImage sprite = m_view.getBank().getSprite(spriteSetNumber, getNextSpriteNumber());
+			g.drawImage(sprite, origin.x, origin.y,
 					(int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
 					(int) (collisionBox.getHeight() * m_view.getViewport().getScale()), null);
 		}
@@ -213,16 +216,17 @@ public abstract class Avatar {
 			uidPaint(g);
 		}
 	}
-	
+
 	void uidPaint(Graphics g) {
 		Rectangle2D collisionBox = instanceEntity.getHitbox();
 		Point origin = m_view.getViewport().toViewport(collisionBox);
-		if(origin == null) {
+		if (origin == null) {
 			return;
 		}
 		g.setColor(Color.BLACK);
-		g.drawString("Speed: " + instanceEntity.getSpeed(), origin.x, origin.y+ g.getFontMetrics().getHeight());
-		g.drawString("Force: " + instanceEntity.getForce(), origin.x, origin.y + g.getFontMetrics().getHeight()*2);
+		g.setFont(new Font("SansSerif",Font.PLAIN,11));
+		g.drawString("Speed: " + instanceEntity.getSpeed(), origin.x, origin.y + g.getFontMetrics().getHeight());
+		g.drawString("Force: " + instanceEntity.getForce(), origin.x, origin.y + g.getFontMetrics().getHeight() * 2);
 		g.drawString("Position: " + "(" + instanceEntity.getX() + "," + instanceEntity.getY() + ")", origin.x,
 				origin.y + g.getFontMetrics().getHeight() * 3);
 	}
@@ -233,6 +237,14 @@ public abstract class Avatar {
 	 * 
 	 * @param g
 	 */
-	abstract void debugPaint(Graphics g);
+	void debugPaint(Graphics g) {
+		Rectangle2D collisionBox = instanceEntity.getHitbox();
+		g.setColor(debugColor);
+		Point origin = m_view.getViewport().toViewport(collisionBox);
+		if (origin == null)
+			return;
+		g.fillRect(origin.x, origin.y, (int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
+				(int) (collisionBox.getHeight() * m_view.getViewport().getScale()));
+	};
 
 }

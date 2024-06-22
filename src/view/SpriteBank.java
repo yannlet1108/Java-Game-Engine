@@ -1,9 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +29,13 @@ public class SpriteBank {
 		loadSpritesSets();
 	}
 
-	int getSpritesSetNumber(String fileName) {
+	/**
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	int getSpritesSetNumber(String entityType) {
+		String fileName = getconfStr(entityType, "spriteFile");
 		for (int i = 0; i < spritesBank.size(); i++) {
 			if (spritesBank.get(i).getName().equals(fileName)) {
 				return i;
@@ -42,30 +45,31 @@ public class SpriteBank {
 
 	}
 
+	
 	void loadSpritesSets() {
 
 		String currentFile = "";
 		try {
 			/* background */
-			currentFile = getconfStr("World", "SpriteFile");
-			spritesBank.add(0, loadSprite(currentFile, 0, 0, new Color(getconfInt("World", "DebugColor"))));
+			currentFile = getconfStr("World", "spriteFile");
+			spritesBank.add(0, loadSprite(currentFile, 0, 0, new Color(getconfInt("World", "debugColor"))));
 			/* player1 */
-			currentFile = getconfStr("Player1", "SpriteFile");
+			currentFile = getconfStr("Player1", "spriteFile");
 			spritesBank.add(1, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
-					getconfInt("World", "spriteNcols"), new Color(getconfInt("Player1", "DebugColor"))));
+					getconfInt("World", "spriteNcols"), new Color(getconfInt("Player1", "debugColor"))));
 			/* player2 */
 			currentFile = getconfStr("Player2", "spriteFile");
 			spritesBank.add(2, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
-					getconfInt("World", "spriteNcols"), new Color(getconfInt("Player2", "DebugColor"))));
+					getconfInt("World", "spriteNcols"), new Color(getconfInt("Player2", "debugColor"))));
 			/* block */
-			currentFile = getconfStr("Block", "SpriteFile");
+			currentFile = getconfStr("Obstacle", "spriteFile");
 			spritesBank.add(3, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
-					getconfInt("World", "spriteNcols"), new Color(getconfInt("Block", "DebugColor"))));
-			/* bots */
-			for (int i = 0; i < getconfInt("Bots", "nbBots"); i++) {
-				currentFile = getconfStr("Bots" + i, "SpriteFile");
+					getconfInt("World", "spriteNcols"), new Color(getconfInt("Obstacle", "debugColor"))));
+			/* Mobs */
+			for (int i = 0; i < getconfInt("World", "nbBots"); i++) {
+				currentFile = getconfStr("Mob" + i, "spriteFile");
 				spritesBank.add(loadSprite(currentFile, getconfInt("World", "spriteNrows"),
-						getconfInt("World", "spriteNcols"), new Color(getconfInt("Bots" + i, "DebugColor"))));
+						getconfInt("World", "spriteNcols"), new Color(getconfInt("Mob" + i, "debugColor"))));
 			}
 		} catch (IOException e) {
 			System.err.println("Erreur de chargement pour " + currentFile);
@@ -82,7 +86,7 @@ public class SpriteBank {
 	 * @throws IOException
 	 */
 	public static SpriteSet loadSprite(String filename, int nrows, int ncols, Color debugColor) throws IOException {
-		File imageFile = new File(filename);
+		File imageFile = new File("sprites/"+filename);
 		if (imageFile.exists()) {
 			BufferedImage image = ImageIO.read(imageFile);
 			int width = image.getWidth(null) / ncols;
@@ -99,7 +103,7 @@ public class SpriteBank {
 
 			return new SpriteSet(images, filename, debugColor);
 		}
-		return null;
+		return new SpriteSet(null, filename, debugColor);
 	}
 
 	/**
@@ -113,6 +117,12 @@ public class SpriteBank {
 		return spritesBank.get(numSetSprite).getSprite(numSprite);
 
 	}
+	
+	/**
+	 * Renvoie la couleur de debug du spriteset
+	 * @param numSetSprite
+	 * @return
+	 */
 	Color getDebugColor(int numSetSprite) {
 		return spritesBank.get(numSetSprite).getDebugColor();
 	}
@@ -122,25 +132,10 @@ public class SpriteBank {
 	 * 
 	 * @return buffered image du background
 	 */
-	BufferedImage getBackground() {
-		return spritesBank.get(0).getSprite(0);
+	SpriteSet getBackgroundset() {
+		return spritesBank.get(0);
 	}
 
-	/**
-	 * Affiche la boite de collision de l'entité
-	 * 
-	 * @param g            : inctance graphique du canvas
-	 * @param c            : couleur de la boite de collision
-	 * @param collisionBox : coordonnées et taille de la boite de collision
-	 */
-	void debugCollisions(Graphics g, Color c, Rectangle2D collisionBox) {
-		g.setColor(c);
-		Point origin = m_view.getViewport().toViewport(collisionBox);
-		if (origin == null)
-			return;
-		g.drawRect(origin.x, origin.y, (int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
-				(int) (collisionBox.getHeight() * m_view.getViewport().getScale()));
-	}
 
 	/**
 	 * Raccourci pour trouver des elements string dans la config
@@ -150,7 +145,7 @@ public class SpriteBank {
 	 * @return
 	 */
 	private String getconfStr(String elem, String param) {
-		return m_view.getController().getconfig().getStringValue(elem, param);
+		return m_view.getController().getConfig().getStringValue(elem, param);
 	}
 
 	/**
@@ -161,7 +156,7 @@ public class SpriteBank {
 	 * @return
 	 */
 	private int getconfInt(String elem, String param) {
-		return m_view.getController().getconfig().getIntValue(elem, param);
+		return m_view.getController().getConfig().getIntValue(elem, param);
 	}
 
 }

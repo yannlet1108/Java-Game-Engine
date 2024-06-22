@@ -42,23 +42,23 @@ public class Model {
 	public Model(Controller m_controller, View m_view) {
 		this.m_controller = m_controller;
 		this.m_view = m_view;
-		worldHeight = this.m_controller.getConfig().getIntValue("world", "height");
-		worldWidth = this.m_controller.getConfig().getIntValue("world", "width");
-		density = this.m_controller.getConfig().getIntValue("world", "density");
-		viscosity = this.m_controller.getConfig().getIntValue("world", "viscosity");
+		worldHeight = this.m_controller.getConfig().getIntValue("World", "height");
+		worldWidth = this.m_controller.getConfig().getIntValue("World", "width");
+		density = this.m_controller.getConfig().getIntValue("World", "density");
+		viscosity = this.m_controller.getConfig().getIntValue("World", "viscosity");
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
 		automatonBank = new AutomatonBank();
-		playerSpawnX = getConfig().getIntValue("world", "playerSpawnX");
-		playerSpawnY = getConfig().getIntValue("world", "playerSpawnY");
+		playerSpawnX = getConfig().getIntValue("World", "playerSpawnX");
+		playerSpawnY = getConfig().getIntValue("World", "playerSpawnY");
 		new Player(new Point2D.Double(playerSpawnX, playerSpawnY), Direction.N, this, "Player1");
 		new Player(new Point2D.Double(playerSpawnX+200, playerSpawnY), Direction.N, this, "Player2");
 
 		m_view.setModel(this);
 		//mapGenerator();
-		seed = getConfig().getIntValue("world", "seed");
-		safeZone = getConfig().getIntValue("world", "safeZone");
+		seed = getConfig().getIntValue("World", "seed");
+		safeZone = getConfig().getIntValue("World", "safeZone");
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class Model {
 			int mobProb = ranWhatFish.nextInt(100);
 			int mobnum = -1;
 			double width = 0, height = 0;
-			if (mobProb < cfg.getIntValue("mob0", "spawnProba")) {
+			if (mobProb < cfg.getIntValue("Mob0", "spawnProba")) {
 				mobnum = 0;
 			} else if (mobProb >= ModelConstants.GOLDENFISH_PROBA
 					&& mobProb < ModelConstants.GOLDENFISH_PROBA + ModelConstants.SHARK_PROBA) {
@@ -118,8 +118,8 @@ public class Model {
 			} else {
 				return null;
 			}
-			width = cfg.getIntValue("mob" + mobnum, "width");
-			height = cfg.getIntValue("mob" + mobnum, "height");
+			width = cfg.getIntValue("Mob" + mobnum, "width");
+			height = cfg.getIntValue("Mob" + mobnum, "height");
 			boolean isGood = false;
 			int x = 0, y = 0;
 			Point2D pts = new Point2D.Double(x, y);
@@ -147,7 +147,7 @@ public class Model {
 				}
 				whileCounter++;
 			}
-			Mob nue = new Mob(pts, Direction.E, this, "mob" + mobnum);
+			Mob nue = new Mob(pts, Direction.E, this, "Mob" + mobnum);
 			// Pour test
 			// System.out.println("Goldfish added at x = " + pts.getX() + ", y = " +
 			// pts.getY() + ".");
@@ -263,9 +263,9 @@ public class Model {
 
 	public void mapGenerator() {
 		Random r = new Random(seed);
-		int obstacleWidth = getConfig().getIntValue("obstacle", "width");
-		int obstacleHeight = getConfig().getIntValue("obstacle", "height");
-		float obstacleProbability = getConfig().getFloatValue("obstacle", "probability");
+		int obstacleWidth = getConfig().getIntValue("Obstacle", "width");
+		int obstacleHeight = getConfig().getIntValue("Obstacle", "height");
+		float obstacleProbability = getConfig().getFloatValue("Obstacle", "probability");
 		for (int i = 0; i < this.getBoardWidth(); i = i + obstacleWidth) {
 			for (int j = 0; j < this.getBoardHeight(); j = j + obstacleHeight) {
 				if (r.nextDouble() < obstacleProbability) {
