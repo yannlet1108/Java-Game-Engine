@@ -17,6 +17,7 @@ public abstract class Entity {
 
 	protected double density;
 	private Vector speed;
+
 	private Vector force;
 	private boolean isPhysicObject;
 
@@ -37,6 +38,7 @@ public abstract class Entity {
 	private boolean automatonAvailable = true;
 	private int range = 10;
 	private double explodeRange;
+
 	private double moveForce;
 
 	/**
@@ -85,6 +87,14 @@ public abstract class Entity {
 	public double getY() {
 		return hitbox.getY();
 
+	}
+
+	public Vector getForce() {
+		return force;
+	}
+
+	public void setSpeed(Vector speed) {
+		this.speed = speed;
 	}
 
 	public double getHeight() {
