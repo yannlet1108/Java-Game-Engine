@@ -7,8 +7,8 @@ import view.PlayerAvatar;
 
 public class Player extends Entity {
 
-	public Vest vest;
-	private int oxygen;
+	private Vest vest;
+	private double oxygen;
 
 	public Player(Point2D position, Direction direction, Model model, String name) {
 		super(position, direction, model, name);
@@ -20,25 +20,24 @@ public class Player extends Entity {
 		this.model.addPlayer(this);
 	}
 
-	public class Vest {
-		public int vestAir; // va de 0 à 100
-		public int densityStep;
-		public int oxygenBreath;
-		public int oxygenStep;
+	private class Vest {
+		public double densityStep;
+		public double oxygenStep;
+		public double maxDensity;
+		public double minDensity;
+		public double oxygenBreath;
 
 		Vest() {
-			vestAir = model.getConfig().getIntValue(name, "vestMaxAir");
-			densityStep = model.getConfig().getIntValue(name, "stepDensity");
-			oxygenBreath = model.getConfig().getIntValue(name, "oxygenBreathe");
-			oxygenStep = model.getConfig().getIntValue(name, "oxygenStep");
+			densityStep = model.getConfig().getFloatValue(name, "stepDensity");
+			oxygenBreath = model.getConfig().getFloatValue(name, "oxygenBreathe");
+			maxDensity = model.getConfig().getFloatValue(name, "maxDensity");
+			minDensity = model.getConfig().getFloatValue(name, "minDensity");
+			oxygenStep = model.getConfig().getFloatValue(name, "oxygenStep");
 		}
 
-		public int getVestAir() {
-			return vestAir;
-		}
 	}
 
-	public int getOxygen() {
+	public double getOxygen() {
 		return oxygen;
 	}
 
@@ -76,15 +75,17 @@ public class Player extends Entity {
 	 * le gilet
 	 */
 	private void swell() {
-		if (vest.getVestAir() + vest.oxygenStep < vest.getVestAir()) {
-			if (oxygen > vest.oxygenStep) {
-				oxygen -= vest.oxygenStep;
-				vest.vestAir += vest.oxygenStep;
-				this.density -= vest.densityStep;
-			} else {
-				oxygen = 0;
-				this.getHit(15);
+		if (density == vest.minDensity) {
+			return;
+		}
+		if (oxygen > 0) {
+			oxygen -= vest.oxygenStep;
+			density -= vest.densityStep;
+			if (density < vest.minDensity) {
+				density = vest.minDensity;
 			}
+		} else {
+			oxygen = 0;
 		}
 	}
 
@@ -93,13 +94,9 @@ public class Player extends Entity {
 	 * dans le gilet
 	 */
 	private void deflate() {
-		if (vest.getVestAir() > 0) {
-			if (oxygen < 100 - vest.oxygenStep) {
-				oxygen += vest.oxygenStep;
+			density += vest.densityStep;
+			if (density > vest.maxDensity) {
+				density = vest.maxDensity;
 			}
-			vest.vestAir -= vest.oxygenStep;
-
-			this.density += vest.densityStep;
-		}
 	}
 }
