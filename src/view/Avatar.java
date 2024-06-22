@@ -254,13 +254,14 @@ public abstract class Avatar {
 		if (origin == null) {
 			return;
 		}
+		int numberOfDecimals = 3;
 		g.setColor(Color.BLACK);
 		g.drawString("Name: " + instanceEntity.toString(), origin.x, origin.y + g.getFontMetrics().getHeight());
-		g.drawString("Position: " + "(" + roundValue(instanceEntity.getX(), 3) + ","
-				+ roundValue(instanceEntity.getY(), 3) + ")", origin.x, origin.y + g.getFontMetrics().getHeight() * 2);
+		g.drawString("Position: " + "(" + roundValue(instanceEntity.getX(), numberOfDecimals) + ","
+				+ roundValue(instanceEntity.getY(), numberOfDecimals) + ")", origin.x, origin.y + g.getFontMetrics().getHeight() * 2);
 		g.drawString("Speed: " + instanceEntity.getSpeed(), origin.x, origin.y + g.getFontMetrics().getHeight() * 3);
 		g.drawString("Force: " + instanceEntity.getForce(), origin.x, origin.y + g.getFontMetrics().getHeight() * 4);
-		g.drawString("Density: " + instanceEntity.getDensity(), origin.x, origin.y + g.getFontMetrics().getHeight() * 5);
+		g.drawString("Density: " + roundValue(instanceEntity.getDensity(), numberOfDecimals), origin.x, origin.y + g.getFontMetrics().getHeight() * 5);
 	}
 
 	/**
