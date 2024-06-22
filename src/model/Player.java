@@ -16,7 +16,6 @@ public class Player extends Entity {
 		oxygen = 100;
 		vest = new Vest();
 		this.team = model.getConfig().getCategory(name, "category");
-		new PlayerAvatar(model.m_view, this, 1);
 		this.model.addPlayer(this);
 	}
 

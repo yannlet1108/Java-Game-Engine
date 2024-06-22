@@ -54,8 +54,6 @@ public class Model {
 		playerSpawnY = getConfig().getIntValue("world", "playerSpawnY");
 		seed = getConfig().getIntValue("world", "seed");
 		safeZone = getConfig().getIntValue("world", "safeZone");
-		new Player(new Point2D.Double(playerSpawnX, playerSpawnY), Direction.N, this, "Player1");
-		new Player(new Point2D.Double(playerSpawnX+200, playerSpawnY), Direction.N, this, "Player2");
 		mapGenerator();
 		new Player(new Point2D.Double(playerSpawnX, playerSpawnY), Direction.N, this, "Player1");
 		new Player(new Point2D.Double(playerSpawnX+200, playerSpawnY), Direction.N, this, "Player2");
