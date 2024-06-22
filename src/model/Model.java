@@ -46,8 +46,8 @@ public class Model {
 		this.m_view = m_view;
 		worldHeight = this.m_controller.getConfig().getIntValue("World", "height");
 		worldWidth = this.m_controller.getConfig().getIntValue("World", "width");
-		density = this.m_controller.getConfig().getIntValue("World", "density");
-		viscosity = this.m_controller.getConfig().getIntValue("World", "viscosity");
+		density = this.m_controller.getConfig().getFloatValue("World", "density");
+		viscosity = this.m_controller.getConfig().getFloatValue("World", "viscosity");
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();

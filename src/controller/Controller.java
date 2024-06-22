@@ -68,15 +68,15 @@ public class Controller implements GameCanvasListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		System.out.println("Mouse entered: (" + e.getX() + "," + e.getY() + ")");
-		//System.out.println(" modifiers=" + e.getModifiersEx());
-		//System.out.println(" buttons=" + e.getButton());
+		// System.out.println(" modifiers=" + e.getModifiersEx());
+		// System.out.println(" buttons=" + e.getButton());
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		System.out.println("Mouse exited: (" + e.getX() + "," + e.getY() + ")");
-		//System.out.println(" modifiers=" + e.getModifiersEx());
-		//System.out.println(" buttons=" + e.getButton());
+		// System.out.println(" modifiers=" + e.getModifiersEx());
+		// System.out.println(" buttons=" + e.getButton());
 	}
 
 	@Override
@@ -88,10 +88,11 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		/*System.out.println("Mouse moved: (" + e.getX() + "," + e.getY() + ")");
-		System.out.println("   modifiers=" + e.getModifiersEx());
-		System.out.println("   buttons=" + e.getButton());
-		*/
+		/*
+		 * System.out.println("Mouse moved: (" + e.getX() + "," + e.getY() + ")");
+		 * System.out.println("   modifiers=" + e.getModifiersEx());
+		 * System.out.println("   buttons=" + e.getButton());
+		 */
 	}
 
 	@Override
@@ -102,7 +103,9 @@ public class Controller implements GameCanvasListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		System.out.println("Key pressed: " + e.getKeyChar() + " code=" + e.getKeyCode());
-		keyList.add(e.getKeyCode());
+		if (!keyList.contains(e.getKeyCode())) {
+			keyList.add(e.getKeyCode());
+		}
 	}
 
 	@Override
@@ -165,7 +168,6 @@ public class Controller implements GameCanvasListener {
 	public Model getmodel() {
 		return m_model;
 	}
-
 
 	public boolean isKeyPressed(String keyString) {
 		int keyCode = getKeyCodeFromString(keyString);

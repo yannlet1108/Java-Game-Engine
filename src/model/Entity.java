@@ -21,7 +21,7 @@ public abstract class Entity {
 
 	private Vector force;
 	private boolean isPhysicObject;
- 
+
 	protected int healthPoint;
 	protected Category team;
 	protected int meleeRange;
@@ -237,7 +237,7 @@ public abstract class Entity {
 		setState(State.FILLING);
 		pop(val);
 		Timer timer = new Timer();
-		ActionTask endPopTask = new EndPopTask(this, 1000);
+		ActionTask endPopTask = new EndPopTask(this, 100);
 		timer.schedule(endPopTask, endPopTask.getDuration());
 	}
 
@@ -585,7 +585,7 @@ public abstract class Entity {
 
 	private Vector computeArchimedes() {
 		// return new Vector(0, -density * volume * ModelConstants.GRAVITY);
-		return new Vector(0, -(model.getDensity() - density));
+		return new Vector(0, ModelConstants.DENSITY_CONSTANT * -(model.getDensity() - density));
 	}
 
 	private Vector computeWeight() {
@@ -609,6 +609,7 @@ public abstract class Entity {
 		closeEntities.remove(this);
 		if (closeEntities.isEmpty())
 			return movement;
+		speed = new Vector(0, 0);
 		return new Vector(0, 0);
 	}
 
