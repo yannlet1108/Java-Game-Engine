@@ -1,7 +1,5 @@
 package model;
 
-import java.time.Duration;
-import java.util.Date;
 import java.util.TimerTask;
 
 public class ActionTask extends TimerTask {

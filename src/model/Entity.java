@@ -88,7 +88,6 @@ public abstract class Entity {
 	 */
 	public double getY() {
 		return hitbox.getY();
-
 	}
 
 	public Vector getForce() {

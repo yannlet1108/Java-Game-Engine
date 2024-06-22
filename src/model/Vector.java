@@ -47,7 +47,7 @@ public class Vector {
 
 	@Override
 	public String toString() {
-		return "(" + getX() + "," + getY() + ")";
+		return "(" + roundValue(getX(),3) + " , " + roundValue(getY(),3) + ")";
 	}
 
 	Direction getVectorDirection() {
@@ -128,5 +128,9 @@ public class Vector {
 				throw new IllegalArgumentException("Absolute direction expected, got : " + direction);
 		}
 		return vector.unitVector();
+	}
+	
+	private double roundValue(double value, int numberOfDecimals) {
+		return Math.round( value * Math.pow(10, numberOfDecimals) ) / Math.pow(10, numberOfDecimals);
 	}
 }
