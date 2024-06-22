@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import automaton.FSM;
+import view.PlayerAvatar;
 
 public abstract class Entity {
 	protected Rectangle2D hitbox;
@@ -64,6 +65,7 @@ public abstract class Entity {
 		this.meleeRange = cfg.getIntValue(name, "meleeRange");
 		this.throwEntity = cfg.getStringValue(name, "throwBots");
 		this.isPhysicObject = cfg.getBooleanValue(name, "isPhysicObject");
+		model.m_view.store(new PlayerAvatar(model.m_view, this, 1));
 		myFSM = new FSM(this,
 				model.getAutomatonBank().getAutomaton(model.getConfig().getStringValue(this.name, "automaton")));
 
