@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import automaton.FSM;
+import view.PlayerAvatar;
 
 public abstract class Entity {
 	protected Rectangle2D hitbox;
@@ -64,13 +65,17 @@ public abstract class Entity {
 		this.meleeRange = cfg.getIntValue(name, "meleeRange");
 		this.throwEntity = cfg.getStringValue(name, "throwBots");
 		this.isPhysicObject = cfg.getBooleanValue(name, "isPhysicObject");
+
 		this.density = model.getDensity();
+
+		new PlayerAvatar(model.m_view, this, 1);
+
 		myFSM = new FSM(this,
 				model.getAutomatonBank().getAutomaton(model.getConfig().getStringValue(this.name, "automaton")));
 
 		this.state = State.WAITING;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;
@@ -133,7 +138,7 @@ public abstract class Entity {
 	public Rectangle2D getHitbox() {
 		return new Rectangle2D.Double(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
-	
+
 	public double getDensity() {
 		return density;
 	}
@@ -217,8 +222,7 @@ public abstract class Entity {
 		blockAutomaton();
 		if (direction == null) {
 			egg();
-		}
-		else {
+		} else {
 			egg(getRightDirection(direction));
 		}
 		Timer timer = new Timer();
