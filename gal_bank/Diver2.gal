@@ -1,9 +1,0 @@
-Diver2(Init){
-	* (Init):
-	| Key(FU) ? Pop(1) :(Init)
-	| Key(FL) ? Move(W) :(Init)
-	| Key(FD) ? Pop(-1) :(Init)
-	| Key(FR) ? Move(E) :(Init)
-	| Key(ENTER) ? Hit :(Init)
-	| True ? :(Init)
-}

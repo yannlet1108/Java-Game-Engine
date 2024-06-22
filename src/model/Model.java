@@ -50,15 +50,15 @@ public class Model {
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
 		automatonBank = new AutomatonBank();
+
 		playerSpawnX = getConfig().getIntValue("World", "playerSpawnX");
 		playerSpawnY = getConfig().getIntValue("World", "playerSpawnY");
-		new Player(new Point2D.Double(playerSpawnX, playerSpawnY), Direction.N, this, "Player1");
-		new Player(new Point2D.Double(playerSpawnX+200, playerSpawnY), Direction.N, this, "Player2");
-
-		m_view.setModel(this);
-		//mapGenerator();
 		seed = getConfig().getIntValue("World", "seed");
 		safeZone = getConfig().getIntValue("World", "safeZone");
+		mapGenerator();
+		new Player(new Point2D.Double(playerSpawnX, playerSpawnY), Direction.N, this, "Player1");
+		new Player(new Point2D.Double(playerSpawnX+200, playerSpawnY), Direction.N, this, "Player2");
+		m_view.setModel(this);
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class Model {
 		for (int i = 0; i < this.getBoardWidth(); i = i + obstacleWidth) {
 			for (int j = 0; j < this.getBoardHeight(); j = j + obstacleHeight) {
 				if (r.nextDouble() < obstacleProbability) {
-					new Obstacle(new Point2D.Double(i, j), null, this);
+					new Obstacle(new Point2D.Double(i, j), Direction.E, this);
 				}
 			}
 		}

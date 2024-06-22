@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import automaton.FSM;
+import view.Avatar;
 
 public abstract class Entity {
 	protected Rectangle2D hitbox;
@@ -64,10 +65,20 @@ public abstract class Entity {
 		this.meleeRange = cfg.getIntValue(name, "meleeRange");
 		this.throwEntity = cfg.getStringValue(name, "throwBots");
 		this.isPhysicObject = cfg.getBooleanValue(name, "isPhysicObject");
+
+		this.density = model.getDensity();
+
+		new Avatar(model.m_view, this, name);
+
 		myFSM = new FSM(this,
 				model.getAutomatonBank().getAutomaton(model.getConfig().getStringValue(this.name, "automaton")));
 
 		this.state = State.WAITING;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 
 	/**
@@ -86,7 +97,6 @@ public abstract class Entity {
 	 */
 	public double getY() {
 		return hitbox.getY();
-
 	}
 
 	public Vector getForce() {
@@ -127,6 +137,10 @@ public abstract class Entity {
 
 	public Rectangle2D getHitbox() {
 		return new Rectangle2D.Double(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
+	}
+
+	public double getDensity() {
+		return density;
 	}
 
 	public void doMove(Direction direction) {
@@ -206,7 +220,11 @@ public abstract class Entity {
 
 	public void doEgg(Direction direction) {
 		blockAutomaton();
-		egg(getRightDirection(direction));
+		if (direction == null) {
+			egg();
+		} else {
+			egg(getRightDirection(direction));
+		}
 		Timer timer = new Timer();
 		ActionTask endEggTask = new EndEggTask(this, 1000);
 		timer.schedule(endEggTask, endEggTask.getDuration());
@@ -574,7 +592,7 @@ public abstract class Entity {
 	private Vector computeFriction() {
 		Vector unitVector = speed.unitVector().scalarMultiplication(-1);
 		double speedNorm = speed.norm();
-		double vs2 = model.getViscosity() * (Math.pow(speedNorm, 2));
+		double vs2 = model.getViscosity() * (speedNorm);
 		return unitVector.scalarMultiplication(vs2);
 	}
 
