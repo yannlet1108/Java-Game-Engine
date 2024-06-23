@@ -7,7 +7,7 @@ import controller.Controller;
 public class TestsModel {
 	public static void main(String[] args) {
 		Controller controller = Controller.getInstance();
-		Model model = controller.getModel();
+		Model model = controller.getmodel();
 		TestHP(controller, model);
 		TestMap(controller, model);
 	}
@@ -30,7 +30,7 @@ public class TestsModel {
 		p1.hit(Direction.N);
 		System.out.printf("Hp P1 apres 2eme coup: %d \n", p1.getHealthPoint());
 		System.out.printf("Hp P2 apres 2eme coup: %d \n", p2.getHealthPoint());
-		Entity g1 = new Mob(model.getWorldCenter(), Direction.N, model, "mob1");
+		Entity g1 = new Mob(model.getWorldCenter(), Direction.N, model, "Mob1");
 		System.out.println("------------------------------------");
 		g1.hit();
 		System.out.printf("Hp P1 apres 3eme coup: %d \n", p1.getHealthPoint());
@@ -38,7 +38,7 @@ public class TestsModel {
 		System.out.printf("Hp G1 apres 3eme coup: %d \n", g1.getHealthPoint());
 		System.out.println("------------------------------------");
 		pos.setLocation(pos.getX() + 2, pos.getY());
-		Entity s1 = new Mob(pos, Direction.N, model, "mob2");
+		Entity s1 = new Mob(pos, Direction.N, model, "Mob2");
 		s1.hit();
 		System.out.printf("Hp P1 apres 4eme coup: %d \n", p1.getHealthPoint());
 		System.out.printf("Hp P2 apres 4eme coup: %d \n", p2.getHealthPoint());
