@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +14,6 @@ import javax.swing.JLabel;
 
 import controller.Controller;
 import info3.game.graphics.GameCanvas;
-import model.Entity;
 import model.Model;
 
 /**
@@ -31,6 +31,7 @@ public class View {
 	private long m_textElapsed;
 
 	private List<Avatar> avatarStorage;
+	private List<Avatar> toRemoveList;
 	private SpriteBank bank;
 	private Viewport viewport;
 
@@ -96,10 +97,11 @@ public class View {
 	}
 
 	/**
-	 * Initialise la liste d'avatar
+	 * Initialise la liste d'avatar et sa liste de suppression
 	 */
 	private void initAvatar() {
 		avatarStorage = new LinkedList<Avatar>();
+		toRemoveList = new LinkedList<Avatar>();
 	}
 
 	/**
@@ -117,14 +119,20 @@ public class View {
 	public void storeAvatar(Avatar a) {
 		avatarStorage.add(a);
 	}
+	
+	public void addToRemove(Avatar a) {
+		toRemoveList.add(a);
+	}
 
 	/**
-	 * Detruit l'avatar d'une entité en cours de destruction
-	 * 
-	 * @param e : entité en cours de destruction
+	 * Retire de la liste d'avatar les avatars de ToRemoveList
 	 */
-	public void destroyAvatar(Avatar a) {
-		avatarStorage.remove(a);
+	public void destroyToRemoves() {
+		Iterator<Avatar> it = toRemoveList.iterator();
+		while (it.hasNext()) {
+			avatarStorage.remove(it.next());
+			
+		}
 	}
 
 	/**
@@ -139,8 +147,9 @@ public class View {
 		fillBackground(g);
 		Iterator<Avatar> avatarIterator = getAvatarIterator();
 		while (avatarIterator.hasNext()) {
-			avatarIterator.next().paint(g);
+				avatarIterator.next().paint(g);
 		}
+		destroyToRemoves();
 	}
 
 	/**
@@ -176,10 +185,11 @@ public class View {
 	/**
 	 * Crée un iterateur sur les avatars
 	 * 
-	 * @return iterateur sur la liste d'avatar
+	 * @return iterateur sur une copie de la liste d'avatar
 	 */
 	private Iterator<Avatar> getAvatarIterator() {
-		return avatarStorage.iterator();
+		LinkedList<Avatar> avatars = new LinkedList<Avatar>(avatarStorage);
+		return avatars.iterator();
 	}
 
 	/**
