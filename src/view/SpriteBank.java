@@ -55,17 +55,20 @@ public class SpriteBank {
 			/* background */
 			currentFile = getconfStr("World", "spriteFile");
 			spritesBank.add(0, loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "debugColor"))));
+			/*ship*/
+			currentFile = getconfStr("World", "shipSpriteFile");
+			spritesBank.add(1, loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "shipDebugColor"))));
 			/* player1 */
 			currentFile = getconfStr("Player1", "spriteFile");
-			spritesBank.add(1, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+			spritesBank.add(loadSprite(currentFile, getconfInt("World", "spriteNrows"),
 					getconfInt("World", "spriteNcols"), new Color(getconfInt("Player1", "debugColor"))));
 			/* player2 */
 			currentFile = getconfStr("Player2", "spriteFile");
-			spritesBank.add(2, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+			spritesBank.add(loadSprite(currentFile, getconfInt("World", "spriteNrows"),
 					getconfInt("World", "spriteNcols"), new Color(getconfInt("Player2", "debugColor"))));
 			/* block */
 			currentFile = getconfStr("Obstacle", "spriteFile");
-			spritesBank.add(3, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+			spritesBank.add(loadSprite(currentFile, getconfInt("World", "spriteNrows"),
 					getconfInt("World", "spriteNcols"), new Color(getconfInt("Obstacle", "debugColor"))));
 			/* Mobs */
 			for (int i = 0; i < getconfInt("World", "nbBots"); i++) {
@@ -137,6 +140,10 @@ public class SpriteBank {
 	 */
 	SpriteSet getBackgroundset() {
 		return spritesBank.get(0);
+	}
+	
+	SpriteSet getShipSet() {
+		return spritesBank.get(1);
 	}
 
 

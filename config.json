@@ -27,7 +27,9 @@
     "player2SpawnX": 600,
     "player2SpawnY": 0,
     "safeZone": 50,
-    "shipSize" : 30
+    "shipSize" : 30,
+    "shipSpriteFile": "shipSprites.png",
+    "shipDebugColor": -16777026
   },
   "Player1": {
     "width": 20,
