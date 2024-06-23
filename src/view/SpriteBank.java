@@ -142,6 +142,11 @@ public class SpriteBank {
 		return spritesBank.get(0);
 	}
 	
+	/**
+	 * Retourne le spriteset de la zone de refill
+	 * 
+	 * @return 
+	 */
 	SpriteSet getShipSet() {
 		return spritesBank.get(1);
 	}

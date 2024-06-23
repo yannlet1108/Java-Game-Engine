@@ -37,7 +37,7 @@ public class View {
 	private SpriteBank bank;
 	private Viewport viewport;
 
-	private Rectangle2D shipArea;
+	private Rectangle2D refillArea;
 
 	/**
 	 * Initialise la view, ouvre la fenêtre graphique, la liste d'avatar et la
@@ -58,7 +58,7 @@ public class View {
 		initViewport();
 		setBank(new SpriteBank(this));
 		initAvatar();
-		initShipArea();
+		initRefillArea();
 	}
 
 	/**
@@ -116,8 +116,11 @@ public class View {
 		toRemoveList = new LinkedList<Avatar>();
 	}
 
-	private void initShipArea() {
-		this.shipArea = new Rectangle2D.Double(m_controller.getConfig().getIntValue("World", "width") / 2, 0,
+	/**
+	 * Initialise la zone de refill du monde
+	 */
+	private void initRefillArea() {
+		this.refillArea = new Rectangle2D.Double(m_controller.getConfig().getIntValue("World", "width") / 2, 0,
 				m_controller.getConfig().getIntValue("World", "shipSize"),
 				m_controller.getConfig().getIntValue("World", "shipSize"));
 	}
@@ -176,18 +179,23 @@ public class View {
 		// TODO implementer une version fonctionnelle avec une image scalée
 	}
 
+	/**
+	 * Dessine la zone de refill avec un sprite ou une couleur de debug
+	 * 
+	 * @param g : instance graphique du canvas
+	 */
 	private void drawRefillZone(Graphics g) {
-		Point origin = getViewport().toViewport(shipArea);
+		Point origin = getViewport().toViewport(refillArea);
 		if (origin == null)
 			return;
 		if (ViewCst.DEBUG) {
 			g.setColor(getBank().getShipSet().getDebugColor());
-			g.fillRect(origin.x, origin.y, (int) (shipArea.getWidth() * getViewport().getScale()),
-					(int) (shipArea.getHeight() * getViewport().getScale()));
+			g.fillRect(origin.x, origin.y, (int) (refillArea.getWidth() * getViewport().getScale()),
+					(int) (refillArea.getHeight() * getViewport().getScale()));
 		} else {
 			BufferedImage sprite = getBank().getShipSet().getSprite(0);
-			g.drawImage(sprite, origin.x, origin.y, (int) (shipArea.getWidth() * getViewport().getScale()),
-					(int) (shipArea.getHeight() * getViewport().getScale()), null);
+			g.drawImage(sprite, origin.x, origin.y, (int) (refillArea.getWidth() * getViewport().getScale()),
+					(int) (refillArea.getHeight() * getViewport().getScale()), null);
 		}
 
 	}
