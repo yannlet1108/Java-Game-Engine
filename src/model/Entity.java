@@ -302,7 +302,7 @@ public abstract class Entity {
 			}
 		}
 
-		return false;
+		return cell(dir, cat, range);
 	}
 
 	/**

@@ -129,12 +129,13 @@ public class Controller implements GameCanvasListener {
 	 */
 	@Override
 	public void tick(long elapsed) {
-		if (m_view != null)
+		if (m_view != null) {
 			m_view.tick(elapsed);
-		if (tick >= ModelConstants.PHYSICS_STEP_DELAY.toMillis()) {
-			if (m_model != null)
-				m_model.step();
-			tick = 0;
+			if (tick >= ModelConstants.PHYSICS_STEP_DELAY.toMillis()) {
+				if (m_model != null)
+					m_model.step();
+				tick = 0;
+			}
 		}
 		tick += elapsed;
 	}
