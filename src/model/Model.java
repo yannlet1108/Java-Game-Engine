@@ -2,6 +2,7 @@ package model;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -31,6 +32,8 @@ public class Model {
 	private int player2SpawnY;
 	private int seed;
 	private int safeZone;
+	private int shipSize;
+	private Double shipArea;
 
 	private AutomatonBank automatonBank;
 
@@ -59,6 +62,8 @@ public class Model {
 		player2SpawnY = getConfig().getIntValue("World", "player2SpawnY");
 		seed = getConfig().getIntValue("World", "seed");
 		safeZone = getConfig().getIntValue("World", "safeZone");
+		shipSize = getConfig().getIntValue("World", "shipSize");
+		shipArea = new Rectangle2D.Double(worldWidth/2, 0, shipSize, shipSize);
 		mapGenerator();
 		new Player(new Point2D.Double(player1SpawnX, player1SpawnY), Direction.N, this, "Player1");
 		new Player(new Point2D.Double(player2SpawnX, player2SpawnY), Direction.N, this, "Player2");
@@ -300,5 +305,9 @@ public class Model {
 
 	public int getSafeZone() {
 		return safeZone;
+	}
+
+	public Double getShipArea() {
+		return shipArea;
 	}
 }

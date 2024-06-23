@@ -273,7 +273,6 @@ public abstract class Entity {
 				e.getHit(this.attackDamage);
 			}
 		}
-		this.model.removeEntityToRemove();
 	}
 
 	public boolean doCell(Direction direction, Category category) {
@@ -593,7 +592,10 @@ public abstract class Entity {
 
 		Vector movement = speed.scalarMultiplication(timeSeconds);
 		movement = checkCollisions(movement);
-		direction = movement.getVectorDirection();
+		Direction dir = movement.getVectorDirection();
+		if (dir != Direction.HERE) {
+			direction = dir;
+		}
 		translatePosition(movement);
 	}
 
@@ -618,6 +620,16 @@ public abstract class Entity {
 		Rectangle2D movementBox = getHitbox();
 		Rectangle2D newHitbox = new Rectangle2D.Double(hitbox.getX() + movement.getX(), hitbox.getY() + movement.getY(),
 				hitbox.getWidth(), hitbox.getHeight());
+		
+		// check if the movement will bring the entity outside the map
+		Rectangle2D map = new Rectangle2D.Double(0, 0, getModel().getBoardWidth(), getModel().getBoardHeight());
+		boolean isMoveInMap = map.contains(newHitbox);
+		if (!isMoveInMap) {
+			speed = new Vector(0, 0);
+			return new Vector(0, 0);
+		}
+		
+		// check if the movement will overlap some other hitbox
 		movementBox.add(newHitbox);
 		List<Entity> closeEntities = getEntitiesInRectangle(movementBox);
 		closeEntities.remove(this);
