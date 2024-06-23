@@ -36,9 +36,9 @@ public class Avatar {
 	 * 
 	 * @param m_view     : instance courante de la view
 	 * @param e          : entité associé à l'avatar
-	 * @param entityConfig : nom de la configuration de l'entité
+	 * @param entityType : numero de l'entité dans la config
 	 */
-	public Avatar	(View m_view, Entity e, String entityConfig) {
+	public Avatar(View m_view, Entity e, String entityConfig) {
 		this.m_view = m_view;
 		instanceEntity = e;
 		spriteSetNumber = m_view.getBank().getSpritesSetNumber(entityConfig);
@@ -63,20 +63,25 @@ public class Avatar {
 	/**
 	 * Met à jour la file d'animation en fonction de l'état de l'entité Relance
 	 * l'animation liée à l'état si necessaire
+	 * 
 	 */
 	void updateAnimations() {
 		model.State newState = instanceEntity.getState();
 		if (newState != lastState) {
 			lastState = newState;
-			if (lastState == model.State.HITTING
-					|| lastState == model.State.HITTING_AROUND && lastState != model.State.DYING) {
+			if (lastState == model.State.HITTING || lastState == model.State.HITTING_AROUND
+					|| lastState == model.State.DYING) {
 				animationSprite.clear();
 			}
 			addAnimation(lastState);
 		} else {
 			if (animationSprite.isEmpty()) {
-				if (lastState != model.State.HITTING && lastState != model.State.HITTING_AROUND
-						&& lastState != model.State.DYING) {
+				if (lastState == model.State.DYING) {
+					m_view.destroyAvatar(this);
+					setInvisible();
+
+				}
+				if (lastState != model.State.HITTING && lastState != model.State.HITTING_AROUND) {
 					addAnimation(lastState);
 				}
 			}
@@ -198,40 +203,41 @@ public class Avatar {
 	 * @param g : instance graphique du canvas
 	 */
 	void paint(Graphics g) {
-		if (ViewCst.DEBUG) {
-			debugPaint(g);
-		} else {
-			updateAnimations();
-			Rectangle2D collisionBox = instanceEntity.getHitbox();
-			Point origin = m_view.getViewport().toViewport(collisionBox);
-			if (origin == null) {
-				return;
+		if (isVisible) {
+			if (ViewCst.DEBUG) {
+				debugPaint(g);
+			} else {
+				updateAnimations();
+				Rectangle2D collisionBox = instanceEntity.getHitbox();
+				Point origin = m_view.getViewport().toViewport(collisionBox);
+				if (origin == null) {
+					return;
+				}
+				BufferedImage sprite = m_view.getBank().getSprite(spriteSetNumber, getNextSpriteNumber());
+				g.drawImage(sprite, origin.x, origin.y, (int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
+						(int) (collisionBox.getHeight() * m_view.getViewport().getScale()), null);
 			}
-			BufferedImage sprite = m_view.getBank().getSprite(spriteSetNumber, getNextSpriteNumber());
-			g.drawImage(sprite, origin.x, origin.y,
-					(int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
-					(int) (collisionBox.getHeight() * m_view.getViewport().getScale()), null);
-		}
-		if (ViewCst.UID) {
-			uidPaint(g);
+			if (ViewCst.UID) {
+				uidPaint(g);
+			}
 		}
 	}
 
 	/**
-	 * Arrondi une valeur à un nombre de décimales près
+	 * Arrondi la valeur à un nombre de décimales donné
 	 * 
 	 * @param value            : valeur à arrondir
 	 * @param numberOfDecimals : nombre de décimales
 	 * @return valeur arrondie
-	 */
+	 */	
 	private double roundValue(double value, int numberOfDecimals) {
 		return Math.round(value * Math.pow(10, numberOfDecimals)) / Math.pow(10, numberOfDecimals);
 	}
 
 	/**
-	 * affichage des informations de l'avatar en mode uid
+	 * Affiche les informations de l'entité en mode uid
 	 * 
-	 * @param g
+	 * @param g : instance graphique du canvas
 	 */
 	void uidPaint(Graphics g) {
 		Rectangle2D collisionBox = instanceEntity.getHitbox();
@@ -242,14 +248,17 @@ public class Avatar {
 		int numberOfDecimals = 3;
 		g.setColor(Color.BLACK);
 
-		g.setFont(new Font("SansSerif",Font.PLAIN,11));
+		g.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		g.drawString("Name: " + instanceEntity.toString(), origin.x, origin.y + g.getFontMetrics().getHeight());
-		g.drawString("Position: " + "(" + roundValue(instanceEntity.getX(), numberOfDecimals) + ","
-				+ roundValue(instanceEntity.getY(), numberOfDecimals) + ")", origin.x, origin.y + g.getFontMetrics().getHeight() * 2);
+		g.drawString(
+				"Position: " + "(" + roundValue(instanceEntity.getX(), numberOfDecimals) + ","
+						+ roundValue(instanceEntity.getY(), numberOfDecimals) + ")",
+				origin.x, origin.y + g.getFontMetrics().getHeight() * 2);
 		g.drawString("Speed: " + instanceEntity.getSpeed(), origin.x, origin.y + g.getFontMetrics().getHeight() * 3);
 		g.drawString("Force: " + instanceEntity.getForce(), origin.x, origin.y + g.getFontMetrics().getHeight() * 4);
-		g.drawString("Density: " + roundValue(instanceEntity.getDensity(), numberOfDecimals), origin.x, origin.y + g.getFontMetrics().getHeight() * 5);
-		g.drawString("Hp" + instanceEntity.getHealthPoint(), origin.x, origin.y+g.getFontMetrics().getHeight()*6);
+		g.drawString("Density: " + roundValue(instanceEntity.getDensity(), numberOfDecimals), origin.x,
+				origin.y + g.getFontMetrics().getHeight() * 5);
+		g.drawString("Hp" + instanceEntity.getHealthPoint(), origin.x, origin.y + g.getFontMetrics().getHeight() * 6);
 	}
 
 	/**
