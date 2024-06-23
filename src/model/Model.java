@@ -253,10 +253,7 @@ public class Model {
 		Iterator<Entity> iter = this.toRemove.iterator();
 		while (iter.hasNext()) {
 			Entity e = iter.next();
-			this.removeEntity(e);
-			if (e instanceof Player) {
-				this.removePlayer((Player) e);
-			}
+			e.destroy();
 		}
 		toRemove.clear();
 	}
