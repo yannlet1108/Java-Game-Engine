@@ -162,7 +162,7 @@ public abstract class Entity {
 	 * @param direction
 	 */
 	public void move(Direction direction) {
-		setForce(Vector.getVectorUnitVectorFromDirection(direction).scalarMultiplication(moveForce));
+		setForce(Vector.getVectorUnitVectorFromDirection(Direction.relativeToAbsolute(this.direction, direction)).scalarMultiplication(moveForce));
 	}
 
 	public void move() {
@@ -319,6 +319,14 @@ public abstract class Entity {
 		Point2D currentPos = getCenter();
 		double x = currentPos.getX();
 		double y = currentPos.getY();
+		
+		/**
+		 * à ne pas laisser !
+		 */
+		if (category == Category.VOID) {
+			return true;
+		}
+		
 		List<Entity> entitiesOfCategory = getEntitiesOfCategory(category);
 		entitiesOfCategory.remove(this);
 
