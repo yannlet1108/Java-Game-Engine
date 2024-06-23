@@ -38,7 +38,7 @@ public class Avatar {
 	 * @param e          : entité associé à l'avatar
 	 * @param entityType : numero de l'entité dans la config
 	 */
-	public Avatar	(View m_view, Entity e, String entityConfig) {
+	public Avatar(View m_view, Entity e, String entityConfig) {
 		this.m_view = m_view;
 		instanceEntity = e;
 		spriteSetNumber = m_view.getBank().getSpritesSetNumber(entityConfig);
@@ -208,8 +208,7 @@ public class Avatar {
 				return;
 			}
 			BufferedImage sprite = m_view.getBank().getSprite(spriteSetNumber, getNextSpriteNumber());
-			g.drawImage(sprite, origin.x, origin.y,
-					(int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
+			g.drawImage(sprite, origin.x, origin.y, (int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
 					(int) (collisionBox.getHeight() * m_view.getViewport().getScale()), null);
 		}
 		if (ViewCst.UID) {
@@ -227,17 +226,25 @@ public class Avatar {
 		if (origin == null) {
 			return;
 		}
-		int numberOfDecimals = 3;
+		int numberOfDecimals = 2;
 		g.setColor(Color.BLACK);
 
-		g.setFont(new Font("SansSerif",Font.PLAIN,11));
+		g.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		g.drawString("Name: " + instanceEntity.toString(), origin.x, origin.y + g.getFontMetrics().getHeight());
-		g.drawString("Position: " + "(" + roundValue(instanceEntity.getX(), numberOfDecimals) + ","
-				+ roundValue(instanceEntity.getY(), numberOfDecimals) + ")", origin.x, origin.y + g.getFontMetrics().getHeight() * 2);
+		g.drawString(
+				"Position: " + "(" + roundValue(instanceEntity.getX(), numberOfDecimals) + ","
+						+ roundValue(instanceEntity.getY(), numberOfDecimals) + ")",
+				origin.x, origin.y + g.getFontMetrics().getHeight() * 2);
 		g.drawString("Speed: " + instanceEntity.getSpeed(), origin.x, origin.y + g.getFontMetrics().getHeight() * 3);
 		g.drawString("Force: " + instanceEntity.getForce(), origin.x, origin.y + g.getFontMetrics().getHeight() * 4);
-		g.drawString("Density: " + roundValue(instanceEntity.getDensity(), numberOfDecimals), origin.x, origin.y + g.getFontMetrics().getHeight() * 5);
-		g.drawString("Hp" + instanceEntity.getHealthPoint(), origin.x, origin.y+g.getFontMetrics().getHeight()*6);
+		g.drawString("Density: " + roundValue(instanceEntity.getDensity(), numberOfDecimals), origin.x,
+				origin.y + g.getFontMetrics().getHeight() * 5);
+		g.drawString("Hp: " + instanceEntity.getHealthPoint(), origin.x, origin.y + g.getFontMetrics().getHeight() * 6);
+		// affichage du niveau d'oxygen des joueurs
+		if (instanceEntity instanceof model.Player) {
+			g.drawString("Oxygen: " + roundValue(((model.Player) instanceEntity).getOxygen(), numberOfDecimals),
+					origin.x, origin.y + g.getFontMetrics().getHeight() * 7);
+		}
 	}
 
 	/**
