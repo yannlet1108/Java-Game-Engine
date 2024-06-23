@@ -215,7 +215,8 @@ public class Avatar {
 					return;
 				}
 				BufferedImage sprite = m_view.getBank().getSprite(spriteSetNumber, getNextSpriteNumber());
-				g.drawImage(sprite, origin.x, origin.y, (int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
+				g.drawImage(sprite, origin.x, origin.y,
+						(int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
 						(int) (collisionBox.getHeight() * m_view.getViewport().getScale()), null);
 			}
 			if (ViewCst.UID) {
@@ -230,7 +231,7 @@ public class Avatar {
 	 * @param value            : valeur à arrondir
 	 * @param numberOfDecimals : nombre de décimales
 	 * @return valeur arrondie
-	 */	
+	 */
 	private double roundValue(double value, int numberOfDecimals) {
 		return Math.round(value * Math.pow(10, numberOfDecimals)) / Math.pow(10, numberOfDecimals);
 	}
@@ -246,7 +247,7 @@ public class Avatar {
 		if (origin == null) {
 			return;
 		}
-		int numberOfDecimals = 3;
+		int numberOfDecimals = 2;
 		g.setColor(Color.BLACK);
 
 		g.setFont(new Font("SansSerif", Font.PLAIN, 11));
@@ -259,7 +260,13 @@ public class Avatar {
 		g.drawString("Force: " + instanceEntity.getForce(), origin.x, origin.y + g.getFontMetrics().getHeight() * 4);
 		g.drawString("Density: " + roundValue(instanceEntity.getDensity(), numberOfDecimals), origin.x,
 				origin.y + g.getFontMetrics().getHeight() * 5);
-		g.drawString("Hp" + instanceEntity.getHealthPoint(), origin.x, origin.y + g.getFontMetrics().getHeight() * 6);
+
+		g.drawString("Hp: " + instanceEntity.getHealthPoint(), origin.x, origin.y + g.getFontMetrics().getHeight() * 6);
+		// affichage du niveau d'oxygen des joueurs
+		if (instanceEntity instanceof model.Player) {
+			g.drawString("Oxygen: " + roundValue(((model.Player) instanceEntity).getOxygen(), numberOfDecimals),
+					origin.x, origin.y + g.getFontMetrics().getHeight() * 7);
+		}
 	}
 
 	/**
