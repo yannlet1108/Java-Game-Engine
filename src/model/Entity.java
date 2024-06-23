@@ -268,7 +268,6 @@ public abstract class Entity {
 				e.getHit(this.attackDamage);
 			}
 		}
-		this.model.removeEntityToRemove();
 	}
 
 	public boolean doCell(Direction direction, Category category) {
@@ -689,6 +688,7 @@ public abstract class Entity {
 	 */
 	public void getHit(int val) {
 		this.modifyHealthPoint(-val);
+		this.model.removeEntityToRemove();
 	}
 
 	public void doHit(Direction direction) {
@@ -714,7 +714,6 @@ public abstract class Entity {
 				}
 			}
 		}
-		this.model.removeEntityToRemove();
 	}
 
 	/**
@@ -755,7 +754,6 @@ public abstract class Entity {
 				}
 			}
 		}
-		this.model.removeEntityToRemove();
 	}
 
 	public Category getTeam() {

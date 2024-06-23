@@ -49,7 +49,6 @@ public class Player extends Entity {
 		} else {
 			oxygen = 0;
 			this.getHit(15);
-			model.removeEntityToRemove();
 		}
 	}
 
