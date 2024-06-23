@@ -19,7 +19,11 @@ public class ViewCst {
 	public static float MOVE_FACTOR;
 	public static float SCALE_FACTOR;
 
-	
+	/**
+	 * Initialise les constantes de la view
+	 * 
+	 * @param conf : configuration du jeu
+	 */
 	public ViewCst(Config conf) {
 		DEBUG = conf.getBooleanValue("View", "debug");
 		UID = conf.getBooleanValue("View", "uid");

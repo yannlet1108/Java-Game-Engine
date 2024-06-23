@@ -36,7 +36,7 @@ public class Avatar {
 	 * 
 	 * @param m_view     : instance courante de la view
 	 * @param e          : entité associé à l'avatar
-	 * @param entityType : numero de l'entité dans la config
+	 * @param entityConfig : nom de la configuration de l'entité
 	 */
 	public Avatar	(View m_view, Entity e, String entityConfig) {
 		this.m_view = m_view;
@@ -44,7 +44,7 @@ public class Avatar {
 		spriteSetNumber = m_view.getBank().getSpritesSetNumber(entityConfig);
 		debugColor = m_view.getBank().getDebugColor(spriteSetNumber);
 		this.animationSprite = new PriorityQueue<Integer>();
-		m_view.store(this);
+		m_view.storeAvatar(this);
 		setInvisible();
 	}
 
@@ -217,10 +217,22 @@ public class Avatar {
 		}
 	}
 
+	/**
+	 * Arrondi une valeur à un nombre de décimales près
+	 * 
+	 * @param value            : valeur à arrondir
+	 * @param numberOfDecimals : nombre de décimales
+	 * @return valeur arrondie
+	 */
 	private double roundValue(double value, int numberOfDecimals) {
 		return Math.round(value * Math.pow(10, numberOfDecimals)) / Math.pow(10, numberOfDecimals);
 	}
 
+	/**
+	 * affichage des informations de l'avatar en mode uid
+	 * 
+	 * @param g
+	 */
 	void uidPaint(Graphics g) {
 		Rectangle2D collisionBox = instanceEntity.getHitbox();
 		Point origin = m_view.getViewport().toViewport(collisionBox);

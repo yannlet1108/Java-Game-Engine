@@ -114,7 +114,7 @@ public class View {
 	 * 
 	 * @param a : nouvel avatar à sauvegarder
 	 */
-	public void store(Avatar a) {
+	public void storeAvatar(Avatar a) {
 		avatarStorage.add(a);
 	}
 
@@ -123,7 +123,7 @@ public class View {
 	 * 
 	 * @param e : entité en cours de destruction
 	 */
-	public void destroy(Entity e) {
+	public void destroyAvatar(Entity e) {
 		Iterator<Avatar> avatarIterator = getAvatarIterator();
 		Avatar current;
 		while (avatarIterator.hasNext()) {
@@ -189,10 +189,7 @@ public class View {
 	private Iterator<Avatar> getAvatarIterator() {
 		return avatarStorage.iterator();
 	}
-	
-	public void supprAvatar(Entity entity) {
-		
-	}
+
 
 	/**
 	 * Renvois la banque d'avatar
@@ -212,6 +209,11 @@ public class View {
 		return viewport;
 	}
 	
+	/**
+	 * Renvois le controller actuel
+	 * 
+	 * @return controller
+	 */
 	Controller getController() {
 		return m_controller;
 	}
