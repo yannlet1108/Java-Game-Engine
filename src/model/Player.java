@@ -6,7 +6,7 @@ import view.Avatar;
 
 public class Player extends Entity {
 
-	private Vest vest;
+	Vest vest;
 	private double oxygen;
 	private double maxOxygen;
 
@@ -20,7 +20,7 @@ public class Player extends Entity {
 		this.model.addPlayer(this);
 	}
 
-	private class Vest {
+	class Vest {
 		public double densityStep;
 		public double oxygenStep;
 		public double maxDensity;
