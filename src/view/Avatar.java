@@ -11,6 +11,7 @@ import java.util.Queue;
 
 import model.Direction;
 import model.Entity;
+import model.State;
 
 /**
  * Classe réunissant les champs et méthodes communes à tout les avatars
@@ -45,6 +46,7 @@ public class Avatar {
 		debugColor = m_view.getBank().getDebugColor(spriteSetNumber);
 		this.animationSprite = new PriorityQueue<Integer>();
 		m_view.storeAvatar(this);
+		lastState = State.WAITING;
 		setVisible();
 	}
 
@@ -77,9 +79,8 @@ public class Avatar {
 		} else {
 			if (animationSprite.isEmpty()) {
 				if (lastState == model.State.DYING) {
-					m_view.destroyAvatar(this);
+					m_view.addToRemove(this);
 					setInvisible();
-
 				}
 				if (lastState != model.State.HITTING && lastState != model.State.HITTING_AROUND) {
 					addAnimation(lastState);

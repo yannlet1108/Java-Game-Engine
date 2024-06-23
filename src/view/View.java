@@ -3,7 +3,10 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +16,6 @@ import javax.swing.JLabel;
 
 import controller.Controller;
 import info3.game.graphics.GameCanvas;
-import model.Entity;
 import model.Model;
 
 /**
@@ -31,8 +33,11 @@ public class View {
 	private long m_textElapsed;
 
 	private List<Avatar> avatarStorage;
+	private List<Avatar> toRemoveList;
 	private SpriteBank bank;
 	private Viewport viewport;
+
+	private Rectangle2D refillArea;
 
 	/**
 	 * Initialise la view, ouvre la fenêtre graphique, la liste d'avatar et la
@@ -53,6 +58,7 @@ public class View {
 		initViewport();
 		setBank(new SpriteBank(this));
 		initAvatar();
+		initRefillArea();
 	}
 
 	/**
@@ -94,19 +100,29 @@ public class View {
 			m_text.setText(txt);
 		}
 	}
-
-	/**
-	 * Initialise la liste d'avatar
-	 */
-	private void initAvatar() {
-		avatarStorage = new LinkedList<Avatar>();
-	}
-
+	
 	/**
 	 * Initialise le viewport
 	 */
 	private void initViewport() {
 		this.viewport = new Viewport(m_canvas);
+	}
+
+	/**
+	 * Initialise la liste d'avatar et sa liste de suppression
+	 */
+	private void initAvatar() {
+		avatarStorage = new LinkedList<Avatar>();
+		toRemoveList = new LinkedList<Avatar>();
+	}
+
+	/**
+	 * Initialise la zone de refill du monde
+	 */
+	private void initRefillArea() {
+		this.refillArea = new Rectangle2D.Double(m_controller.getConfig().getIntValue("World", "width") / 2, 0,
+				m_controller.getConfig().getIntValue("World", "shipSize"),
+				m_controller.getConfig().getIntValue("World", "shipSize"));
 	}
 
 	/**
@@ -118,13 +134,19 @@ public class View {
 		avatarStorage.add(a);
 	}
 
+	public void addToRemove(Avatar a) {
+		toRemoveList.add(a);
+	}
+
 	/**
-	 * Detruit l'avatar d'une entité en cours de destruction
-	 * 
-	 * @param e : entité en cours de destruction
+	 * Retire de la liste d'avatar les avatars de ToRemoveList
 	 */
-	public void destroyAvatar(Avatar a) {
-		avatarStorage.remove(a);
+	public void destroyToRemoves() {
+		Iterator<Avatar> it = toRemoveList.iterator();
+		while (it.hasNext()) {
+			avatarStorage.remove(it.next());
+
+		}
 	}
 
 	/**
@@ -137,10 +159,12 @@ public class View {
 			viewport.updateViewport(m_model.getPlayersPos());
 		viewport.resize();
 		fillBackground(g);
+		drawRefillZone(g);
 		Iterator<Avatar> avatarIterator = getAvatarIterator();
 		while (avatarIterator.hasNext()) {
 			avatarIterator.next().paint(g);
 		}
+		destroyToRemoves();
 	}
 
 	/**
@@ -153,6 +177,27 @@ public class View {
 		g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
 
 		// TODO implementer une version fonctionnelle avec une image scalée
+	}
+
+	/**
+	 * Dessine la zone de refill avec un sprite ou une couleur de debug
+	 * 
+	 * @param g : instance graphique du canvas
+	 */
+	private void drawRefillZone(Graphics g) {
+		Point origin = getViewport().toViewport(refillArea);
+		if (origin == null)
+			return;
+		if (ViewCst.DEBUG) {
+			g.setColor(getBank().getShipSet().getDebugColor());
+			g.fillRect(origin.x, origin.y, (int) (refillArea.getWidth() * getViewport().getScale()),
+					(int) (refillArea.getHeight() * getViewport().getScale()));
+		} else {
+			BufferedImage sprite = getBank().getShipSet().getSprite(0);
+			g.drawImage(sprite, origin.x, origin.y, (int) (refillArea.getWidth() * getViewport().getScale()),
+					(int) (refillArea.getHeight() * getViewport().getScale()), null);
+		}
+
 	}
 
 	/**
@@ -176,10 +221,11 @@ public class View {
 	/**
 	 * Crée un iterateur sur les avatars
 	 * 
-	 * @return iterateur sur la liste d'avatar
+	 * @return iterateur sur une copie de la liste d'avatar
 	 */
 	private Iterator<Avatar> getAvatarIterator() {
-		return avatarStorage.iterator();
+		LinkedList<Avatar> avatars = new LinkedList<Avatar>(avatarStorage);
+		return avatars.iterator();
 	}
 
 	/**

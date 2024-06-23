@@ -42,6 +42,7 @@ public class Player extends Entity {
 	public void setOxygen(double oxygen) {
 		this.oxygen = oxygen;
 	}
+
 	/**
 	 * Diminue l'oxygen dans le gilet chaque step
 	 */
@@ -53,7 +54,10 @@ public class Player extends Entity {
 			this.getHit(15);
 		}
 		if (this.hitbox.intersects(model.getShipArea())) {
-			setOxygen(maxOxygen);
+			if (oxygen <= 90) {
+				setOxygen(oxygen + 10);
+				this.state = State.REFILLING;
+			}
 		}
 	}
 

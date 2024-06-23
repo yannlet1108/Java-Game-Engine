@@ -628,7 +628,7 @@ public abstract class Entity {
 		Rectangle2D movementBox = getHitbox();
 		Rectangle2D newHitbox = new Rectangle2D.Double(hitbox.getX() + movement.getX(), hitbox.getY() + movement.getY(),
 				hitbox.getWidth(), hitbox.getHeight());
-		
+
 		// check if the movement will bring the entity outside the map
 		Rectangle2D map = new Rectangle2D.Double(0, 0, getModel().getBoardWidth(), getModel().getBoardHeight());
 		boolean isMoveInMap = map.contains(newHitbox);
@@ -636,7 +636,7 @@ public abstract class Entity {
 			speed = new Vector(0, 0);
 			return new Vector(0, 0);
 		}
-		
+
 		// check if the movement will overlap some other hitbox
 		movementBox.add(newHitbox);
 		List<Entity> closeEntities = getEntitiesInRectangle(movementBox);
@@ -703,7 +703,9 @@ public abstract class Entity {
 	public void modifyHealthPoint(int val) {
 		this.healthPoint += val;
 		if (this.healthPoint <= 0) {
-			this.model.addEntityToRemove(this);
+			if (!(model.toRemove.contains(this))) {
+				this.model.addEntityToRemove(this);
+			}
 		}
 	}
 
