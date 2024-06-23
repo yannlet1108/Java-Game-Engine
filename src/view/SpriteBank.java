@@ -30,7 +30,7 @@ public class SpriteBank {
 	}
 
 	/**
-	 * 
+	 * Renvoie l'emplacement du spriteset dans la banque de sprite en fonction de son type dans la config
 	 * @param fileName
 	 * @return
 	 */
@@ -45,7 +45,9 @@ public class SpriteBank {
 
 	}
 
-	
+	/**
+	 * Charge les spriteset de la config dans la banque de sprite
+	 */
 	void loadSpritesSets() {
 
 		String currentFile = "";

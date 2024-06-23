@@ -4,8 +4,8 @@
     "debug": false,
     "uid": true,
     "max_scaling": 10.0,
-    "min_scaling": 0.1,
-    "margin": 100,
+    "min_scaling": 0.5,
+    "margin": 60,
     "move_factor": 0.06,
     "scale_factor": 0.06
   },
