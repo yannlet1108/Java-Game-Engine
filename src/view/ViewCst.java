@@ -1,41 +1,36 @@
 package view;
 
-import java.awt.Color;
+import config.Config;
 
 /**
  * Classe listant les variables global de la view
  */
 public class ViewCst {
 
-	public static final boolean DEBUG = false;
+	public static boolean DEBUG;
+	public static boolean UID;
 
 	/* Calcul du scaling */
-	public static final float MAX_SCALING = 10f;
-	public static final float MIN_SCALING = 0.1f;
-	public static final int MARGIN = 20;
-	public static final float PARALLAX = 0.5f;
+	public static final float PARALLAX = 0.8f;
+	public static float MAX_SCALING;
+	public static float MIN_SCALING;
+	public static int MARGIN;
 
 	/* Lissage des déplacements */
-	public static final float MOVE_FACTOR = 0.06f;
-	public static final float SCALE_FACTOR = 0.06f;
+	public static float MOVE_FACTOR;
+	public static float SCALE_FACTOR;
 
-	/* Couleurs par defaut */
-	public static final Color BACKGROUND_DEFAULT = Color.BLUE;
+	public ViewCst(Config conf) {
+		DEBUG = conf.getBooleanValue("View", "debug");
+		UID = conf.getBooleanValue("View", "uid");
 
-	/* Couleurs de debug */
-	public static final Color DEBUG_PLAYER = Color.RED;
-	public static final Color DEBUG_OBSTACLE = Color.GREEN;
-	public static final Color DEBUG_GOLDFISH = Color.ORANGE;
-	public static final Color DEBUG_SHARK = Color.CYAN;
-	public static final Color DEBUG_BULLET = Color.DARK_GRAY;
+		MAX_SCALING = conf.getFloatValue("View", "max_scaling");
+		MIN_SCALING = conf.getFloatValue("View", "min_scaling");
+		MARGIN = conf.getIntValue("View", "margin");
 
-	/* Chargement des sprites */
-	// A lister dans l'ordre {background, joueur1, joueur2, obstacles, bullet, mob1,
-	// mob2}
-	public static final String[] SPRITES_FILES = { "sprites/backgroundsprites.jpeg", "sprites/playersprites.png",
-			"sprites/playersprites.png", "sprites/obstaclesprites.png", "sprites/bulletsprites.png",
-			"sprites/goldfishsprites.png", "sprites/sharksprites.png" };
-	public static final int[] SPRITES_NROWS = { 1, 3 };
-	public static final int[] SPRITES_NCOLS = { 1, 4 };
+		MOVE_FACTOR = conf.getFloatValue("View", "move_factor");
+		SCALE_FACTOR = conf.getFloatValue("View", "scale_factor");
+
+	}
 
 }

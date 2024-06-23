@@ -1,71 +1,171 @@
 package view;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
+import model.Direction;
 import model.Entity;
 
 /**
  * Classe réunissant les champs et méthodes communes à tout les avatars
  */
-public abstract class Avatar {
+public class Avatar {
 
 	protected View m_view;
 
 	protected Entity instanceEntity;
 	protected boolean isVisible;
 
-	protected int currentSpriteNumber = 0; // numero de sprite dans un set
 	protected int spriteSetNumber; // numero de set de sprite
+
+	private model.State lastState;
+
+	private Queue<Integer> animationSprite; // file de sprites pour l'animation
+
+	private Color debugColor;
 
 	/**
 	 * Crée et initialise les champs communs des avatars. Doit être appellé par une
-	 * sous-classe
-	 * charge le set de sprites associé à l'entité
+	 * sous-classe charge le set de sprites associé à l'entité
 	 * 
-	 * @param m_view : instance courante de la view
-	 * @param e      : entité associé à l'avatar
+	 * @param m_view     : instance courante de la view
+	 * @param e          : entité associé à l'avatar
+	 * @param entityType : numero de l'entité dans la config
 	 */
-	protected Avatar(View m_view, Entity e, int entityType) {
+	public Avatar(View m_view, Entity e, String entityConfig) {
 		this.m_view = m_view;
 		instanceEntity = e;
-
-		spriteSetNumber = m_view.getBank().loadSpritesSet(getSpritesFile(entityType), getSpritesNrows(entityType),
-				getSpritesNcols(entityType));
-
+		spriteSetNumber = m_view.getBank().getSpritesSetNumber(entityConfig);
+		debugColor = m_view.getBank().getDebugColor(spriteSetNumber);
+		this.animationSprite = new PriorityQueue<Integer>();
+		m_view.store(this);
 		setInvisible();
 	}
 
 	/**
-	 * Cherche le nom fichier de sprites associé à l'entité dans la config
+	 * Retourne le prochain sprite à afficher dans la liste d'animation
 	 * 
-	 * @param entityType : numero de l'entité dans la config
-	 * @return nom du fichier de sprites
+	 * @return numero du sprite
 	 */
-	String getSpritesFile(int entityType) {
-		return ViewCst.SPRITES_FILES[entityType];
+	int getNextSpriteNumber() {
+		if (animationSprite.isEmpty()) {
+			return 0;
+		}
+		return animationSprite.poll();
 	}
 
 	/**
-	 * Cherche le nombre de lignes de sprites associé au fichier dans la config
-	 * 
-	 * @param entityType : numero de l'entité dans la config
-	 * @return nombre de lignes de sprites
+	 * Met à jour la file d'animation en fonction de l'état de l'entité Relance
+	 * l'animation liée à l'état si necessaire
 	 */
-	int getSpritesNrows(int entityType) {
-		return ViewCst.SPRITES_NROWS[entityType];
+	void updateAnimations() {
+		model.State newState = instanceEntity.getState();
+		if (newState != lastState) {
+			lastState = newState;
+			if (lastState == model.State.HITTING
+					|| lastState == model.State.HITTING_AROUND && lastState != model.State.DYING) {
+				animationSprite.clear();
+			}
+			addAnimation(lastState);
+		} else {
+			if (animationSprite.isEmpty()) {
+				if (lastState != model.State.HITTING && lastState != model.State.HITTING_AROUND
+						&& lastState != model.State.DYING) {
+					addAnimation(lastState);
+				}
+			}
+		}
+
 	}
 
 	/**
-	 * Cherche le nombre de colonnes de sprites associé au fichier dans la config
+	 * Determine si l'avatar est orienté vers la droite pouur le choix des sprites
 	 * 
-	 * @param entityType : numero de l'entité dans la config
-	 * @return nombre de colonnes de sprites
+	 * @return true si l'avatar est orienté vers la droite
 	 */
-	int getSpritesNcols(int entityType) {
-		return ViewCst.SPRITES_NCOLS[entityType];
+	Boolean isRightSided() {
+		Direction dir = instanceEntity.getDirection();
+		if (dir == Direction.E || dir == Direction.SE || dir == Direction.NE) {
+			return true;
+		}
+		return false;
+	}
 
+	/**
+	 * Ajoute les sprites correspondant à l'état de l'entité dans la file
+	 * d'animation
+	 * 
+	 * @param state : état de l'entité
+	 */
+	void addAnimation(model.State state) {
+		int diff = 0;
+		if (!isRightSided()) {
+			diff = 24;
+		}
+		switch (state) {
+		case WAITING:
+			animationSprite.add(0 + diff);
+			animationSprite.add(0 + diff);
+			animationSprite.add(1 + diff);
+			animationSprite.add(1 + diff);
+			break;
+
+		case DYING:
+			animationSprite.add(diff + 4);
+			animationSprite.add(diff + 4);
+			animationSprite.add(diff + 5);
+			animationSprite.add(diff + 5);
+			animationSprite.add(diff + 6);
+			animationSprite.add(diff + 6);
+			animationSprite.add(diff + 7);
+			animationSprite.add(diff + 7);
+			break;
+
+		case EMPTYING:
+			animationSprite.add(diff + 20);
+			animationSprite.add(diff + 20);
+			break;
+
+		case FILLING:
+			animationSprite.add(diff + 21);
+			animationSprite.add(diff + 21);
+			break;
+
+		case HITTING:
+			animationSprite.add(diff + 12);
+			animationSprite.add(diff + 12);
+			animationSprite.add(diff + 13);
+			animationSprite.add(diff + 14);
+			animationSprite.add(diff + 15);
+			break;
+		case HITTING_AROUND:
+			animationSprite.add(diff + 16);
+			animationSprite.add(diff + 17);
+			animationSprite.add(diff + 18);
+			animationSprite.add(diff + 19);
+			break;
+
+		case MOVING:
+			animationSprite.add(diff + 8);
+			animationSprite.add(diff + 9);
+			animationSprite.add(diff + 10);
+			animationSprite.add(diff + 11);
+			break;
+
+		case REFILLING:
+			animationSprite.add(diff + 22);
+			animationSprite.add(diff + 23);
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	/**
@@ -93,8 +193,7 @@ public abstract class Avatar {
 
 	/**
 	 * Affiche l'avatar en fonction du viewport et des coordonnées de l'entité
-	 * affichage en hitbox si mode debug activé
-	 * en sprite sinon
+	 * affichage en hitbox si mode debug activé en sprite sinon
 	 * 
 	 * @param g : instance graphique du canvas
 	 */
@@ -102,21 +201,58 @@ public abstract class Avatar {
 		if (ViewCst.DEBUG) {
 			debugPaint(g);
 		} else {
+			updateAnimations();
 			Rectangle2D collisionBox = instanceEntity.getHitbox();
 			Point origin = m_view.getViewport().toViewport(collisionBox);
 			if (origin == null) {
 				return;
 			}
-			g.drawImage(m_view.getBank().getSprite(spriteSetNumber, currentSpriteNumber), origin.x, origin.y,
+			BufferedImage sprite = m_view.getBank().getSprite(spriteSetNumber, getNextSpriteNumber());
+			g.drawImage(sprite, origin.x, origin.y,
 					(int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
 					(int) (collisionBox.getHeight() * m_view.getViewport().getScale()), null);
 		}
+		if (ViewCst.UID) {
+			uidPaint(g);
+		}
 	}
-	
+
+	private double roundValue(double value, int numberOfDecimals) {
+		return Math.round(value * Math.pow(10, numberOfDecimals)) / Math.pow(10, numberOfDecimals);
+	}
+
+	void uidPaint(Graphics g) {
+		Rectangle2D collisionBox = instanceEntity.getHitbox();
+		Point origin = m_view.getViewport().toViewport(collisionBox);
+		if (origin == null) {
+			return;
+		}
+		int numberOfDecimals = 3;
+		g.setColor(Color.BLACK);
+
+		g.setFont(new Font("SansSerif",Font.PLAIN,11));
+		g.drawString("Name: " + instanceEntity.toString(), origin.x, origin.y + g.getFontMetrics().getHeight());
+		g.drawString("Position: " + "(" + roundValue(instanceEntity.getX(), numberOfDecimals) + ","
+				+ roundValue(instanceEntity.getY(), numberOfDecimals) + ")", origin.x, origin.y + g.getFontMetrics().getHeight() * 2);
+		g.drawString("Speed: " + instanceEntity.getSpeed(), origin.x, origin.y + g.getFontMetrics().getHeight() * 3);
+		g.drawString("Force: " + instanceEntity.getForce(), origin.x, origin.y + g.getFontMetrics().getHeight() * 4);
+		g.drawString("Density: " + roundValue(instanceEntity.getDensity(), numberOfDecimals), origin.x, origin.y + g.getFontMetrics().getHeight() * 5);
+	}
+
 	/**
-	 * affichage des hitbox de l'avatar en mode debug (differe en fonction de l'avatar)
+	 * affichage des hitbox de l'avatar en mode debug (differe en fonction de
+	 * l'avatar)
+	 * 
 	 * @param g
 	 */
-	abstract void debugPaint(Graphics g);
+	void debugPaint(Graphics g) {
+		Rectangle2D collisionBox = instanceEntity.getHitbox();
+		g.setColor(debugColor);
+		Point origin = m_view.getViewport().toViewport(collisionBox);
+		if (origin == null)
+			return;
+		g.fillRect(origin.x, origin.y, (int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
+				(int) (collisionBox.getHeight() * m_view.getViewport().getScale()));
+	};
 
 }

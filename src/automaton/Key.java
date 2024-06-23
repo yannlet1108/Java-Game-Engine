@@ -12,7 +12,7 @@ class Key implements Condition {
 
 	@Override
 	public boolean eval(Entity e) {
-		e.doKey(key);
+		return e.doKey(key);
 	}
 
 	@Override

@@ -7,11 +7,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
+import automaton.AutomatonBank;
+import config.Config;
 import controller.Controller;
 import view.View;
 
 public class Model {
-	Controller m_controller;
+	private Controller m_controller;
 	View m_view;
 
 	private double worldHeight;
@@ -23,6 +25,15 @@ public class Model {
 	private Collection<Player> players;
 	Collection<Entity> toRemove;
 
+	private int player1SpawnX;
+	private int player1SpawnY;
+	private int player2SpawnX;
+	private int player2SpawnY;
+	private int seed;
+	private int safeZone;
+
+	private AutomatonBank automatonBank;
+
 	/**
 	 * Initialise la simulation en creant les entites d'origine et en definisant
 	 * leur etat d'initialisation.
@@ -33,14 +44,24 @@ public class Model {
 	public Model(Controller m_controller, View m_view) {
 		this.m_controller = m_controller;
 		this.m_view = m_view;
-		worldHeight = ModelConstants.WORLD_HEIGHT;
-		worldWidth = ModelConstants.WORLD_WIDTH;
-		density = ModelConstants.WORLD_DENSITY;
-		viscosity = ModelConstants.WORLD_VISCOSITY;
+		worldHeight = this.m_controller.getConfig().getIntValue("World", "height");
+		worldWidth = this.m_controller.getConfig().getIntValue("World", "width");
+		density = this.m_controller.getConfig().getFloatValue("World", "density");
+		viscosity = this.m_controller.getConfig().getFloatValue("World", "viscosity");
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
-		new Player(getWorldCenter(), Direction.N, this);
+		automatonBank = new AutomatonBank();
+
+		player1SpawnX = getConfig().getIntValue("World", "player1SpawnX");
+		player1SpawnY = getConfig().getIntValue("World", "player1SpawnY");
+		player2SpawnX = getConfig().getIntValue("World", "player2SpawnX");
+		player2SpawnY = getConfig().getIntValue("World", "player2SpawnY");
+		seed = getConfig().getIntValue("World", "seed");
+		safeZone = getConfig().getIntValue("World", "safeZone");
+		mapGenerator();
+		new Player(new Point2D.Double(player1SpawnX, player1SpawnY), Direction.N, this, "Player1");
+		new Player(new Point2D.Double(player2SpawnX, player2SpawnY), Direction.N, this, "Player2");
 		m_view.setModel(this);
 	}
 
@@ -69,6 +90,9 @@ public class Model {
 	public void step() {
 		for (Entity entity : entities) {
 			entity.step();
+			if (entity.isPhysicObject()) {
+				entity.computeMovement();
+			}
 		}
 		spawnEnemy();
 	}
@@ -81,26 +105,25 @@ public class Model {
 	 * @return le poisson
 	 * @author MO ER
 	 */
-	private Fish spawnEnemy() {
+	private Mob spawnEnemy() {
+		config.Config cfg = this.m_controller.getConfig();
 		Random yesOrNotRand = new Random();
 		int yesOrNot = yesOrNotRand.nextInt(1000); // 1000 à modif
 		if (yesOrNot < ModelConstants.IN_GENERAL) {
 			Random ranWhatFish = new Random();
-			int fishProb = ranWhatFish.nextInt(100);
-			int fish = -1;
+			int mobProb = ranWhatFish.nextInt(100);
+			int mobnum = -1;
 			double width = 0, height = 0;
-			if (fishProb < ModelConstants.GOLDENFISH_PROBA) {
-				fish = 0;
-				width = FishConstants.GOLDFISH_WIDTH;
-				height = FishConstants.GOLDFISH_HEIGHT;
-			} else if (fishProb >= ModelConstants.GOLDENFISH_PROBA
-					&& fishProb < ModelConstants.GOLDENFISH_PROBA + ModelConstants.SHARK_PROBA) {
-				fish = 1;
-				width = FishConstants.SHARK_WIDTH;
-				height = FishConstants.SHARK_HEIGHT;
+			if (mobProb < cfg.getIntValue("Mob0", "spawnProba")) {
+				mobnum = 0;
+			} else if (mobProb >= ModelConstants.GOLDENFISH_PROBA
+					&& mobProb < ModelConstants.GOLDENFISH_PROBA + ModelConstants.SHARK_PROBA) {
+				mobnum = 1;
 			} else {
 				return null;
 			}
+			width = cfg.getIntValue("Mob" + mobnum, "width");
+			height = cfg.getIntValue("Mob" + mobnum, "height");
 			boolean isGood = false;
 			int x = 0, y = 0;
 			Point2D pts = new Point2D.Double(x, y);
@@ -128,23 +151,14 @@ public class Model {
 				}
 				whileCounter++;
 			}
-			Fish nue;
-			if (fish == 0) {
-				nue = new Goldfish(pts, Direction.E, this);
-				// Pour test
-				// System.out.println("Goldfish added at x = " + pts.getX() + ", y = " +
-				// pts.getY() + ".");
-				return nue;
-			} else if (fish == 1) {
-				nue = new Shark(pts, Direction.E, this);
-				// Pour test
-				// System.out.println("Shark added at x = " + pts.getX() + ", y = " + pts.getY()
-				// + ".");
-				return nue;
-			}
-			return null;
+			Mob nue = new Mob(pts, Direction.E, this, "Mob" + mobnum);
+			// Pour test
+			// System.out.println("Goldfish added at x = " + pts.getX() + ", y = " +
+			// pts.getY() + ".");
+			return nue;
 		}
 		return null;
+
 	}
 
 	/**
@@ -252,29 +266,42 @@ public class Model {
 	}
 
 	public void mapGenerator() {
-		Random r = new Random(ModelConstants.SEED);
-		for (int i = 0; i < ModelConstants.WORLD_WIDTH; i = i + EntityConstants.OBSTACLE_WIDTH) {
-			for (int j = 0; j < ModelConstants.WORLD_HEIGHT; j = j + EntityConstants.OBSTACLE_HEIGHT) {
-				if (r.nextDouble() < ModelConstants.OBSTACLE_PROBABILITY) {
-					new Obstacle(new Point2D.Double(i, j), null, this);
+		Random r = new Random(seed);
+		int obstacleWidth = getConfig().getIntValue("Obstacle", "width");
+		int obstacleHeight = getConfig().getIntValue("Obstacle", "height");
+		int playerWidth = getConfig().getIntValue("Player1", "width");
+		float obstacleProbability = getConfig().getFloatValue("Obstacle", "probability");
+		Rectangle2D safezone = new Rectangle2D.Double(player1SpawnX - safeZone, player1SpawnY,
+				(player2SpawnX - player1SpawnX) + 2 * safeZone + 2 * playerWidth, 2 * safeZone);
+		for (int i = 0; i < this.getBoardWidth(); i = i + obstacleWidth) {
+			for (int j = 0; j < this.getBoardHeight(); j = j + obstacleHeight) {
+				Rectangle2D block = new Rectangle2D.Double(i, j, obstacleWidth, obstacleHeight);
+				if (!(safezone.intersects(block))) {
+					if (r.nextDouble() < obstacleProbability) {
+						new Obstacle(new Point2D.Double(i, j), Direction.E, this);
+					}
 				}
 			}
 		}
-		Rectangle2D safezone = new Rectangle2D.Double(ModelConstants.PLAYER_SPAWN_X - ModelConstants.SAFE_AREA,
-				ModelConstants.PLAYER_SPAWN_Y, ModelConstants.SAFE_AREA, ModelConstants.SAFE_AREA);
-		Iterator<Entity> it = this.entitiesIterator();
-		while (it.hasNext()) {
-			Entity e = it.next();
-			if (e instanceof Obstacle) {
-				if (e.getHitbox().intersects(safezone)) {
-					this.addEntityToRemove(e);
-				}
-			}
-		}
-		this.removeEntityToRemove();
 	}
 
 	public Collection<Entity> getEntities() {
 		return entities;
+	}
+
+	public AutomatonBank getAutomatonBank() {
+		return automatonBank;
+	}
+
+	public Config getConfig() {
+		return m_controller.getConfig();
+	}
+
+	public Controller getController() {
+		return m_controller;
+	}
+
+	public int getSafeZone() {
+		return safeZone;
 	}
 }

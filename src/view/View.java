@@ -26,6 +26,7 @@ import model.Model;
 public class View {
 
 	private Model m_model;
+	private Controller m_controller;
 	private GameCanvas m_canvas;
 	private JFrame m_frame;
 	private JLabel m_text;
@@ -43,8 +44,9 @@ public class View {
 	 * @param m_controller : Instance courante du controller
 	 */
 	public View(Controller m_controller) {
-
+		new ViewCst(m_controller.getConfig());
 		m_canvas = new GameCanvas(m_controller);
+		this.m_controller = m_controller;
 
 		System.out.println("  - creating frame...");
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -74,13 +76,6 @@ public class View {
 		m_frame.setLocationRelativeTo(null);
 
 		m_frame.setVisible(true);
-	}
-
-	/**
-	 * Initialise la banque d'avatar après la création du model
-	 */
-	public void initBackgroundSprite() {
-		bank.loadBackground();
 	}
 
 	/**
@@ -149,10 +144,9 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	public void paint(Graphics g) {
-		if (m_model != null)
+		if (m_model != null) {
 			viewport.updateViewport(getFarthestPlayers(m_model.getPlayersPos()));
-		viewport.resize();
-		if (bank.canDisplay()) {
+			viewport.resize();
 			fillBackground(g);
 			Iterator<Avatar> avatarIterator = getAvatarIterator();
 			while (avatarIterator.hasNext()) {
@@ -167,7 +161,7 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	private void fillBackground(Graphics g) {
-		BufferedImage background = bank.getBackground();
+		BufferedImage background = bank.getBackgroundset().getSprite(0);
 		float scale = getBackgroundScale();
 		Point origin = getBackgroundPos(scale);
 		System.out.println("x : " + origin.x + ", y : " + origin.y + ", scale : " + scale);
@@ -187,7 +181,7 @@ public class View {
 	}
 
 	private float getBackgroundRawScale() {
-		return getScreenHeight() / bank.getBackground().getHeight();
+		return getScreenHeight() / bank.getBackgroundset().getSprite(0).getHeight();
 	}
 
 	/**
@@ -202,7 +196,7 @@ public class View {
 	}
 
 	private Point getBackgroundPos(float scale) {
-		BufferedImage background = bank.getBackground();
+		BufferedImage background = bank.getBackgroundset().getSprite(0);
 		float rawScale = getBackgroundRawScale();
 		float parallax = ratioToParallax(getScaleRatio());
 		Point2D tops[] = getFarthestPlayers(m_model.getPlayersPos());
@@ -286,6 +280,10 @@ public class View {
 	 */
 	Viewport getViewport() {
 		return viewport;
+	}
+
+	Controller getController() {
+		return m_controller;
 	}
 
 	/**

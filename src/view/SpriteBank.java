@@ -1,9 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +15,7 @@ public class SpriteBank {
 
 	private View m_view;
 
-	private LinkedList<BufferedImage[]> spritesBank;
-	private boolean canDisplay;
+	private LinkedList<SpriteSet> spritesBank;
 
 	/**
 	 * Initialise la banque de sprite
@@ -29,78 +25,68 @@ public class SpriteBank {
 	SpriteBank(View m_view) {
 		this.m_view = m_view;
 		m_view.setBank(this);
-		this.spritesBank = new LinkedList<BufferedImage[]>();
-		canDisplay = false;
+		this.spritesBank = new LinkedList<SpriteSet>();
+		loadSpritesSets();
+		resizeBackground();
 	}
 
-	/**
-	 * Retourne true si suffisement de sprite sont chargés pour permettre le display
-	 * d'avoir lieu
-	 * 
-	 * @return vrai ou faux en fonction de la capacité a afficher les sprites
-	 *         chargés
-	 */
-	boolean canDisplay() {
-		return canDisplay;
+	private void resizeBackground() {
+		SpriteSet background = getBackgroundset();
+		BufferedImage sprite = background.getSprite(0);
+		double xRatio = sprite.getWidth() / m_view.getScreenWidth();
+		double yRatio = sprite.getHeight() / m_view.getScreenHeight();
+		double ratio = Math.min(xRatio, yRatio);
+		double newWidth = sprite.getWidth();
+		double newHeight = sprite.getHeight();
+		int offset = sprite.getMinX();
+		if (xRatio > ratio) {
+			newWidth = (int) ((ratio * sprite.getWidth()) / xRatio);
+			offset = (int) ((sprite.getWidth() - newWidth) / 2);
+		}
+		if (yRatio > ratio)
+			newHeight = (int) ((ratio * sprite.getHeight()) / yRatio);
+		BufferedImage newSprite = sprite.getSubimage(offset, sprite.getMinY(), (int) newWidth, (int) newHeight);
+		background.setSprite(0, newSprite);
 	}
 
-	/**
-	 * Charge le sprite correspondant au background
-	 */
-	public void loadBackground() {
-		try {
-			spritesBank.add(0, loadSprite(getBackgroundFile(), 1, 1));
-			BufferedImage background = spritesBank.remove()[0];
-			double xRatio = background.getWidth() / m_view.getScreenWidth();
-			double yRatio = background.getHeight() / m_view.getScreenHeight();
-			double ratio = Math.min(xRatio, yRatio);
-			double newWidth = background.getWidth();
-			double newHeight = background.getHeight();
-			int offset = background.getMinX();
-			if (xRatio > ratio) {
-				newWidth = (int) ((ratio * background.getWidth()) / xRatio);
-				offset = (int) ((background.getWidth() - newWidth) / 2);
+	int getSpritesSetNumber(String entityType) {
+		String fileName = getconfStr(entityType, "spriteFile");
+		for (int i = 0; i < spritesBank.size(); i++) {
+			if (spritesBank.get(i).getName().equals(fileName)) {
+				return i;
 			}
-			if (yRatio > ratio)
-				newHeight = (int) ((ratio * background.getHeight()) / yRatio);
-			BufferedImage newBackground[] = new BufferedImage[1];
-			newBackground[0] = background.getSubimage(offset, background.getMinY(), (int) newWidth, (int) newHeight);
-			spritesBank.add(0, newBackground);
-		} catch (IOException e) {
-			System.err.println("Erreur de chargement pour " + ViewCst.SPRITES_FILES[0]);
-		} catch (ArrayIndexOutOfBoundsException e2) {
-			System.err.println("Nombre de colonnes/lignes non spécifié pour " + ViewCst.SPRITES_FILES[0]);
 		}
-
-		canDisplay = true;
+		return -1;
 	}
 
-	/**
-	 * Retourne le fichier contenant le sprite du background
-	 *
-	 * @return nom du fichier de sprite
-	 */
-	String getBackgroundFile() {
-		return ViewCst.SPRITES_FILES[0];
-	}
+	void loadSpritesSets() {
 
-	/**
-	 * Charge un sprite enregistré sous forme de matrice
-	 * 
-	 * @param fileName : nom du fichier
-	 * @param nrows    : nombre de ligne de sprite
-	 * @param ncols    : nombre de collone de sprite
-	 * @return numero du sprite enragistré
-	 */
-	int loadSpritesSet(String fileName, int nrows, int ncols) {
+		String currentFile = "";
 		try {
-			spritesBank.add(loadSprite(fileName, nrows, ncols));
+			/* background */
+			currentFile = getconfStr("World", "spriteFile");
+			spritesBank.add(0, loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "debugColor"))));
+			/* player1 */
+			currentFile = getconfStr("Player1", "spriteFile");
+			spritesBank.add(1, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+					getconfInt("World", "spriteNcols"), new Color(getconfInt("Player1", "debugColor"))));
+			/* player2 */
+			currentFile = getconfStr("Player2", "spriteFile");
+			spritesBank.add(2, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+					getconfInt("World", "spriteNcols"), new Color(getconfInt("Player2", "debugColor"))));
+			/* block */
+			currentFile = getconfStr("Obstacle", "spriteFile");
+			spritesBank.add(3, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+					getconfInt("World", "spriteNcols"), new Color(getconfInt("Obstacle", "debugColor"))));
+			/* Mobs */
+			for (int i = 0; i < getconfInt("World", "nbBots"); i++) {
+				currentFile = getconfStr("Mob" + i, "spriteFile");
+				spritesBank.add(loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+						getconfInt("World", "spriteNcols"), new Color(getconfInt("Mob" + i, "debugColor"))));
+			}
 		} catch (IOException e) {
-			System.err.println("Erreur de chargement pour " + fileName);
-		} catch (ArrayIndexOutOfBoundsException e2) {
-			System.err.println("Nombre de colonnes/lignes non spécifié pour " + fileName);
+			System.err.println("Erreur de chargement pour " + currentFile);
 		}
-		return spritesBank.size() - 1;
 	}
 
 	/**
@@ -112,8 +98,8 @@ public class SpriteBank {
 	 * @return : le tableau des sprites du fichier
 	 * @throws IOException
 	 */
-	public static BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {
-		File imageFile = new File(filename);
+	public static SpriteSet loadSprite(String filename, int nrows, int ncols, Color debugColor) throws IOException {
+		File imageFile = new File("sprites/" + filename);
 		if (imageFile.exists()) {
 			BufferedImage image = ImageIO.read(imageFile);
 			int width = image.getWidth(null) / ncols;
@@ -127,9 +113,10 @@ public class SpriteBank {
 					images[(i * ncols) + j] = image.getSubimage(x, y, width, height);
 				}
 			}
-			return images;
+
+			return new SpriteSet(images, filename, debugColor);
 		}
-		return null;
+		return new SpriteSet(null, filename, debugColor);
 	}
 
 	/**
@@ -140,8 +127,18 @@ public class SpriteBank {
 	 * @return : le sprite de l'avatar
 	 */
 	BufferedImage getSprite(int numSetSprite, int numSprite) {
-		return spritesBank.get(numSetSprite)[numSprite];
+		return spritesBank.get(numSetSprite).getSprite(numSprite);
 
+	}
+
+	/**
+	 * Renvoie la couleur de debug du spriteset
+	 * 
+	 * @param numSetSprite
+	 * @return
+	 */
+	Color getDebugColor(int numSetSprite) {
+		return spritesBank.get(numSetSprite).getDebugColor();
 	}
 
 	/**
@@ -149,24 +146,30 @@ public class SpriteBank {
 	 * 
 	 * @return buffered image du background
 	 */
-	BufferedImage getBackground() {
-		return spritesBank.get(0)[0];
+	SpriteSet getBackgroundset() {
+		return spritesBank.get(0);
 	}
 
 	/**
-	 * Affiche la boite de collision de l'entité
+	 * Raccourci pour trouver des elements string dans la config
 	 * 
-	 * @param g            : inctance graphique du canvas
-	 * @param c            : couleur de la boite de collision
-	 * @param collisionBox : coordonnées et taille de la boite de collision
+	 * @param elem
+	 * @param param
+	 * @return
 	 */
-	void debugCollisions(Graphics g, Color c, Rectangle2D collisionBox) {
-		g.setColor(c);
-		Point origin = m_view.getViewport().toViewport(collisionBox);
-		if (origin == null)
-			return;
-		g.drawRect(origin.x, origin.y, (int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
-				(int) (collisionBox.getHeight() * m_view.getViewport().getScale()));
+	private String getconfStr(String elem, String param) {
+		return m_view.getController().getConfig().getStringValue(elem, param);
+	}
+
+	/**
+	 * Raccourci pour trouver des element int dans la config
+	 * 
+	 * @param elem
+	 * @param param
+	 * @return
+	 */
+	private int getconfInt(String elem, String param) {
+		return m_view.getController().getConfig().getIntValue(elem, param);
 	}
 
 }

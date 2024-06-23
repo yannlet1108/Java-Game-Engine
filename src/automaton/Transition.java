@@ -38,7 +38,7 @@ class Transition {
 		if (action != null) {
 			action.exec(e);
 		}
-		e.getFSM.setState(end);
+		e.getFSM().setState(end);
 	}
 
 	@Override
