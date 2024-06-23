@@ -123,16 +123,8 @@ public class View {
 	 * 
 	 * @param e : entité en cours de destruction
 	 */
-	public void destroyAvatar(Entity e) {
-		Iterator<Avatar> avatarIterator = getAvatarIterator();
-		Avatar current;
-		while (avatarIterator.hasNext()) {
-			current = avatarIterator.next();
-			if (current.getEntity() == e) {
-				avatarStorage.remove(current);
-				return;
-			}
-		}
+	public void destroyAvatar(Avatar a) {
+		avatarStorage.remove(a);
 	}
 
 	/**
@@ -190,7 +182,6 @@ public class View {
 		return avatarStorage.iterator();
 	}
 
-
 	/**
 	 * Renvois la banque d'avatar
 	 * 
@@ -208,7 +199,7 @@ public class View {
 	Viewport getViewport() {
 		return viewport;
 	}
-	
+
 	/**
 	 * Renvois le controller actuel
 	 * 
