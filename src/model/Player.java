@@ -2,8 +2,6 @@ package model;
 
 import java.awt.geom.Point2D;
 
-import view.Avatar;
-
 public class Player extends Entity {
 
 	Vest vest;
