@@ -38,7 +38,7 @@ public abstract class Entity {
 	private Direction lastDirectionRequested;
 
 	private boolean automatonAvailable = true;
-	private int range = 10;
+	private double range;
 	private double explodeRange;
 
 	private double moveForce;
@@ -66,8 +66,10 @@ public abstract class Entity {
 		this.attackDamage = cfg.getIntValue(name, "attackDamage");
 		this.healthPoint = cfg.getIntValue(name, "healthPoint");
 		this.meleeRange = cfg.getIntValue(name, "meleeRange");
+		this.explodeRange = meleeRange;
 		this.throwEntity = cfg.getStringValue(name, "throwBots");
 		this.isPhysicObject = cfg.getBooleanValue(name, "isPhysicObject");
+		this.range = cfg.getFloatValue(name, "width") * 1;
 
 		this.density = model.getDensity();
 
@@ -264,7 +266,7 @@ public abstract class Entity {
 	 */
 	public void explode() {
 		Rectangle2D hitRange = new Rectangle2D.Double(this.hitbox.getX() - explodeRange,
-				this.hitbox.getY() - meleeRange, this.hitbox.getWidth() + 2 * explodeRange,
+				this.hitbox.getY() - explodeRange, this.hitbox.getWidth() + 2 * explodeRange,
 				this.hitbox.getHeight() + 2 * explodeRange);
 		Iterator<Entity> it = this.model.entitiesIterator();
 		while (it.hasNext()) {
@@ -318,7 +320,7 @@ public abstract class Entity {
 	 * @param rayon
 	 * @return true or false
 	 */
-	public boolean cell(Direction direction, Category category, int rayon) {
+	public boolean cell(Direction direction, Category category, Double rayon) {
 
 		Point2D currentPos = getCenter();
 		double x = currentPos.getX();
@@ -328,15 +330,17 @@ public abstract class Entity {
 		if (category == Category.VOID) {
 			for (Iterator<Entity> iterator = model.entitiesIterator(); iterator.hasNext();) {
 				Entity entity = (Entity) iterator.next();
-				if (isEntityInZone(rayon, x, y, absoluteDirection, entity))
-					return false;
+				if (!(this == entity)) {
+					if (isEntityInZone(rayon, x, y, absoluteDirection, entity)) {
+						return false;
+					}
+				}
 			}
 			return true;
 		}
 
 		List<Entity> entitiesOfCategory = getEntitiesOfCategory(category);
 		entitiesOfCategory.remove(this);
-
 
 		for (Entity entity : entitiesOfCategory) {
 			if (isEntityInZone(rayon, x, y, absoluteDirection, entity))
@@ -345,7 +349,7 @@ public abstract class Entity {
 		return false;
 	}
 
-	private boolean isEntityInZone(int rayon, double x, double y, Direction absoluteDirection, Entity entity) {
+	private boolean isEntityInZone(double rayon, double x, double y, Direction absoluteDirection, Entity entity) {
 		// Cela test si un des points de rectangle est dans cette direction
 		double GBx, GBy;
 		for (int i = 0; i < 4; i++) {
@@ -374,21 +378,17 @@ public abstract class Entity {
 				return true;
 			if (absoluteDirection == Direction.SE && GBx > x && GBx <= x + rayon && GBy > y && GBy <= y + rayon)
 				return true;
-			if (absoluteDirection == Direction.E
-					&& ((GBx > x && GBx <= x + rayon / 2 && absolute(GBx - y) < GBx - x)
-							|| (GBx <= x + rayon && GBx >= x + rayon / 2 && absolute(GBy - y) < x + rayon - GBx)))
+			if (absoluteDirection == Direction.E && ((GBx > x && GBx <= x + rayon / 2 && absolute(GBx - y) < GBx - x)
+					|| (GBx <= x + rayon && GBx >= x + rayon / 2 && absolute(GBy - y) < x + rayon - GBx)))
 				return true;
-			if (absoluteDirection == Direction.W
-					&& ((GBx < x && GBx >= x - rayon / 2 && absolute(GBy - y) < x - GBx)
-							|| (GBx >= x - rayon && GBx <= x - rayon / 2 && absolute(GBy - y) < GBx - (x - rayon))))
+			if (absoluteDirection == Direction.W && ((GBx < x && GBx >= x - rayon / 2 && absolute(GBy - y) < x - GBx)
+					|| (GBx >= x - rayon && GBx <= x - rayon / 2 && absolute(GBy - y) < GBx - (x - rayon))))
 				return true;
-			if (absoluteDirection == Direction.N
-					&& ((GBy < y && GBy >= y - rayon / 2 && absolute(GBx - x) < y - GBy)
-							|| (GBy >= y - rayon && GBy <= y - rayon / 2 && absolute(GBx - x) < GBy - (y - rayon))))
+			if (absoluteDirection == Direction.N && ((GBy < y && GBy >= y - rayon / 2 && absolute(GBx - x) < y - GBy)
+					|| (GBy >= y - rayon && GBy <= y - rayon / 2 && absolute(GBx - x) < GBy - (y - rayon))))
 				return true;
-			if (absoluteDirection == Direction.S
-					&& ((GBy > y && GBy <= y + rayon / 2 && absolute(GBx - x) < GBy - y)
-							|| (GBy <= y + rayon && GBy >= y + rayon / 2 && absolute(GBx - x) < y + rayon - GBy)))
+			if (absoluteDirection == Direction.S && ((GBy > y && GBy <= y + rayon / 2 && absolute(GBx - x) < GBy - y)
+					|| (GBy <= y + rayon && GBy >= y + rayon / 2 && absolute(GBx - x) < y + rayon - GBy)))
 				return true;
 		}
 		// Cela test si le rectangle ou le losange de la direction a un point dans le
@@ -516,7 +516,7 @@ public abstract class Entity {
 		case ADVERSARY:
 			for (Iterator<Entity> iterator = model.entitiesIterator(); iterator.hasNext();) {
 				Entity entity = (Entity) iterator.next();
-				if (!entity.getCategory().equals(category) && category.isAbsoluteTeam()) {
+				if (!entity.getCategory().equals(this.category) && entity.category.isAbsoluteTeam()) {
 					entitiesOfCategory.add(entity);
 				}
 			}
@@ -741,7 +741,6 @@ public abstract class Entity {
 				}
 			}
 		}
-		this.model.removeEntityToRemove();
 	}
 
 	/**

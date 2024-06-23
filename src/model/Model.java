@@ -114,16 +114,16 @@ public class Model {
 	private Mob spawnEnemy() {
 		config.Config cfg = this.m_controller.getConfig();
 		Random yesOrNotRand = new Random();
-		int yesOrNot = yesOrNotRand.nextInt(1000); // 1000 à modif
-		if (yesOrNot < ModelConstants.IN_GENERAL) {
+		int yesOrNot = yesOrNotRand.nextInt(100); // 100 à modif
+		if (yesOrNot < cfg.getIntValue("World", "spawnMobProba")) {
 			Random ranWhatFish = new Random();
 			int mobProb = ranWhatFish.nextInt(100);
 			int mobnum = -1;
 			double width = 0, height = 0;
 			if (mobProb < cfg.getIntValue("Mob0", "spawnProba")) {
 				mobnum = 0;
-			} else if (mobProb >= ModelConstants.GOLDENFISH_PROBA
-					&& mobProb < ModelConstants.GOLDENFISH_PROBA + ModelConstants.SHARK_PROBA) {
+			} else if (mobProb >= cfg.getIntValue("Mob0", "spawnProba")
+					&& mobProb < cfg.getIntValue("Mob1", "spawnProba") + cfg.getIntValue("Mob0", "spawnProba")) {
 				mobnum = 1;
 			} else {
 				return null;
@@ -136,7 +136,7 @@ public class Model {
 			Rectangle2D candidate;
 			int whileCounter = 0;
 			while (!isGood) {
-				if (whileCounter > 10) {
+				if (whileCounter > 30) {
 					System.out.println("Almost Nowhere to spawn, gave Up");
 					return null;
 				}
