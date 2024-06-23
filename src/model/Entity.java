@@ -145,6 +145,7 @@ public abstract class Entity {
 
 	public void doMove(Direction direction) {
 		blockAutomaton();
+		state = State.MOVING;
 		if (direction == null) {
 			move();
 		} else {
@@ -161,7 +162,7 @@ public abstract class Entity {
 	 * @param direction
 	 */
 	public void move(Direction direction) {
-		setForce(Vector.getVectorUnitVectorFromDirection(direction).scalarMultiplication(moveForce));
+		setForce(Vector.getVectorUnitVectorFromDirection(Direction.relativeToAbsolute(this.direction, direction)).scalarMultiplication(moveForce));
 	}
 
 	public void move() {
@@ -170,6 +171,7 @@ public abstract class Entity {
 
 	public void doWait() {
 		blockAutomaton();
+		setState(State.WAITING);
 		Timer timer = new Timer();
 		ActionTask endWaitTask = new EndWaitTask(this, 1000);
 		timer.schedule(endWaitTask, endWaitTask.getDuration());
@@ -232,9 +234,10 @@ public abstract class Entity {
 
 	public void doPop(int val) {
 		blockAutomaton();
+		setState(State.FILLING);
 		pop(val);
 		Timer timer = new Timer();
-		ActionTask endPopTask = new EndPopTask(this, 1000);
+		ActionTask endPopTask = new EndPopTask(this, 100);
 		timer.schedule(endPopTask, endPopTask.getDuration());
 	}
 
@@ -244,6 +247,7 @@ public abstract class Entity {
 
 	public void doExplode() {
 		blockAutomaton();
+		setState(State.DYING);
 		explode();
 		Timer timer = new Timer();
 		ActionTask endExplodeTask = new EndExplodeTask(this, 1000);
@@ -298,7 +302,7 @@ public abstract class Entity {
 			}
 		}
 
-		return false;
+		return cell(dir, cat, range);
 	}
 
 	/**
@@ -315,6 +319,14 @@ public abstract class Entity {
 		Point2D currentPos = getCenter();
 		double x = currentPos.getX();
 		double y = currentPos.getY();
+		
+		/**
+		 * à ne pas laisser !
+		 */
+		if (category == Category.VOID) {
+			return true;
+		}
+		
 		List<Entity> entitiesOfCategory = getEntitiesOfCategory(category);
 		entitiesOfCategory.remove(this);
 
@@ -576,12 +588,13 @@ public abstract class Entity {
 
 		Vector movement = speed.scalarMultiplication(timeSeconds);
 		movement = checkCollisions(movement);
+		direction = movement.getVectorDirection();
 		translatePosition(movement);
 	}
 
 	private Vector computeArchimedes() {
 		// return new Vector(0, -density * volume * ModelConstants.GRAVITY);
-		return new Vector(0, -(model.getDensity() - density));
+		return new Vector(0, ModelConstants.DENSITY_CONSTANT * -(model.getDensity() - density));
 	}
 
 	private Vector computeWeight() {
@@ -605,6 +618,7 @@ public abstract class Entity {
 		closeEntities.remove(this);
 		if (closeEntities.isEmpty())
 			return movement;
+		speed = new Vector(0, 0);
 		return new Vector(0, 0);
 	}
 
@@ -679,6 +693,7 @@ public abstract class Entity {
 
 	public void doHit(Direction direction) {
 		blockAutomaton();
+		setState(State.HITTING);
 		Timer timer = new Timer();
 		ActionTask hitTask = new HitTask(this, 1000 / 2, getRightDirection(direction));
 		timer.schedule(hitTask, hitTask.getDuration());
@@ -693,7 +708,7 @@ public abstract class Entity {
 		Iterator<Entity> it = this.model.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
-			if (e.getTeam().isSameTeam(this.getTeam())) {
+			if (!(e.getCategory().isSameTeam(this.getCategory()))) {
 				if (e.getHitbox().intersects(hitRange)) {
 					e.getHit(this.attackDamage);
 				}
@@ -734,7 +749,7 @@ public abstract class Entity {
 		Iterator<Entity> it = this.model.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
-			if (e.getTeam().isSameTeam(this.getTeam())) {
+			if (!(e.getCategory().isSameTeam(this.getCategory()))) {
 				if (e.getHitbox().intersects(hitRange)) {
 					e.getHit(this.attackDamage);
 				}
@@ -852,6 +867,7 @@ public abstract class Entity {
 
 	public void doThrow(Direction direction) {
 		blockAutomaton();
+		setState(State.WAITING);
 		if (direction != null) {
 			this.direction = direction;
 		}

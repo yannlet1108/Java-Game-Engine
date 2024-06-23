@@ -38,7 +38,7 @@ public class Avatar {
 	 * @param e          : entité associé à l'avatar
 	 * @param entityType : numero de l'entité dans la config
 	 */
-	public Avatar(View m_view, Entity e, String entityConfig) {
+	public Avatar	(View m_view, Entity e, String entityConfig) {
 		this.m_view = m_view;
 		instanceEntity = e;
 		spriteSetNumber = m_view.getBank().getSpritesSetNumber(entityConfig);
@@ -237,6 +237,7 @@ public class Avatar {
 		g.drawString("Speed: " + instanceEntity.getSpeed(), origin.x, origin.y + g.getFontMetrics().getHeight() * 3);
 		g.drawString("Force: " + instanceEntity.getForce(), origin.x, origin.y + g.getFontMetrics().getHeight() * 4);
 		g.drawString("Density: " + roundValue(instanceEntity.getDensity(), numberOfDecimals), origin.x, origin.y + g.getFontMetrics().getHeight() * 5);
+		g.drawString("Hp" + instanceEntity.getHealthPoint(), origin.x, origin.y+g.getFontMetrics().getHeight()*6);
 	}
 
 	/**
