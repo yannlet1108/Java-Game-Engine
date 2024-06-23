@@ -45,7 +45,7 @@ public class Avatar {
 		debugColor = m_view.getBank().getDebugColor(spriteSetNumber);
 		this.animationSprite = new PriorityQueue<Integer>();
 		m_view.storeAvatar(this);
-		setInvisible();
+		setVisible();
 	}
 
 	/**
