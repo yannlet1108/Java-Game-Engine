@@ -42,8 +42,8 @@
     "throwBots": "missile",
     "automaton": "Diver1",
     "stepDensity": 0.1,
-    "oxygenBreathe": 0.02,
-    "oxygenStep": 3,
+    "oxygenBreathe": 0.01,
+    "oxygenStep": 2,
     "maxDensity": 2,
     "minDensity": 0,
     "isPhysicObject": true
@@ -62,8 +62,8 @@
     "throwBots": "missile",
     "automaton": "Diver2",
     "stepDensity": 0.1,
-    "oxygenBreathe": 0.02,
-    "oxygenStep": 3,
+    "oxygenBreathe": 0.01,
+    "oxygenStep": 2,
     "maxDensity": 2,
     "minDensity": 0,
     "isPhysicObject": true
