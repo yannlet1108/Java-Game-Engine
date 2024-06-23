@@ -580,6 +580,7 @@ public abstract class Entity {
 
 		Vector movement = speed.scalarMultiplication(timeSeconds);
 		movement = checkCollisions(movement);
+		direction = movement.getVectorDirection();
 		translatePosition(movement);
 	}
 
