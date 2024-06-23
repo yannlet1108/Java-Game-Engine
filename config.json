@@ -75,7 +75,7 @@
     "spriteFile": "obstacleSprites.png",
     "debugColor": -8355712,
     "category": "OBSTACLE",
-    "healthPoint": 1000000,
+    "healthPoint": 10,
     "automaton": "Block",
     "probability": 0.006,
     "attackDamage": 0,

@@ -700,7 +700,7 @@ public abstract class Entity {
 		Iterator<Entity> it = this.model.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
-			if (e.getTeam().isSameTeam(this.getTeam())) {
+			if (!(e.getCategory().isSameTeam(this.getCategory()))) {
 				if (e.getHitbox().intersects(hitRange)) {
 					e.getHit(this.attackDamage);
 				}
@@ -741,7 +741,7 @@ public abstract class Entity {
 		Iterator<Entity> it = this.model.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
-			if (e.getTeam().isSameTeam(this.getTeam())) {
+			if (!(e.getCategory().isSameTeam(this.getCategory()))) {
 				if (e.getHitbox().intersects(hitRange)) {
 					e.getHit(this.attackDamage);
 				}
