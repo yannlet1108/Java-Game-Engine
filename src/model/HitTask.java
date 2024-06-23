@@ -19,6 +19,7 @@ public class HitTask extends ActionTask {
 		}
 		Timer timer = new Timer();
 		ActionTask endHitTask = new EndHitTask(entity, duration);
+		entity.currenTask = endHitTask;
 		timer.schedule(endHitTask, endHitTask.getDuration());
 	}
 

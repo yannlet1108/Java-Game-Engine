@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,6 +42,8 @@ public abstract class Entity {
 	private double explodeRange;
 
 	private double moveForce;
+	Timer timer;
+	TimerTask currenTask;
 
 	/**
 	 * @param position
@@ -69,6 +72,7 @@ public abstract class Entity {
 		this.density = model.getDensity();
 
 		new Avatar(model.m_view, this, name);
+		timer = new Timer();
 
 		myFSM = new FSM(this,
 				model.getAutomatonBank().getAutomaton(model.getConfig().getStringValue(this.name, "automaton")));
@@ -151,8 +155,8 @@ public abstract class Entity {
 		} else {
 			move(getRightDirection(direction));
 		}
-		Timer timer = new Timer();
 		ActionTask endMoveTask = new EndMoveTask(this, 1000);
+		currenTask = endMoveTask;
 		timer.schedule(endMoveTask, endMoveTask.getDuration());
 	}
 
@@ -162,7 +166,8 @@ public abstract class Entity {
 	 * @param direction
 	 */
 	public void move(Direction direction) {
-		setForce(Vector.getVectorUnitVectorFromDirection(Direction.relativeToAbsolute(this.direction, direction)).scalarMultiplication(moveForce));
+		setForce(Vector.getVectorUnitVectorFromDirection(Direction.relativeToAbsolute(this.direction, direction))
+				.scalarMultiplication(moveForce));
 	}
 
 	public void move() {
@@ -172,8 +177,8 @@ public abstract class Entity {
 	public void doWait() {
 		blockAutomaton();
 		setState(State.WAITING);
-		Timer timer = new Timer();
 		ActionTask endWaitTask = new EndWaitTask(this, 1000);
+		currenTask = endWaitTask;
 		timer.schedule(endWaitTask, endWaitTask.getDuration());
 	}
 
@@ -227,8 +232,8 @@ public abstract class Entity {
 		} else {
 			egg(getRightDirection(direction));
 		}
-		Timer timer = new Timer();
 		ActionTask endEggTask = new EndEggTask(this, 1000);
+		currenTask = endEggTask;
 		timer.schedule(endEggTask, endEggTask.getDuration());
 	}
 
@@ -236,8 +241,8 @@ public abstract class Entity {
 		blockAutomaton();
 		setState(State.FILLING);
 		pop(val);
-		Timer timer = new Timer();
 		ActionTask endPopTask = new EndPopTask(this, 100);
+		currenTask = endPopTask;
 		timer.schedule(endPopTask, endPopTask.getDuration());
 	}
 
@@ -249,8 +254,8 @@ public abstract class Entity {
 		blockAutomaton();
 		setState(State.DYING);
 		explode();
-		Timer timer = new Timer();
 		ActionTask endExplodeTask = new EndExplodeTask(this, 1000);
+		currenTask = endExplodeTask;
 		timer.schedule(endExplodeTask, endExplodeTask.getDuration());
 	}
 
@@ -319,14 +324,14 @@ public abstract class Entity {
 		Point2D currentPos = getCenter();
 		double x = currentPos.getX();
 		double y = currentPos.getY();
-		
+
 		/**
 		 * à ne pas laisser !
 		 */
 		if (category == Category.VOID) {
 			return true;
 		}
-		
+
 		List<Entity> entitiesOfCategory = getEntitiesOfCategory(category);
 		entitiesOfCategory.remove(this);
 
@@ -694,8 +699,8 @@ public abstract class Entity {
 	public void doHit(Direction direction) {
 		blockAutomaton();
 		setState(State.HITTING);
-		Timer timer = new Timer();
 		ActionTask hitTask = new HitTask(this, 1000 / 2, getRightDirection(direction));
+		currenTask = hitTask;
 		timer.schedule(hitTask, hitTask.getDuration());
 	}
 
@@ -788,6 +793,8 @@ public abstract class Entity {
 
 	public void destroy() {
 		model.removeEntity(this);
+		currenTask.cancel();
+		timer.cancel();
 		setState(State.DYING);
 		if (this instanceof Player) {
 			model.removePlayer((Player) this);
@@ -873,8 +880,8 @@ public abstract class Entity {
 			this.direction = direction;
 		}
 		throwEntity(throwEntity);
-		Timer timer = new Timer();
 		ActionTask endThrowTask = new EndThrowTask(this, 1000);
+		currenTask = endThrowTask;
 		timer.schedule(endThrowTask, endThrowTask.getDuration());
 	}
 }
