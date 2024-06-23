@@ -63,7 +63,7 @@ public class Model {
 		seed = getConfig().getIntValue("World", "seed");
 		safeZone = getConfig().getIntValue("World", "safeZone");
 		shipSize = getConfig().getIntValue("World", "shipSize");
-		shipArea = new Rectangle2D.Double(worldWidth/2, 0, shipSize, shipSize);
+		shipArea = new Rectangle2D.Double(worldWidth / 2, 0, shipSize, shipSize);
 		mapGenerator();
 		new Player(new Point2D.Double(player1SpawnX, player1SpawnY), Direction.N, this, "Player1");
 		new Player(new Point2D.Double(player2SpawnX, player2SpawnY), Direction.N, this, "Player2");
@@ -99,6 +99,7 @@ public class Model {
 				entity.computeMovement();
 			}
 		}
+		removeEntityToRemove();
 		spawnEnemy();
 	}
 
