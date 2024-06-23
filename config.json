@@ -22,9 +22,9 @@
     "spriteNrows": 12,
     "spriteNcols": 4,
     "seed": 12,
-    "player1SpawnX": 400,
+    "player1SpawnX": 1400,
     "player1SpawnY": 0,
-    "player2SpawnX": 600,
+    "player2SpawnX": 1600,
     "player2SpawnY": 0,
     "safeZone": 50,
     "shipSize" : 30
@@ -98,8 +98,8 @@
       "meleeRange": 4,
       "healthPoint": 30,
       "throwBots": "mob2",
-      "automaton": "Goldfish",
-      "spawnProba": 80,
+      "automaton": "RandomMove",
+      "spawnProba": 50,
       "isPhysicObject": true
     },
     {
@@ -113,8 +113,8 @@
       "meleeRange": 15,
       "healthPoint": 200,
       "throwBots": "mob2",
-      "automaton": "Shark",
-      "spawnProba": 20,
+      "automaton": "BackAndForth",
+      "spawnProba": 50,
       "isPhysicObject": true
     },
     {
