@@ -3,8 +3,10 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Toolkit;
-import java.util.ConcurrentModificationException;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +37,8 @@ public class View {
 	private SpriteBank bank;
 	private Viewport viewport;
 
+	private Rectangle2D shipArea;
+
 	/**
 	 * Initialise la view, ouvre la fenêtre graphique, la liste d'avatar et la
 	 * banque d'avatar
@@ -54,6 +58,7 @@ public class View {
 		initViewport();
 		setBank(new SpriteBank(this));
 		initAvatar();
+		initShipArea();
 	}
 
 	/**
@@ -95,6 +100,13 @@ public class View {
 			m_text.setText(txt);
 		}
 	}
+	
+	/**
+	 * Initialise le viewport
+	 */
+	private void initViewport() {
+		this.viewport = new Viewport(m_canvas);
+	}
 
 	/**
 	 * Initialise la liste d'avatar et sa liste de suppression
@@ -104,11 +116,10 @@ public class View {
 		toRemoveList = new LinkedList<Avatar>();
 	}
 
-	/**
-	 * Initialise le viewport
-	 */
-	private void initViewport() {
-		this.viewport = new Viewport(m_canvas);
+	private void initShipArea() {
+		this.shipArea = new Rectangle2D.Double(m_controller.getConfig().getIntValue("World", "width") / 2, 0,
+				m_controller.getConfig().getIntValue("World", "shipSize"),
+				m_controller.getConfig().getIntValue("World", "shipSize"));
 	}
 
 	/**
@@ -119,7 +130,7 @@ public class View {
 	public void storeAvatar(Avatar a) {
 		avatarStorage.add(a);
 	}
-	
+
 	public void addToRemove(Avatar a) {
 		toRemoveList.add(a);
 	}
@@ -131,7 +142,7 @@ public class View {
 		Iterator<Avatar> it = toRemoveList.iterator();
 		while (it.hasNext()) {
 			avatarStorage.remove(it.next());
-			
+
 		}
 	}
 
@@ -145,9 +156,10 @@ public class View {
 			viewport.updateViewport(m_model.getPlayersPos());
 		viewport.resize();
 		fillBackground(g);
+		drawRefillZone(g);
 		Iterator<Avatar> avatarIterator = getAvatarIterator();
 		while (avatarIterator.hasNext()) {
-				avatarIterator.next().paint(g);
+			avatarIterator.next().paint(g);
 		}
 		destroyToRemoves();
 	}
@@ -162,6 +174,22 @@ public class View {
 		g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
 
 		// TODO implementer une version fonctionnelle avec une image scalée
+	}
+
+	private void drawRefillZone(Graphics g) {
+		Point origin = getViewport().toViewport(shipArea);
+		if (origin == null)
+			return;
+		if (ViewCst.DEBUG) {
+			g.setColor(getBank().getShipSet().getDebugColor());
+			g.fillRect(origin.x, origin.y, (int) (shipArea.getWidth() * getViewport().getScale()),
+					(int) (shipArea.getHeight() * getViewport().getScale()));
+		} else {
+			BufferedImage sprite = getBank().getShipSet().getSprite(0);
+			g.drawImage(sprite, origin.x, origin.y, (int) (shipArea.getWidth() * getViewport().getScale()),
+					(int) (shipArea.getHeight() * getViewport().getScale()), null);
+		}
+
 	}
 
 	/**
