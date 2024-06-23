@@ -494,7 +494,7 @@ public abstract class Entity {
 		entitiesOfCategory.remove(this);
 		Entity closestEntity = getClosestEntity(entitiesOfCategory);
 		double angle = angleTo(closestEntity);
-		return Direction.angleInDirection(angle, absoluteDirection);
+		return Direction.isAngleInDirection(angle, absoluteDirection);
 	}
 
 	private Entity getClosestEntity(List<Entity> entities) {
@@ -548,8 +548,16 @@ public abstract class Entity {
 	private double angleTo(Entity entity) {
 		double relativeXPosition = entity.getCenter().getX() - getCenter().getX();
 		double relativeYPosition = entity.getCenter().getY() - getCenter().getY();
+		
+		double angle = Math.toDegrees(Math.atan2(relativeYPosition, relativeXPosition)) + 90;
+		
+		if (angle < 0) {
+			angle += 360;
+		}
+		
+		return angle;
 
-		return Math.toDegrees(Math.atan2(relativeXPosition, relativeYPosition)) % 360;
+		//return Math.toDegrees(Math.atan2(relativeYPosition, relativeXPosition)) % 360;
 
 	}
 

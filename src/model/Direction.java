@@ -142,7 +142,7 @@ public enum Direction {
 		}
 	}
 
-	public static boolean angleInDirection(double angle, Direction direction) {
+	public static boolean isAngleInDirection(double angle, Direction direction) {
 		switch (direction) {
 		case N:
 			return angle < 45 || angle > 315;
@@ -156,6 +156,8 @@ public enum Direction {
 			return angle < 180 && angle > 90;
 		case SW:
 			return angle < 270 && angle > 180;
+		case E:
+			return angle < 135 && angle > 45;
 		case W:
 			return angle < 315 && angle > 225;
 		default:
