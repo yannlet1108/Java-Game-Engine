@@ -788,7 +788,7 @@ public abstract class Entity {
 
 	public void destroy() {
 		model.removeEntity(this);
-		model.m_view.destroy(this);
+		setState(State.DYING);
 		if (this instanceof Player) {
 			model.removePlayer((Player) this);
 		}
