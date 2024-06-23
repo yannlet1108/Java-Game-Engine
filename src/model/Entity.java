@@ -587,7 +587,10 @@ public abstract class Entity {
 
 		Vector movement = speed.scalarMultiplication(timeSeconds);
 		movement = checkCollisions(movement);
-		direction = movement.getVectorDirection();
+		Direction dir = movement.getVectorDirection();
+		if (dir != Direction.HERE) {
+			direction = dir;
+		}
 		translatePosition(movement);
 	}
 
@@ -698,7 +701,6 @@ public abstract class Entity {
 	 */
 	public void getHit(int val) {
 		this.modifyHealthPoint(-val);
-		this.model.removeEntityToRemove();
 	}
 
 	public void doHit(Direction direction) {
@@ -724,6 +726,7 @@ public abstract class Entity {
 				}
 			}
 		}
+		this.model.removeEntityToRemove();
 	}
 
 	/**
@@ -764,6 +767,7 @@ public abstract class Entity {
 				}
 			}
 		}
+		this.model.removeEntityToRemove();
 	}
 
 	public Category getTeam() {
