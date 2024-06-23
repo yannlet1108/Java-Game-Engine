@@ -52,7 +52,7 @@ public class SpriteBank {
 		try {
 			/* background */
 			currentFile = getconfStr("World", "spriteFile");
-			spritesBank.add(0, loadSprite(currentFile, 0, 0, new Color(getconfInt("World", "debugColor"))));
+			spritesBank.add(0, loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "debugColor"))));
 			/* player1 */
 			currentFile = getconfStr("Player1", "spriteFile");
 			spritesBank.add(1, loadSprite(currentFile, getconfInt("World", "spriteNrows"),

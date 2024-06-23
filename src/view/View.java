@@ -189,6 +189,10 @@ public class View {
 	private Iterator<Avatar> getAvatarIterator() {
 		return avatarStorage.iterator();
 	}
+	
+	public void supprAvatar(Entity entity) {
+		
+	}
 
 	/**
 	 * Renvois la banque d'avatar
