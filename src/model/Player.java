@@ -8,11 +8,13 @@ public class Player extends Entity {
 
 	private Vest vest;
 	private double oxygen;
+	private double maxOxygen;
 
 	public Player(Point2D position, Direction direction, Model model, String name) {
 		super(position, direction, model, name);
 		density = model.getConfig().getIntValue(name, "density");
-		oxygen = 100;
+		maxOxygen = model.getConfig().getFloatValue(name, "maxOxygen");
+		oxygen = maxOxygen;
 		vest = new Vest();
 		this.team = model.getConfig().getCategory(name, "category");
 		this.model.addPlayer(this);
@@ -39,16 +41,21 @@ public class Player extends Entity {
 		return oxygen;
 	}
 
+	public void setOxygen(double oxygen) {
+		this.oxygen = oxygen;
+	}
 	/**
 	 * Diminue l'oxygen dans le gilet chaque step
 	 */
 	public void breathe() {
 		if (oxygen > 0) {
 			oxygen -= vest.oxygenBreath;
-			;
 		} else {
 			oxygen = 0;
 			this.getHit(15);
+		}
+		if (this.hitbox.intersects(model.getShipArea())) {
+			setOxygen(maxOxygen);
 		}
 	}
 
@@ -96,5 +103,9 @@ public class Player extends Entity {
 		if (density > vest.maxDensity) {
 			density = vest.maxDensity;
 		}
+	}
+
+	public Vest getVest() {
+		return vest;
 	}
 }

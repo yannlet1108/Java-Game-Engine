@@ -26,7 +26,8 @@
     "player1SpawnY": 0,
     "player2SpawnX": 600,
     "player2SpawnY": 0,
-    "safeZone": 50
+    "safeZone": 50,
+    "shipSize" : 30
   },
   "Player1": {
     "width": 20,
@@ -41,6 +42,7 @@
     "healthPoint": 100,
     "throwBots": "missile",
     "automaton": "Diver1",
+    "maxOxygen" : 100,
     "stepDensity": 0.1,
     "oxygenBreathe": 0.02,
     "oxygenStep": 3,
@@ -61,6 +63,7 @@
     "healthPoint": 200,
     "throwBots": "missile",
     "automaton": "Diver2",
+    "maxOxygen" : 100,
     "stepDensity": 0.1,
     "oxygenBreathe": 0.02,
     "oxygenStep": 3,
