@@ -37,7 +37,7 @@ public class View {
 	private SpriteBank bank;
 	private Viewport viewport;
 
-	private Rectangle2D refillArea;
+	private Rectangle2D fixedBackgroundArea;
 
 	/**
 	 * Initialise la view, ouvre la fenêtre graphique, la liste d'avatar et la
@@ -58,7 +58,7 @@ public class View {
 		initViewport();
 		setBank(new SpriteBank(this));
 		initAvatar();
-		initRefillArea();
+		initFixedBackgroundArea();
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class View {
 			m_text.setText(txt);
 		}
 	}
-	
+
 	/**
 	 * Initialise le viewport
 	 */
@@ -119,10 +119,12 @@ public class View {
 	/**
 	 * Initialise la zone de refill du monde
 	 */
-	private void initRefillArea() {
-		this.refillArea = new Rectangle2D.Double(0, -950,
-				m_controller.getConfig().getIntValue("World", "shipSize"),
-				m_controller.getConfig().getIntValue("World", "shipSize"));
+	private void initFixedBackgroundArea() {
+		this.fixedBackgroundArea = new Rectangle2D.Double(
+				getController().getConfig().getIntValue("World", "fixedBackgroundXOffset"),
+				getController().getConfig().getIntValue("World", "fixedBackgroundYOffset"),
+				getController().getConfig().getIntValue("World", "fixedBackgroundWidth"),
+				getController().getConfig().getIntValue("World", "fixedBackgroundHeight"));
 	}
 
 	/**
@@ -159,7 +161,7 @@ public class View {
 			viewport.updateViewport(m_model.getPlayersPos());
 		viewport.resize();
 		fillBackground(g);
-		drawRefillZone(g);
+		drawfixedBackground(g);
 		Iterator<Avatar> avatarIterator = getAvatarIterator();
 		while (avatarIterator.hasNext()) {
 			avatarIterator.next().paint(g);
@@ -184,18 +186,18 @@ public class View {
 	 * 
 	 * @param g : instance graphique du canvas
 	 */
-	private void drawRefillZone(Graphics g) {
-		Point origin = getViewport().toViewport(refillArea);
+	private void drawfixedBackground(Graphics g) {
+		Point origin = getViewport().toViewport(fixedBackgroundArea);
 		if (origin == null)
 			return;
 		if (ViewCst.DEBUG) {
 			g.setColor(getBank().getShipSet().getDebugColor());
-			g.fillRect(origin.x, origin.y, (int) (refillArea.getWidth() * getViewport().getScale()),
-					(int) (refillArea.getHeight() * getViewport().getScale()));
+			g.fillRect(origin.x, origin.y, (int) (fixedBackgroundArea.getWidth() * getViewport().getScale()),
+					(int) (fixedBackgroundArea.getHeight() * getViewport().getScale()));
 		} else {
 			BufferedImage sprite = getBank().getShipSet().getSprite(0);
-			g.drawImage(sprite, origin.x, origin.y, (int) (refillArea.getWidth() * getViewport().getScale()),
-					(int) (refillArea.getHeight() * getViewport().getScale()), null);
+			g.drawImage(sprite, origin.x, origin.y, (int) (fixedBackgroundArea.getWidth() * getViewport().getScale()),
+					(int) (fixedBackgroundArea.getHeight() * getViewport().getScale()), null);
 		}
 
 	}

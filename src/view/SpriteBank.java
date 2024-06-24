@@ -56,7 +56,7 @@ public class SpriteBank {
 			currentFile = getconfStr("World", "spriteFile");
 			spritesBank.add(0, loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "debugColor"))));
 			/*ship*/
-			currentFile = getconfStr("World", "shipSpriteFile");
+			currentFile = getconfStr("World", "fixedBackgroundSprite");
 			spritesBank.add(1, loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "shipDebugColor"))));
 			/* player1 */
 			currentFile = getconfStr("Player1", "spriteFile");

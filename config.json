@@ -27,8 +27,13 @@
     "player2SpawnX": 600,
     "player2SpawnY": 50,
     "safeZone": 50,
-    "shipSize" : 1000,
-    "shipSpriteFile": "surface.png",
+    "refillAreaSizeX": 100,
+    "refillAreaSizeY": 100,
+    "fixedBackgroundSprite": "surface.png",
+    "fixedBackgroundHeight": 1800,
+    "fixedBackgroundWidth": 1000,
+    "fixedBackgroundXOffset": 0,
+    "fixedBackgroundYOffset": -1000,
     "shipDebugColor": -16777026
   },
   "Player1": {

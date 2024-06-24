@@ -32,8 +32,8 @@ public class Model {
 	private int player2SpawnY;
 	private int seed;
 	private int safeZone;
-	private int shipSize;
-	private Double shipArea;
+	private int refillAreaSize;
+	private Double refillArea;
 
 	private AutomatonBank automatonBank;
 
@@ -62,8 +62,9 @@ public class Model {
 		player2SpawnY = getConfig().getIntValue("World", "player2SpawnY");
 		seed = getConfig().getIntValue("World", "seed");
 		safeZone = getConfig().getIntValue("World", "safeZone");
-		shipSize = getConfig().getIntValue("World", "shipSize");
-		shipArea = new Rectangle2D.Double(worldWidth / 2, 0, shipSize, shipSize);
+		int refillAreaSizeX = getConfig().getIntValue("World", "refillAreaSizeX");
+		int refillAreaSizeY = getConfig().getIntValue("World", "refillAreaSizeY");
+		refillArea = new Rectangle2D.Double(worldWidth / 2, 0, refillAreaSizeX, refillAreaSizeY);
 		mapGenerator();
 		new Player(new Point2D.Double(player1SpawnX, player1SpawnY), Direction.N, this, "Player1");
 		new Player(new Point2D.Double(player2SpawnX, player2SpawnY), Direction.N, this, "Player2");
@@ -309,6 +310,6 @@ public class Model {
 	}
 
 	public Double getShipArea() {
-		return shipArea;
+		return refillArea;
 	}
 }
