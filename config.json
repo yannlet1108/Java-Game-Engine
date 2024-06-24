@@ -11,8 +11,8 @@
   },
 
   "World": {
-    "width": 300,
-    "height": 100,
+    "width": 1000,
+    "height": 800,
     "density": 1,
     "viscosity": 0.65,
     "spawnMobProba": 50,
@@ -22,13 +22,13 @@
     "spriteNrows": 12,
     "spriteNcols": 4,
     "seed": 12,
-    "player1SpawnX": 100,
+    "player1SpawnX": 400,
     "player1SpawnY": 50,
-    "player2SpawnX": 200,
+    "player2SpawnX": 600,
     "player2SpawnY": 50,
     "safeZone": 50,
-    "shipSize" : 30,
-    "shipSpriteFile": "shipSprites.png",
+    "shipSize" : 1000,
+    "shipSpriteFile": "surface.png",
     "shipDebugColor": -16777026
   },
   "Player1": {
