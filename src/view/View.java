@@ -195,7 +195,7 @@ public class View {
 			g.setColor(Color.lightGray);
 			g.fillRect(margin, margin * 2 + barHeight, barWidth, barHeight);
 			g.setColor(Color.red);
-			double maxHealthRatio = (float) player1.getHealthPoint() / (float) player2.getMaxHealtPoint();
+			double maxHealthRatio = (float) player1.getHealthPoint() / (float) player1.getMaxHealtPoint();
 			g.fillRect(margin, margin * 2 + barHeight,
 					(int) (maxHealthRatio * (float) barWidth), barHeight);
 		}
