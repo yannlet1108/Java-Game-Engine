@@ -19,11 +19,12 @@ public class Player extends Entity {
 	}
 
 	class Vest {
-		public double densityStep;
-		public double oxygenStep;
-		public double maxDensity;
-		public double minDensity;
-		public double oxygenBreath;
+		private double densityStep;
+		private double oxygenStep;
+		private double maxDensity;
+		private double minDensity;
+		private double oxygenBreath;
+		private double reloadStep; 
 
 		Vest() {
 			densityStep = model.getConfig().getFloatValue(name, "stepDensity");
@@ -31,6 +32,7 @@ public class Player extends Entity {
 			maxDensity = model.getConfig().getFloatValue(name, "maxDensity");
 			minDensity = model.getConfig().getFloatValue(name, "minDensity");
 			oxygenStep = model.getConfig().getFloatValue(name, "oxygenStep");
+			reloadStep = model.getConfig().getFloatValue(name, "reloadStep");
 		}
 
 	}
@@ -39,14 +41,14 @@ public class Player extends Entity {
 		return oxygen;
 	}
 
-	public void setOxygen(double oxygen) {
+	void setOxygen(double oxygen) {
 		this.oxygen = oxygen;
 	}
 
 	/**
 	 * Diminue l'oxygen dans le gilet chaque step
 	 */
-	public void breathe() {
+	void breathe() {
 		if (oxygen > 0) {
 			oxygen -= vest.oxygenBreath;
 		} else {
@@ -54,8 +56,8 @@ public class Player extends Entity {
 			this.getHit(15);
 		}
 		if (this.hitbox.intersects(model.getShipArea())) {
-			if (oxygen <= 90) {
-				setOxygen(oxygen + 10);
+			if (oxygen <= maxOxygen - vest.reloadStep) {
+				setOxygen(oxygen + vest.reloadStep);
 				this.state = State.REFILLING;
 			}
 		}
@@ -67,7 +69,7 @@ public class Player extends Entity {
 	 * 
 	 * @param i
 	 */
-	public void pop(int i) {
+	void pop(int i) {
 		if (i == 1) {
 			this.swell();
 		} else if (i == -1) {
@@ -97,8 +99,7 @@ public class Player extends Entity {
 	}
 
 	/**
-	 * degonfler le gilet : augmente l'oxygen, augmente la densité, diminuer l'air
-	 * dans le gilet
+	 * degonfler le gilet : augmente la densité, diminuer l'air dans le gilet
 	 */
 	private void deflate() {
 		density += vest.densityStep;
@@ -107,7 +108,7 @@ public class Player extends Entity {
 		}
 	}
 
-	public Vest getVest() {
+	Vest getVest() {
 		return vest;
 	}
 }
