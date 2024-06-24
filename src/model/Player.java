@@ -111,4 +111,8 @@ public class Player extends Entity {
 	Vest getVest() {
 		return vest;
 	}
+
+	public double getMaxOxygen() {
+		return maxOxygen;
+	}
 }
