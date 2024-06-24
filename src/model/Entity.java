@@ -172,7 +172,7 @@ public abstract class Entity {
 		} else {
 			move(getRightDirection(direction));
 		}
-		ActionTask endMoveTask = new EndMoveTask(this, 500);
+		ActionTask endMoveTask = new EndMoveTask(this, moveDuration);
 		currenTask = endMoveTask;
 		timer.schedule(endMoveTask, endMoveTask.getDuration());
 	}
@@ -238,7 +238,7 @@ public abstract class Entity {
 			if (e.hitbox.intersects(futurHitBox))
 				return;
 		}
-		new Mob(pts, direction, this.model, name);
+		new Mob(pts, this.direction, this.model, name);
 
 	}
 
