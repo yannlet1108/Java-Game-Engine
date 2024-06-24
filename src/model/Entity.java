@@ -916,8 +916,7 @@ public abstract class Entity {
 	 * 
 	 * @param ekey
 	 */
-	private void throwEntity(String name, Direction dir) {
-		Direction direction = Direction.relativeToAbsolute(this.direction, dir);
+	private void throwEntity(String name, Direction direction) {
 		Point2D pos = null;
 		int marge = 3;
 		config.Config cfg = model.getConfig();
@@ -956,10 +955,10 @@ public abstract class Entity {
 		}
 		switch (name) {
 		case "Player":
-			e = new Player(pos, this.direction, this.model, this.name);
+			e = new Player(pos, direction, this.model, name);
 			break;
 		default:
-			e = new Mob(pos, this.direction, this.model, this.name);
+			e = new Mob(pos, direction, this.model, name);
 			break;
 		}
 
@@ -983,11 +982,12 @@ public abstract class Entity {
 		blockAutomaton();
 		setState(State.WAITING);
 		if (direction != null) {
-			this.direction = Direction.relativeToAbsolute(this.direction, getRightDirection(direction));
-			throwEntity(throwEntity, getRightDirection(direction));
+			Direction dir = Direction.relativeToAbsolute(this.direction, getRightDirection(direction)).getCardinalDirection();
+			this.direction = dir;
+			throwEntity(throwEntity, dir);
 		}
 		else {
-			throwEntity(throwEntity, this.direction);
+			throwEntity(throwEntity, this.direction.getCardinalDirection());
 		}
 
 		ActionTask endThrowTask = new EndThrowTask(this, throwDuration);
