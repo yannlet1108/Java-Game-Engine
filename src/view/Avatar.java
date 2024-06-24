@@ -270,6 +270,7 @@ public class Avatar {
 		// affichage de la direction de l'entité
 		g.drawString("Direction: " + instanceEntity.getDirection(), origin.x,
 				origin.y + g.getFontMetrics().getHeight() * 8);
+		g.drawString("State: " + instanceEntity.getState(), origin.x, origin.y + g.getFontMetrics().getHeight() * 9);
 	}
 
 	/**

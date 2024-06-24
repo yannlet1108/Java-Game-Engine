@@ -101,7 +101,7 @@ public abstract class Entity {
 
 	@Override
 	public String toString() {
-		return name;
+		return name + " dans l'état " + state;
 	}
 
 	/**
