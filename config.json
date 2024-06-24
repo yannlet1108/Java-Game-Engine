@@ -6,6 +6,10 @@
     "max_scaling": 10.0,
     "min_scaling": 0.5,
     "margin": 60,
+    "top_margin": 100,
+    "bottom_margin": 0,
+    "left_margin": 0,
+    "right_margin": 0,
     "move_factor": 0.06,
     "scale_factor": 0.06
   },

@@ -3,7 +3,6 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -14,7 +13,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.lang.model.util.Elements.Origin;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -110,7 +108,7 @@ public class View {
 	 * Initialise le viewport
 	 */
 	private void initViewport() {
-		this.viewport = new Viewport(m_canvas);
+		this.viewport = new Viewport(m_canvas, this);
 	}
 
 	/**
@@ -163,7 +161,7 @@ public class View {
 	 */
 	public void paint(Graphics g) {
 
-		if (m_model != null && m_model.getPlayers().size() > 0) {
+		if (m_model != null) {
 
 			viewport.updateViewport(getFarthestPlayers(m_model.getPlayersPos()));
 			viewport.resize();
@@ -192,8 +190,8 @@ public class View {
 	}
 
 	private void drawPlayersBars(Graphics g) {
-		int margin = 50;
-		int barHeight = 40;
+		int margin = 30;
+		int barHeight = 15;
 		int barWidth = 300;
 		Player player1 = m_model.getPlayer1();
 		Player player2 = m_model.getPlayer2();
@@ -206,10 +204,12 @@ public class View {
 			g.fillRect(margin, margin, (int) (oxygenRatio * (float) barWidth), barHeight);
 
 			g.setColor(Color.lightGray);
-			g.fillRect(margin, margin * 2 + barHeight, barWidth, barHeight);
+			g.fillRect(margin, margin + barHeight + 10, barWidth, barHeight);
 			g.setColor(Color.red);
 			double maxHealthRatio = (float) player1.getHealthPoint() / (float) player1.getMaxHealtPoint();
-			g.fillRect(margin, margin * 2 + barHeight, (int) (maxHealthRatio * (float) barWidth), barHeight);
+
+			g.fillRect(margin, margin + barHeight + 10, (int) (maxHealthRatio * (float) barWidth), barHeight);
+
 		}
 
 		if (player2 != null) {
@@ -222,10 +222,10 @@ public class View {
 					barHeight);
 
 			g.setColor(Color.lightGray);
-			g.fillRect(viewport.getWidth() - margin - barWidth, margin * 2 + barHeight, barWidth, barHeight);
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin + barHeight+10, barWidth, barHeight);
 			g.setColor(Color.red);
 			double maxHealthRatio = (float) player2.getHealthPoint() / (float) player2.getMaxHealtPoint();
-			g.fillRect(viewport.getWidth() - margin - barWidth, margin * 2 + barHeight,
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin + barHeight+10,
 					(int) (maxHealthRatio * (float) barWidth), barHeight);
 		}
 	}
@@ -306,8 +306,15 @@ public class View {
 	 *         du rectangle englobant tout les joueurs
 	 */
 	private Point2D[] getFarthestPlayers(Iterator<Point2D> playersPos) {
+
 		Point2D tops[] = new Point2D.Double[2];
-		Point2D current = playersPos.next();
+		Point2D current;
+		if(playersPos.hasNext()) {
+			current = playersPos.next();
+		}
+		else {
+			current = new Point2D.Double(getSimWidth()/2,0);
+		}
 		double xMax = current.getX();
 		double xMin = current.getX();
 		double yMax = current.getY();
