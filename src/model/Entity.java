@@ -961,9 +961,12 @@ public abstract class Entity {
 		setState(State.WAITING);
 		if (direction != null) {
 			this.direction = Direction.relativeToAbsolute(this.direction, getRightDirection(direction));
+			throwEntity(throwEntity, getRightDirection(direction));
+		}
+		else {
+			throwEntity(throwEntity, this.direction);
 		}
 
-		throwEntity(throwEntity, getRightDirection(direction));
 		ActionTask endThrowTask = new EndThrowTask(this, throwDuration);
 
 		currenTask = endThrowTask;
