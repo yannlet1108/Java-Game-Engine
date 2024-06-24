@@ -11,6 +11,7 @@ public class ViewCst {
 	public static boolean UID;
 
 	/* Calcul du scaling */
+	public static final float PARALLAX = 0.95f;
 	public static float MAX_SCALING;
 	public static float MIN_SCALING;
 	public static int MARGIN;
@@ -27,14 +28,14 @@ public class ViewCst {
 	public ViewCst(Config conf) {
 		DEBUG = conf.getBooleanValue("View", "debug");
 		UID = conf.getBooleanValue("View", "uid");
-		
+
 		MAX_SCALING = conf.getFloatValue("View", "max_scaling");
 		MIN_SCALING = conf.getFloatValue("View", "min_scaling");
 		MARGIN = conf.getIntValue("View", "margin");
 
 		MOVE_FACTOR = conf.getFloatValue("View", "move_factor");
 		SCALE_FACTOR = conf.getFloatValue("View", "scale_factor");
-		
+
 	}
 
 }

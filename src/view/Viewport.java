@@ -3,7 +3,6 @@ package view;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Iterator;
 
 import info3.game.graphics.GameCanvas;
 
@@ -52,24 +51,12 @@ public class Viewport {
 	 * 
 	 * @param playersPos : positions des joueurs
 	 */
-	void updateViewport(Iterator<Point2D> playersPos) {
+	void updateViewport(Point2D tops[]) {
 
-		Point2D current = playersPos.next();
-		double xMax = current.getX();
-		double xMin = current.getX();
-		double yMax = current.getY();
-		double yMin = current.getY();
-		while (playersPos.hasNext()) {
-			current = playersPos.next();
-			if (current.getX() > xMax)
-				xMax = current.getX();
-			if (current.getX() < xMin)
-				xMin = current.getX();
-			if (current.getY() > yMax)
-				yMax = current.getY();
-			if (current.getY() < yMin)
-				yMin = current.getY();
-		}
+		double xMax = tops[0].getX();
+		double xMin = tops[1].getX();
+		double yMax = tops[0].getY();
+		double yMin = tops[1].getY();
 
 		double scaling_x = (xMax - xMin + 2 * ViewCst.MARGIN) / this.getWidth();
 		double scaling_y = (yMax - yMin + 2 * ViewCst.MARGIN) / this.getHeight();
@@ -103,6 +90,12 @@ public class Viewport {
 	 */
 	void resize() {
 		viewbox.setRect(viewbox.getX(), viewbox.getY(), m_canvas.getWidth(), m_canvas.getHeight());
+	}
+
+	Point backgroundPos(double simX, double simY, float height, float width) {
+		double distX = viewbox.getX() / width * simX;
+		double distY = viewbox.getY() / height * simY;
+		return new Point((int) (viewbox.getX() - distX), (int) (viewbox.getY() - distY));
 	}
 
 	/**
@@ -158,5 +151,4 @@ public class Viewport {
 	int getY() {
 		return (int) viewbox.getY();
 	}
-
 }

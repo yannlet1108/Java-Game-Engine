@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
@@ -56,7 +57,7 @@ public class View {
 		System.out.println("  - setting up the frame...");
 		setupFrame();
 		initViewport();
-		setBank(new SpriteBank(this));
+		new SpriteBank(this);
 		initAvatar();
 		initFixedBackgroundArea();
 	}
@@ -157,14 +158,17 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	public void paint(Graphics g) {
-		if (m_model != null)
-			viewport.updateViewport(m_model.getPlayersPos());
-		viewport.resize();
-		fillBackground(g);
-		drawfixedBackground(g);
-		Iterator<Avatar> avatarIterator = getAvatarIterator();
-		while (avatarIterator.hasNext()) {
-			avatarIterator.next().paint(g);
+
+		if (m_model != null && m_model.getPlayers().size() > 0) {
+
+			viewport.updateViewport(getFarthestPlayers(m_model.getPlayersPos()));
+			viewport.resize();
+			fillBackground(g);
+			drawfixedBackground(g);
+			Iterator<Avatar> avatarIterator = getAvatarIterator();
+			while (avatarIterator.hasNext()) {
+				avatarIterator.next().paint(g);
+			}
 		}
 		destroyToRemoves();
 	}
@@ -175,10 +179,105 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	private void fillBackground(Graphics g) {
-		g.setColor(getBank().getBackgroundset().getDebugColor());
-		g.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
+		BufferedImage background = bank.getBackgroundset().getSprite(0);
+		float scale = getBackgroundScale();
+		Point origin = getBackgroundPos(scale);
+		System.out.println("x : " + origin.x + ", y : " + origin.y + ", scale : " + scale);
+		g.drawImage(background, origin.x, origin.y, (int) (background.getWidth() * scale),
+				(int) (background.getHeight() * scale), null);
+	}
 
-		// TODO implementer une version fonctionnelle avec une image scalée
+	/**
+	 * Calcule le coeficient allant de 0 à 1 permettant de calculer la taille du
+	 * background
+	 * 
+	 * @return coeficient permettant le scaling du background
+	 */
+	private double getScaleRatio() {
+		Point2D tops[] = getFarthestPlayers(m_model.getPlayersPos());
+		double xRatio = (tops[0].getX() - tops[1].getX()) / getSimWidth();
+		double yRatio = (tops[0].getY() - tops[1].getY()) / getSimHeight();
+		return Math.max(xRatio, yRatio);
+	}
+
+	/**
+	 * Adapte le ratio en fonction du coeficient parallaxale
+	 * 
+	 * @param ratio : ratio entre 0 et 1 résultat de getScaleRatio()
+	 * @return convertie en parallaxe
+	 */
+	private float ratioToParallax(double ratio) {
+		return ((1 - (float) (ratio)) * ViewCst.PARALLAX);
+	}
+
+	/**
+	 * Calcule le scale du background basé sur son raw scale et sur le coeficient de
+	 * remplisage du viewport adapté au parallaxe courant
+	 * 
+	 * @return scale exacte du background
+	 */
+	private float getBackgroundScale() {
+		float rawScale = getScreenHeight() / bank.getBackgroundset().getSprite(0).getHeight();
+		return rawScale + rawScale * ratioToParallax(getScaleRatio());
+	}
+
+	/**
+	 * Calcule la position du background en fonction du scaling du background
+	 * 
+	 * @param scaleb : scaling du background
+	 * @return point origine de l'affichage du background
+	 */
+	private Point getBackgroundPos(float scale) {
+		BufferedImage background = bank.getBackgroundset().getSprite(0);
+		Point2D tops[] = getFarthestPlayers(m_model.getPlayersPos());
+		double xRatio = (tops[1].getX() + (tops[0].getX() - tops[1].getX())) / getSimWidth();
+		double yRatio = (tops[1].getY() + (tops[0].getY() - tops[1].getY())) / getSimHeight();
+
+		double diffWidth = (background.getWidth() * scale - viewport.getWidth()) * xRatio;
+		double diffHeight = (background.getHeight() * scale - viewport.getHeight()) * yRatio;
+		double x = -diffWidth;
+		double y = -diffHeight;
+		return new Point((int) x, (int) y);
+	}
+
+	/**
+	 * Retourne les extréminés du rectangle contenant tout les joueurs
+	 * 
+	 * @param playersPos : positions des joueurs
+	 * @return deux points, un étant le point bas droit et l'autre étant haut gauche
+	 *         du rectangle englobant tout les joueurs
+	 */
+	private Point2D[] getFarthestPlayers(Iterator<Point2D> playersPos) {
+		Point2D tops[] = new Point2D.Double[2];
+		Point2D current = playersPos.next();
+		double xMax = current.getX();
+		double xMin = current.getX();
+		double yMax = current.getY();
+		double yMin = current.getY();
+		while (playersPos.hasNext()) {
+			current = playersPos.next();
+			if (current.getX() > xMax)
+				xMax = current.getX();
+			if (current.getX() < xMin)
+				xMin = current.getX();
+			if (current.getY() > yMax)
+				yMax = current.getY();
+			if (current.getY() < yMin)
+				yMin = current.getY();
+		}
+		if (xMax > getSimWidth() - ViewCst.MARGIN)
+			xMax = getSimWidth() - ViewCst.MARGIN;
+		if (xMin < ViewCst.MARGIN)
+			xMin = ViewCst.MARGIN;
+		if (yMax > getSimHeight() - ViewCst.MARGIN)
+			yMax = getSimHeight() - ViewCst.MARGIN;
+		if (yMin < ViewCst.MARGIN)
+			yMin = ViewCst.MARGIN;
+		Point2D max = new Point2D.Double(xMax, yMax);
+		Point2D min = new Point2D.Double(xMin, yMin);
+		tops[0] = max;
+		tops[1] = min;
+		return tops;
 	}
 
 	/**
@@ -231,6 +330,15 @@ public class View {
 	}
 
 	/**
+	 * Retourne l'instance courante du controller
+	 * 
+	 * @return instance du controller
+	 */
+	Controller getController() {
+		return m_controller;
+	}
+
+	/**
 	 * Renvois la banque d'avatar
 	 * 
 	 * @return banque d'avatar
@@ -249,12 +357,28 @@ public class View {
 	}
 
 	/**
-	 * Renvois le controller actuel
+	 * Retourne la hauteur de la simulation
 	 * 
-	 * @return controller
+	 * @return taille de la simulation sur les abcisses
 	 */
-	Controller getController() {
-		return m_controller;
+	double getSimHeight() {
+		return m_model.getBoardHeight();
 	}
 
+	/**
+	 * Retourne la largeur de la simulation
+	 * 
+	 * @return taille de la simulation sur les ordonnées
+	 */
+	double getSimWidth() {
+		return m_model.getBoardWidth();
+	}
+
+	int getScreenWidth() {
+		return Toolkit.getDefaultToolkit().getScreenSize().width;
+	}
+
+	int getScreenHeight() {
+		return Toolkit.getDefaultToolkit().getScreenSize().height;
+	}
 }

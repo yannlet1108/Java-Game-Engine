@@ -57,7 +57,7 @@ public class Avatar {
 	 */
 	int getNextSpriteNumber() {
 		if (animationSprite.isEmpty()) {
-			return 0;
+			addAnimation(State.WAITING);
 		}
 		return animationSprite.poll();
 	}

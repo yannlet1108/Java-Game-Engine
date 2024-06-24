@@ -27,10 +27,35 @@ public class SpriteBank {
 		m_view.setBank(this);
 		this.spritesBank = new LinkedList<SpriteSet>();
 		loadSpritesSets();
+		resizeBackground();
 	}
 
 	/**
-	 * Renvoie l'emplacement du spriteset dans la banque de sprite en fonction de son type dans la config
+	 * Met a jour la taille du background en fonction de la taille de l'écran
+	 */
+	private void resizeBackground() {
+		SpriteSet background = getBackgroundset();
+		BufferedImage sprite = background.getSprite(0);
+		double xRatio = sprite.getWidth() / m_view.getScreenWidth();
+		double yRatio = sprite.getHeight() / m_view.getScreenHeight();
+		double ratio = Math.min(xRatio, yRatio);
+		double newWidth = sprite.getWidth();
+		double newHeight = sprite.getHeight();
+		int offset = sprite.getMinX();
+		if (xRatio > ratio) {
+			newWidth = (int) ((ratio * sprite.getWidth()) / xRatio);
+			offset = (int) ((sprite.getWidth() - newWidth) / 2);
+		}
+		if (yRatio > ratio)
+			newHeight = (int) ((ratio * sprite.getHeight()) / yRatio);
+		BufferedImage newSprite = sprite.getSubimage(offset, sprite.getMinY(), (int) newWidth, (int) newHeight);
+		background.setSprite(0, newSprite);
+	}
+
+	/**
+	 * Renvoie l'emplacement du spriteset dans la banque de sprite en fonction de
+	 * son type dans la config
+	 * 
 	 * @param fileName
 	 * @return
 	 */
@@ -42,7 +67,6 @@ public class SpriteBank {
 			}
 		}
 		return -1;
-
 	}
 
 	/**
@@ -55,8 +79,10 @@ public class SpriteBank {
 			/* background */
 			currentFile = getconfStr("World", "spriteFile");
 			spritesBank.add(0, loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "debugColor"))));
-			/*ship*/
+			
+			/*fixedBackground*/
 			currentFile = getconfStr("World", "fixedBackgroundSprite");
+
 			spritesBank.add(1, loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "shipDebugColor"))));
 			/* player1 */
 			currentFile = getconfStr("Player1", "spriteFile");
@@ -92,7 +118,7 @@ public class SpriteBank {
 	 * @throws IOException
 	 */
 	public static SpriteSet loadSprite(String filename, int nrows, int ncols, Color debugColor) throws IOException {
-		File imageFile = new File("sprites/"+filename);
+		File imageFile = new File("sprites/" + filename);
 		if (imageFile.exists()) {
 			BufferedImage image = ImageIO.read(imageFile);
 			int width = image.getWidth(null) / ncols;
@@ -123,9 +149,10 @@ public class SpriteBank {
 		return spritesBank.get(numSetSprite).getSprite(numSprite);
 
 	}
-	
+
 	/**
 	 * Renvoie la couleur de debug du spriteset
+	 * 
 	 * @param numSetSprite
 	 * @return
 	 */
@@ -136,21 +163,20 @@ public class SpriteBank {
 	/**
 	 * Retourne le spriteset de l'arrière plan
 	 * 
-	 * @return 
+	 * @return
 	 */
 	SpriteSet getBackgroundset() {
 		return spritesBank.get(0);
 	}
-	
+
 	/**
 	 * Retourne le spriteset de la zone de refill
 	 * 
-	 * @return 
+	 * @return
 	 */
 	SpriteSet getShipSet() {
 		return spritesBank.get(1);
 	}
-
 
 	/**
 	 * Raccourci pour trouver des elements string dans la config
