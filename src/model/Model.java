@@ -25,6 +25,7 @@ public class Model {
 	private Collection<Entity> entities;
 	private Collection<Player> players;
 	Collection<Entity> toRemove;
+	Collection<Entity> toAdd;
 
 	private int player1SpawnX;
 	private int player1SpawnY;
@@ -53,6 +54,7 @@ public class Model {
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
+		toAdd = new LinkedList<Entity>();
 		automatonBank = new AutomatonBank();
 
 		player1SpawnX = getConfig().getIntValue("World", "player1SpawnX");
@@ -101,6 +103,7 @@ public class Model {
 		}
 		removeEntityToRemove();
 		spawnEnemy();
+		addEntityToAdd();
 	}
 
 	/**
@@ -262,6 +265,15 @@ public class Model {
 			e.destroy();
 		}
 		toRemove.clear();
+	}
+	
+	void addEntityToAdd() {
+		Iterator<Entity> iter = this.toAdd.iterator();
+		while (iter.hasNext()) {
+			Entity e = iter.next();
+			addEntity(e);
+		}
+		toAdd.clear();
 	}
 
 	public Collection<Player> getPlayers() {

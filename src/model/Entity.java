@@ -66,7 +66,7 @@ public abstract class Entity {
 				cfg.getFloatValue(name, "height"));
 		this.direction = direction;
 		this.model = model;
-		this.model.addEntity(this);
+		this.model.toAdd.add(this);
 		force = new Vector();
 		speed = new Vector();
 		this.moveForce = cfg.getFloatValue(name, "speed");
@@ -863,7 +863,6 @@ public abstract class Entity {
 				}
 			}
 		}
-		this.model.removeEntityToRemove();
 	}
 
 	public Category getTeam() {
