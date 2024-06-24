@@ -775,8 +775,8 @@ public abstract class Entity {
 			}
 			if (e != null) {
 				e.modifyHealthPoint(this.attackDamage * 2, e);
-				if (e.healthPoint > 100) {
-					e.setHealthPoint(maxHealthPoint);
+				if (e.healthPoint > e.maxHealthPoint) {
+					e.setHealthPoint(e.maxHealthPoint);
 				}
 			}
 		}
