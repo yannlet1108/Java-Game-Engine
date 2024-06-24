@@ -195,6 +195,7 @@ public class View {
 			g.setColor(Color.red);
 			double maxHealthRatio = (float) player1.getHealthPoint() / (float) player1.getMaxHealtPoint();
 			g.fillRect(margin, margin + barHeight + 10, (int) (maxHealthRatio * (float) barWidth), barHeight);
+
 		}
 
 		if (player2 != null) {
@@ -224,8 +225,6 @@ public class View {
 		BufferedImage background = bank.getBackgroundset().getSprite(0);
 		float scale = getBackgroundScale();
 		Point origin = getBackgroundPos(scale);
-		// System.out.println("x : " + origin.x + ", y : " + origin.y + ", scale : " +
-		// scale);
 		g.drawImage(background, origin.x, origin.y, (int) (background.getWidth() * scale),
 				(int) (background.getHeight() * scale), null);
 	}
@@ -293,12 +292,13 @@ public class View {
 	private Point2D[] getFarthestPlayers(Iterator<Point2D> playersPos) {
 
 		Point2D tops[] = new Point2D.Double[2];
-		if (!playersPos.hasNext()) {
-			tops[0] = viewport.getCenter();
-			tops[1] = viewport.getCenter();
-			return tops;
+		Point2D current;
+		if(playersPos.hasNext()) {
+			current = playersPos.next();
 		}
-		Point2D current = playersPos.next();
+		else {
+			current = new Point2D.Double(getSimWidth()/2,0);
+		}
 		double xMax = current.getX();
 		double xMin = current.getX();
 		double yMax = current.getY();
