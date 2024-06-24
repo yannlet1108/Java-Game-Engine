@@ -26,6 +26,7 @@ public class Model {
 	private Collection<Player> players;
 	Collection<Entity> toRemove;
 	Collection<Entity> toAdd;
+	private int maxEntity;
 
 	private int player1SpawnX;
 	private int player1SpawnY;
@@ -47,15 +48,16 @@ public class Model {
 	public Model(Controller m_controller, View m_view) {
 		this.m_controller = m_controller;
 		this.m_view = m_view;
-		worldHeight = this.m_controller.getConfig().getIntValue("World", "height");
-		worldWidth = this.m_controller.getConfig().getIntValue("World", "width");
-		density = this.m_controller.getConfig().getFloatValue("World", "density");
-		viscosity = this.m_controller.getConfig().getFloatValue("World", "viscosity");
+		worldHeight = getConfig().getIntValue("World", "height");
+		worldWidth = getConfig().getIntValue("World", "width");
+		density = getConfig().getFloatValue("World", "density");
+		viscosity = getConfig().getFloatValue("World", "viscosity");
 		entities = new LinkedList<Entity>();
 		players = new LinkedList<Player>();
 		toRemove = new LinkedList<Entity>();
 		toAdd = new LinkedList<Entity>();
 		automatonBank = new AutomatonBank();
+		maxEntity = getConfig().getIntValue("World", "maxEntity");
 
 		player1SpawnX = getConfig().getIntValue("World", "player1SpawnX");
 		player1SpawnY = getConfig().getIntValue("World", "player1SpawnY");
@@ -115,56 +117,58 @@ public class Model {
 	 * @author MO ER
 	 */
 	private Mob spawnEnemy() {
-		config.Config cfg = this.m_controller.getConfig();
-		Random yesOrNotRand = new Random();
-		int yesOrNot = yesOrNotRand.nextInt(100); // 100 à modif
-		if (yesOrNot < cfg.getIntValue("World", "spawnMobProba")) {
-			Random ranWhatFish = new Random();
-			int mobProb = ranWhatFish.nextInt(100);
-			int mobnum = -1;
-			double width = 0, height = 0;
-			if (mobProb < cfg.getIntValue("Mob0", "spawnProba")) {
-				mobnum = 0;
-			} else if (mobProb >= cfg.getIntValue("Mob0", "spawnProba")
-					&& mobProb < cfg.getIntValue("Mob1", "spawnProba") + cfg.getIntValue("Mob0", "spawnProba")) {
-				mobnum = 1;
-			} else {
-				return null;
-			}
-			width = cfg.getIntValue("Mob" + mobnum, "width");
-			height = cfg.getIntValue("Mob" + mobnum, "height");
-			boolean isGood = false;
-			int x = 0, y = 0;
-			Point2D pts = new Point2D.Double(x, y);
-			Rectangle2D candidate;
-			int whileCounter = 0;
-			while (!isGood) {
-				if (whileCounter > 30) {
-					System.out.println("Almost Nowhere to spawn, gave Up");
+		if (entities.size() < maxEntity) {
+			Config cfg = this.m_controller.getConfig();
+			Random yesOrNotRand = new Random();
+			int yesOrNot = yesOrNotRand.nextInt(100); // 100 à modif
+			if (yesOrNot < cfg.getIntValue("World", "spawnMobProba")) {
+				Random ranWhatFish = new Random();
+				int mobProb = ranWhatFish.nextInt(100);
+				int mobnum = -1;
+				double width = 0, height = 0;
+				if (mobProb < cfg.getIntValue("Mob0", "spawnProba")) {
+					mobnum = 0;
+				} else if (mobProb >= cfg.getIntValue("Mob0", "spawnProba")
+						&& mobProb < cfg.getIntValue("Mob1", "spawnProba") + cfg.getIntValue("Mob0", "spawnProba")) {
+					mobnum = 1;
+				} else {
 					return null;
 				}
-				isGood = true;
-				Random ranWhereFish = new Random();
-				x = ranWhereFish.nextInt((int) this.getBoardWidth());
-				y = ranWhereFish.nextInt((int) this.getBoardHeight());
-				pts = new Point2D.Double(x, y);
-				candidate = new Rectangle2D.Double(x, y, width, height);
-				Iterator<Entity> iter = this.entitiesIterator();
-				Entity currentEntity;
-				while (iter.hasNext()) {
-					currentEntity = iter.next();
-					if (currentEntity.hitbox.intersects(candidate)) {
-						isGood = false;
-						break;
+				width = cfg.getIntValue("Mob" + mobnum, "width");
+				height = cfg.getIntValue("Mob" + mobnum, "height");
+				boolean isGood = false;
+				int x = 0, y = 0;
+				Point2D pts = new Point2D.Double(x, y);
+				Rectangle2D candidate;
+				int whileCounter = 0;
+				while (!isGood) {
+					if (whileCounter > 30) {
+						System.out.println("Almost Nowhere to spawn, gave Up");
+						return null;
 					}
+					isGood = true;
+					Random ranWhereFish = new Random();
+					x = ranWhereFish.nextInt((int) this.getBoardWidth());
+					y = ranWhereFish.nextInt((int) this.getBoardHeight());
+					pts = new Point2D.Double(x, y);
+					candidate = new Rectangle2D.Double(x, y, width, height);
+					Iterator<Entity> iter = this.entitiesIterator();
+					Entity currentEntity;
+					while (iter.hasNext()) {
+						currentEntity = iter.next();
+						if (currentEntity.hitbox.intersects(candidate)) {
+							isGood = false;
+							break;
+						}
+					}
+					whileCounter++;
 				}
-				whileCounter++;
+				Mob nue = new Mob(pts, Direction.E, this, "Mob" + mobnum);
+				// Pour test
+				// System.out.println("Goldfish added at x = " + pts.getX() + ", y = " +
+				// pts.getY() + ".");
+				return nue;
 			}
-			Mob nue = new Mob(pts, Direction.E, this, "Mob" + mobnum);
-			// Pour test
-			// System.out.println("Goldfish added at x = " + pts.getX() + ", y = " +
-			// pts.getY() + ".");
-			return nue;
 		}
 		return null;
 
@@ -266,7 +270,7 @@ public class Model {
 		}
 		toRemove.clear();
 	}
-	
+
 	void addEntityToAdd() {
 		Iterator<Entity> iter = this.toAdd.iterator();
 		while (iter.hasNext()) {
@@ -326,16 +330,16 @@ public class Model {
 
 	public Player getPlayer1() {
 		for (Player player : players) {
-			if(player.name == "Player1") {
+			if (player.name == "Player1") {
 				return player;
 			}
 		}
 		return null;
 	}
-	
+
 	public Player getPlayer2() {
 		for (Player player : players) {
-			if(player.name == "Player2") {
+			if (player.name == "Player2") {
 				return player;
 			}
 		}

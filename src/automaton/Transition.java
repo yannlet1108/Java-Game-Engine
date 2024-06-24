@@ -46,7 +46,7 @@ class Transition {
 		if (action == null) {
 			return cond.toString() + "? ";
 		}
-		return cond.toString() + "? " + action.toString();
+		return cond.toString() + "? " + action.toString() + " :(" + end + ")";
 	}
 
 }

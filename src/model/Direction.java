@@ -202,4 +202,23 @@ public enum Direction {
 	private int getRandomNumber(int min, int max) {
 		return (int) ((Math.random() * (max - min)) + min);
 	}
+	
+	Direction getCardinalDirection() {
+		switch (this) {
+		case NE:
+		case E:
+		case SE:
+			return E;
+		case NW:
+		case W:
+		case SW:
+			return W;
+		case N:
+			return N;
+		case S:
+			return S;
+		default:
+			throw new IllegalArgumentException("Absolute direction expected, got :)" + this);
+		}
+	}
 }

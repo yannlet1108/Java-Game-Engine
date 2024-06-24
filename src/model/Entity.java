@@ -101,7 +101,7 @@ public abstract class Entity {
 
 	@Override
 	public String toString() {
-		return name;
+		return name + " dans l'état " + state;
 	}
 
 	/**
@@ -289,7 +289,7 @@ public abstract class Entity {
 		while (it.hasNext()) {
 			Entity e = it.next();
 			if (e.getHitbox().intersects(hitRange)) {
-				e.getHit(this.attackDamage);
+				e.getHit(this);
 			}
 		}
 	}
@@ -497,20 +497,25 @@ public abstract class Entity {
 		if (category == null) {
 			cat = Category.ADVERSARY;
 		}
+		Entity closestEntity = getClosestEntity(category);
+		if (closestEntity == null) {
+			return false;
+		}
 
 		// Direction par défaut
 		Direction dir = direction;
 		if (direction == null) {
 			dir = Direction.FORWARD;
+			return closest(cat, dir, closestEntity);
 		} // Cas particulier de la direction d
 		else if (direction == Direction.d) {
 			dir = Direction.N; // Première direction qu'on vérifie
-			boolean isDirectionFound = closest(cat, dir);
+			boolean isDirectionFound = closest(cat, dir, closestEntity);
 			boolean isTourCompleted = false;
 
 			while (!isDirectionFound && !isTourCompleted) {
 				dir = Direction.rotateSlightlyRight(dir);
-				isDirectionFound = closest(cat, dir);
+				isDirectionFound = closest(cat, dir, closestEntity);
 
 				if (dir == Direction.NW) {
 					isTourCompleted = true;
@@ -525,22 +530,21 @@ public abstract class Entity {
 		return false;
 	}
 
-	private boolean closest(Category category, Direction direction) {
+	private boolean closest(Category category, Direction direction, Entity closestEntity) {
 		Direction absoluteDirection = Direction.relativeToAbsolute(getDirection(), direction);
-		List<Entity> entitiesOfCategory = getEntitiesOfCategory(category);
-		entitiesOfCategory.remove(this);
-		if (entitiesOfCategory.isEmpty()) {
-			return false;
-		}
-		Entity closestEntity = getClosestEntity(entitiesOfCategory);
 		double angle = angleTo(closestEntity);
 		return Direction.isAngleInDirection(angle, absoluteDirection);
 	}
 
-	private Entity getClosestEntity(List<Entity> entities) {
-		double minimalDistance = distance(entities.get(0));
-		Entity closestEntity = entities.get(0);
-		for (Entity entity : entities) {
+	private Entity getClosestEntity(Category category) {
+		List<Entity> entitiesOfCategory = getEntitiesOfCategory(category);
+		entitiesOfCategory.remove(this);
+		if (entitiesOfCategory.isEmpty()) {
+			return null;
+		}
+		double minimalDistance = distance(entitiesOfCategory.get(0));
+		Entity closestEntity = entitiesOfCategory.get(0);
+		for (Entity entity : entitiesOfCategory) {
 			double distance = distance(entity);
 			if (distance < minimalDistance) {
 				minimalDistance = distance;
@@ -763,11 +767,17 @@ public abstract class Entity {
 	 * 
 	 * @param val
 	 */
-	public void modifyHealthPoint(int val) {
+	public void modifyHealthPoint(int val, Entity e) {
 		this.healthPoint += val;
 		if (this.healthPoint <= 0) {
 			if (!(model.toRemove.contains(this))) {
 				this.model.addEntityToRemove(this);
+			}
+			if (e != null) {
+				e.modifyHealthPoint(this.attackDamage * 2, e);
+				if (e.healthPoint > 100) {
+					e.setHealthPoint(maxHealthPoint);
+				}
 			}
 		}
 	}
@@ -777,8 +787,12 @@ public abstract class Entity {
 	 * 
 	 * @param val
 	 */
-	public void getHit(int val) {
-		this.modifyHealthPoint(-val);
+	public void getHit(Entity e) {
+		if (e == null) {
+			this.modifyHealthPoint(-1, null);
+		} else {
+			this.modifyHealthPoint(-(e.attackDamage), e);
+		}
 	}
 
 	public void doHit(Direction direction) {
@@ -803,7 +817,7 @@ public abstract class Entity {
 			Entity e = it.next();
 			if (!(e.getCategory().isSameTeam(this.getCategory()))) {
 				if (e.getHitbox().intersects(hitRange)) {
-					e.getHit(this.attackDamage);
+					e.getHit(this);
 				}
 			}
 		}
@@ -853,13 +867,12 @@ public abstract class Entity {
 		default:
 			hitRange = null;
 		}
-
 		Iterator<Entity> it = this.model.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
 			if (!(e.getCategory().isSameTeam(this.getCategory()))) {
 				if (e.getHitbox().intersects(hitRange)) {
-					e.getHit(this.attackDamage);
+					e.getHit(this);
 				}
 			}
 		}
@@ -916,8 +929,7 @@ public abstract class Entity {
 	 * 
 	 * @param ekey
 	 */
-	private void throwEntity(String name, Direction dir) {
-		Direction direction = Direction.relativeToAbsolute(this.direction, dir);
+	private void throwEntity(String name, Direction direction) {
 		Point2D pos = null;
 		int marge = 3;
 		config.Config cfg = model.getConfig();
@@ -956,10 +968,10 @@ public abstract class Entity {
 		}
 		switch (name) {
 		case "Player":
-			e = new Player(pos, this.direction, this.model, this.name);
+			e = new Player(pos, direction, this.model, name);
 			break;
 		default:
-			e = new Mob(pos, this.direction, this.model, this.name);
+			e = new Mob(pos, direction, this.model, name);
 			break;
 		}
 
@@ -983,10 +995,14 @@ public abstract class Entity {
 		blockAutomaton();
 		setState(State.WAITING);
 		if (direction != null) {
-			this.direction = Direction.relativeToAbsolute(this.direction, getRightDirection(direction));
+			Direction dir = Direction.relativeToAbsolute(this.direction, getRightDirection(direction)).getCardinalDirection();
+			this.direction = dir;
+			throwEntity(throwEntity, dir);
+		}
+		else {
+			throwEntity(throwEntity, this.direction.getCardinalDirection());
 		}
 
-		throwEntity(throwEntity, getRightDirection(direction));
 		ActionTask endThrowTask = new EndThrowTask(this, throwDuration);
 
 		currenTask = endThrowTask;

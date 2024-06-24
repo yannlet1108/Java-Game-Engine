@@ -172,13 +172,26 @@ public class View {
 			while (avatarIterator.hasNext()) {
 				avatarIterator.next().paint(g);
 			}
+			drawOverlayBackground(g);
 		}
 		destroyToRemoves();
 	}
 
+	private void drawOverlayBackground(Graphics g) {
+		Point origin = getViewport().toViewport(fixedBackgroundArea);
+		if (origin == null)
+			return;
+		if (ViewCst.DEBUG) {
+		} else {
+			BufferedImage sprite = getBank().getBackgroundOverlaySet().getSprite(0);
+			g.drawImage(sprite, origin.x, origin.y, (int) (fixedBackgroundArea.getWidth() * getViewport().getScale()),
+					(int) (fixedBackgroundArea.getHeight() * getViewport().getScale()), null);
+		}
+	}
+
 	private void drawPlayersBars(Graphics g) {
 		int margin = 30;
-		int barHeight = 10;
+		int barHeight = 15;
 		int barWidth = 300;
 		Player player1 = m_model.getPlayer1();
 		Player player2 = m_model.getPlayer2();
@@ -194,6 +207,7 @@ public class View {
 			g.fillRect(margin, margin + barHeight + 10, barWidth, barHeight);
 			g.setColor(Color.red);
 			double maxHealthRatio = (float) player1.getHealthPoint() / (float) player1.getMaxHealtPoint();
+
 			g.fillRect(margin, margin + barHeight + 10, (int) (maxHealthRatio * (float) barWidth), barHeight);
 
 		}
@@ -225,6 +239,8 @@ public class View {
 		BufferedImage background = bank.getBackgroundset().getSprite(0);
 		float scale = getBackgroundScale();
 		Point origin = getBackgroundPos(scale);
+		// System.out.println("x : " + origin.x + ", y : " + origin.y + ", scale : " +
+		// scale);
 		g.drawImage(background, origin.x, origin.y, (int) (background.getWidth() * scale),
 				(int) (background.getHeight() * scale), null);
 	}
@@ -330,7 +346,7 @@ public class View {
 	}
 
 	/**
-	 * Dessine la zone de refill avec un sprite ou une couleur de debug
+	 * Dessine le background fixe
 	 * 
 	 * @param g : instance graphique du canvas
 	 */
@@ -339,11 +355,11 @@ public class View {
 		if (origin == null)
 			return;
 		if (ViewCst.DEBUG) {
-			g.setColor(getBank().getShipSet().getDebugColor());
+			g.setColor(getBank().getFixedBackgroundSet().getDebugColor());
 			g.fillRect(origin.x, origin.y, (int) (fixedBackgroundArea.getWidth() * getViewport().getScale()),
 					(int) (fixedBackgroundArea.getHeight() * getViewport().getScale()));
 		} else {
-			BufferedImage sprite = getBank().getShipSet().getSprite(0);
+			BufferedImage sprite = getBank().getFixedBackgroundSet().getSprite(0);
 			g.drawImage(sprite, origin.x, origin.y, (int) (fixedBackgroundArea.getWidth() * getViewport().getScale()),
 					(int) (fixedBackgroundArea.getHeight() * getViewport().getScale()), null);
 		}
