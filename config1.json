@@ -40,7 +40,7 @@
     "fixedBackgroundWidth": 1000,
     "fixedBackgroundXOffset": 0,
     "fixedBackgroundYOffset": -200,
-    "fixedBackgroundDebugColor": -16777026
+    "fixedBackgroundDebugColor": -16777026,
     "maxEntity": 10000
 
   },
