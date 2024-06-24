@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -202,17 +203,17 @@ public class View {
 		if (player2 != null) {
 
 			g.setColor(Color.lightGray);
-			g.fillRect(getScreenWidth() - margin - barWidth, margin, barWidth, barHeight);
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin, barWidth, barHeight);
 			g.setColor(Color.blue);
 			double oxygenRatio = player2.getOxygen() / player2.getMaxOxygen();
-			g.fillRect(getScreenWidth() - margin - barWidth, margin,
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin,
 					(int) (oxygenRatio * (float) barWidth), barHeight);
 
 			g.setColor(Color.lightGray);
-			g.fillRect(getScreenWidth() - margin - barWidth, margin * 2 + barHeight, barWidth, barHeight);
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin * 2 + barHeight, barWidth, barHeight);
 			g.setColor(Color.red);
 			double maxHealthRatio = (float) player2.getHealthPoint() / (float) player2.getMaxHealtPoint();
-			g.fillRect(getScreenWidth() - margin - barWidth, margin * 2 + barHeight,
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin * 2 + barHeight,
 					(int) (maxHealthRatio * (float) barWidth), barHeight);
 		}
 	}
