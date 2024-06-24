@@ -66,7 +66,7 @@ public abstract class Entity {
 				cfg.getFloatValue(name, "height"));
 		this.direction = direction;
 		this.model = model;
-		this.model.addEntity(this);
+		this.model.toAdd.add(this);
 		force = new Vector();
 		speed = new Vector();
 		this.moveForce = cfg.getFloatValue(name, "speed");
@@ -348,9 +348,12 @@ public abstract class Entity {
 			for (Iterator<Entity> iterator = model.entitiesIterator(); iterator.hasNext();) {
 				Entity entity = (Entity) iterator.next();
 				if (!(this == entity)) {
-					if (isEntityInZone(rayon, x, y, absoluteDirection, entity)) {
+					if (isEntityInZone(rayon, x, y, absoluteDirection, entity.getHitbox())) {
 						return false;
 					}
+				}
+				if (isWorldBorderInZone(rayon, x, y, absoluteDirection)) {
+					return false;
 				}
 			}
 			return true;
@@ -360,32 +363,49 @@ public abstract class Entity {
 		entitiesOfCategory.remove(this);
 
 		for (Entity entity : entitiesOfCategory) {
-			if (isEntityInZone(rayon, x, y, absoluteDirection, entity))
+			if (isEntityInZone(rayon, x, y, absoluteDirection, entity.getHitbox()))
 				return true;
+		}
+		if (category == Category.OBSTACLE) {
+			if (isWorldBorderInZone(rayon, x, y, absoluteDirection)) {
+				return true;
+			}
 		}
 		return false;
 	}
 
-	private boolean isEntityInZone(double rayon, double x, double y, Direction absoluteDirection, Entity entity) {
+	private boolean isWorldBorderInZone(Double rayon, double x, double y, Direction direction) {
+		boolean isLeftBorderInZone = isEntityInZone(rayon, x, y, direction,
+				new Rectangle2D.Double(-200, 0, 200, model.getBoardHeight()));
+		boolean isRightBorderInZone = isEntityInZone(rayon, x, y, direction,
+				new Rectangle2D.Double(model.getBoardWidth(), 0, 200, model.getBoardHeight()));
+		boolean isTopBorderInZone = isEntityInZone(rayon, x, y, direction,
+				new Rectangle2D.Double(0, -200, model.getBoardWidth(), 200));
+		boolean isBottomBorderInZone = isEntityInZone(rayon, x, y, direction,
+				new Rectangle2D.Double(0, model.getBoardHeight(), model.getBoardWidth(), 200));
+		return isLeftBorderInZone || isRightBorderInZone || isTopBorderInZone || isBottomBorderInZone;
+	}
+
+	private boolean isEntityInZone(double rayon, double x, double y, Direction absoluteDirection, Rectangle2D hitbox) {
 		// Cela test si un des points de rectangle est dans cette direction
 		double GBx, GBy;
 		for (int i = 0; i < 4; i++) {
 			if (i == 0) {
 				// Gauche bas point
-				GBx = entity.getHitbox().getMinX();
-				GBy = entity.getHitbox().getMaxY();
+				GBx = hitbox.getMinX();
+				GBy = hitbox.getMaxY();
 			} else if (i == 1) {
 				// Gauche Haut point
-				GBx = entity.getHitbox().getMinX();
-				GBy = entity.getHitbox().getMinY();
+				GBx = hitbox.getMinX();
+				GBy = hitbox.getMinY();
 			} else if (i == 2) {
 				// Droit Haut point
-				GBx = entity.getHitbox().getMaxX();
-				GBy = entity.getHitbox().getMinY();
+				GBx = hitbox.getMaxX();
+				GBy = hitbox.getMinY();
 			} else {
 				// Droit bas point
-				GBx = entity.getHitbox().getMaxX();
-				GBy = entity.getHitbox().getMaxY();
+				GBx = hitbox.getMaxX();
+				GBy = hitbox.getMaxY();
 			}
 			if (absoluteDirection == Direction.NE && GBx > x && GBx <= x + rayon && GBy < y && GBy >= y - rayon)
 				return true;
@@ -410,7 +430,7 @@ public abstract class Entity {
 		}
 		// Cela test si le rectangle ou le losange de la direction a un point dans le
 		// hitbox d'entité
-		Rectangle2D hitBox = entity.getHitbox();
+		Rectangle2D hitBox = hitbox;
 		Point2D point1, point2, point3;
 		if (absoluteDirection == Direction.SE) {
 			point1 = new Point2D.Double(x + rayon, y);
@@ -843,7 +863,6 @@ public abstract class Entity {
 				}
 			}
 		}
-		this.model.removeEntityToRemove();
 	}
 
 	public Category getTeam() {
@@ -876,8 +895,12 @@ public abstract class Entity {
 
 	public void destroy() {
 		model.removeEntity(this);
-		currenTask.cancel();
-		timer.cancel();
+		if (currenTask != null) {
+			currenTask.cancel();
+		}
+		if (timer != null) {
+			timer.cancel();
+		}
 		setState(State.DYING);
 		if (this instanceof Player) {
 			model.removePlayer((Player) this);
