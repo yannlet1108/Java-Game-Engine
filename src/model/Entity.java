@@ -869,8 +869,8 @@ public abstract class Entity {
 	 * 
 	 * @param ekey
 	 */
-	private void throwEntity(String name) {
-		Direction direction = Direction.relativeToAbsolute(this.direction, Direction.FORWARD);
+	private void throwEntity(String name, Direction dir) {
+		Direction direction = Direction.relativeToAbsolute(this.direction, dir);
 		Point2D pos = null;
 		int marge = 3;
 		config.Config cfg = model.getConfig();
@@ -938,7 +938,7 @@ public abstract class Entity {
 		if (direction != null) {
 			this.direction = direction;
 		}
-		throwEntity(throwEntity);
+		throwEntity(throwEntity, direction);
 		ActionTask endThrowTask = new EndThrowTask(this, 1000);
 		currenTask = endThrowTask;
 		timer.schedule(endThrowTask, endThrowTask.getDuration());
