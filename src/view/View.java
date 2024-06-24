@@ -156,7 +156,8 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	public void paint(Graphics g) {
-		if (m_model != null) {
+		if (m_model != null && m_model.getPlayers().size() > 0) {
+
 			viewport.updateViewport(getFarthestPlayers(m_model.getPlayersPos()));
 			viewport.resize();
 			fillBackground(g);
@@ -261,6 +262,14 @@ public class View {
 			if (current.getY() < yMin)
 				yMin = current.getY();
 		}
+		if (xMax > getSimWidth() - ViewCst.MARGIN)
+			xMax = getSimWidth() - ViewCst.MARGIN;
+		if (xMin < ViewCst.MARGIN)
+			xMin = ViewCst.MARGIN;
+		if (yMax > getSimHeight() - ViewCst.MARGIN)
+			yMax = getSimHeight() - ViewCst.MARGIN;
+		if (yMin < ViewCst.MARGIN)
+			yMin = ViewCst.MARGIN;
 		Point2D max = new Point2D.Double(xMax, yMax);
 		Point2D min = new Point2D.Double(xMin, yMin);
 		tops[0] = max;
