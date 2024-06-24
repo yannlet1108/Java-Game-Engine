@@ -1,3 +1,42 @@
+### Lundi 24 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Yann, Yohan, Gwendal, Matthieu | Résolution de bugs (closest, animations) dans le jeu et adapatation de la config | En cours |
+| Axel | Background | En cours |
+| Tout le groupe | Début de la vidéo | En cours |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Faire la vidéo | Elevé | Tout le groupe |
+
+### WE 22-23 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Yann, Yohan, Gwendal, Matthieu | Résolution de bugs (hit, cell, closest, animations) dans le jeu et adapatation de la config | En cours |
+| Axel | Background | En cours |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Trouver les bugs dans le jeu | Elevé | Tout le groupe |
+| Faire correctement la config | Elevé | Tout le groupe |
+
+### Vendredi 21 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Gwendal | Fichiers de config et chargement | Done |
+| Matthieu | Restructuration des entités et deplacement des constantes dans la config | Done |
+| Yoahn | Sprites | En cours |
+| Yann & Gwendal | Liaison automate et modele | Done |
+| Axel | Background | En cours |
+
+#### Taches programmés
+| Tache | Priorité | Participants |
+| --- | :-: | :-: |
+| Trouver les bugs dans le jeu | Elevé | Tout le groupe |
+| Faire correctement la config | Elevé | Tout le groupe |
+
 ### Jeudi 20 juin
 | Nom | Tache | Etat |
 |:-:|---|:-:|

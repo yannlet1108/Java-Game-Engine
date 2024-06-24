@@ -8,6 +8,7 @@ class EndThrowTask extends ActionTask {
 
 	@Override
 	public void run() {
+		entity.setState(State.WAITING);
 		entity.freeAutomaton();
 	}
 	

@@ -59,7 +59,7 @@ public class Vector {
 		}
 
 		if (x == 0) {
-			if (y > 0) {
+			if (y < 0) {
 				return Direction.N;
 			} else {
 				return Direction.S;
@@ -74,19 +74,19 @@ public class Vector {
 			}
 		}
 
-		if (x > 0 && y > 0) {
+		if (x > 0 && y < 0) {
 			return Direction.NE;
 		}
 
-		if (x > 0 && y < 0) {
+		if (x > 0 && y > 0) {
 			return Direction.SE;
 		}
 
-		if (x < 0 && y > 0) {
+		if (x < 0 && y < 0) {
 			return Direction.NW;
 		}
 
-		if (x < 0 && y < 0) {
+		if (x < 0 && y > 0) {
 			return Direction.SW;
 		}
 

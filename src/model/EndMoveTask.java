@@ -8,6 +8,7 @@ public class EndMoveTask extends ActionTask {
 
 	@Override
 	public void run() {
+		entity.setState(State.WAITING);
 		entity.setForce(new Vector(0, 0));
 		entity.freeAutomaton();
 	}

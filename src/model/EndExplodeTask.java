@@ -8,7 +8,8 @@ public class EndExplodeTask extends ActionTask {
 
 	@Override
 	public void run() {
-		entity.destroy();
+		entity.setState(State.WAITING);
+		entity.model.toRemove.add(entity);
 		entity.freeAutomaton();
 	}
 
