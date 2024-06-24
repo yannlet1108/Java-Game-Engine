@@ -91,11 +91,11 @@ public class Viewport {
 		}
 		
 		double newY = viewbox.getY() - length_y * ViewCst.MOVE_FACTOR;
-		if (newX < 0 - ViewCst.TOP_MARGIN) {
-			newX = 0 - ViewCst.TOP_MARGIN;
+		if (newY < 0 - ViewCst.TOP_MARGIN) {
+			newY = 0 - ViewCst.TOP_MARGIN;
 		}
-		if (newX > (0 + m_view.getSimWidth() + ViewCst.BOTTOM_MARGIN)) {
-			newX = m_view.getSimWidth() - length_x + ViewCst.BOTTOM_MARGIN;
+		if (newY > (0 + m_view.getSimWidth() + ViewCst.BOTTOM_MARGIN)) {
+			newY = m_view.getSimWidth() - length_y + ViewCst.BOTTOM_MARGIN;
 		}
 		viewbox.setRect(newX, newY, viewbox.getHeight(), viewbox.getHeight());
 	}
