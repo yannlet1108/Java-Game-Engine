@@ -52,6 +52,7 @@ public abstract class Entity {
 	int popDuration;
 	int explodeDuration;
 	int throwDuration;
+	private int maxHealthPoint;
 
 	/**
 	 * @param position
@@ -72,7 +73,8 @@ public abstract class Entity {
 		this.category = cfg.getCategory(name, "category");
 		this.name = name;
 		this.attackDamage = cfg.getIntValue(name, "attackDamage");
-		this.healthPoint = cfg.getIntValue(name, "healthPoint");
+		this.maxHealthPoint = cfg.getIntValue(name, "maxHealthPoint");
+		this.healthPoint = maxHealthPoint;
 		this.meleeRange = cfg.getIntValue(name, "meleeRange");
 		this.explodeRange = meleeRange;
 		this.throwEntity = cfg.getStringValue(name, "throwBots");
@@ -563,16 +565,17 @@ public abstract class Entity {
 	private double angleTo(Entity entity) {
 		double relativeXPosition = entity.getCenter().getX() - getCenter().getX();
 		double relativeYPosition = entity.getCenter().getY() - getCenter().getY();
-		
+
 		double angle = Math.toDegrees(Math.atan2(relativeYPosition, relativeXPosition)) + 90;
-		
+
 		if (angle < 0) {
 			angle += 360;
 		}
-		
+
 		return angle;
 
-		//return Math.toDegrees(Math.atan2(relativeYPosition, relativeXPosition)) % 360;
+		// return Math.toDegrees(Math.atan2(relativeYPosition, relativeXPosition)) %
+		// 360;
 
 	}
 
@@ -624,17 +627,17 @@ public abstract class Entity {
 		Vector movement = speed.scalarMultiplication(timeSeconds);
 		Vector movementX = new Vector(movement.getX(), 0);
 		boolean isMovePossibleX = isMovePossible(movementX);
-		if(!isMovePossibleX) {
+		if (!isMovePossibleX) {
 			speed = new Vector(0, speed.getY());
 			movement = new Vector(0, movement.getY());
 		}
 		Vector movementY = new Vector(0, movement.getY());
 		boolean isMovePossibleY = isMovePossible(movementY);
-		if(!isMovePossibleY) {
+		if (!isMovePossibleY) {
 			speed = new Vector(speed.getX(), 0);
 			movement = new Vector(movement.getX(), 0);
 		}
-		if(isMovePossibleX && isMovePossibleY && !isMovePossible(movement)) {
+		if (isMovePossibleX && isMovePossibleY && !isMovePossible(movement)) {
 			speed = new Vector(0, 0);
 			movement = new Vector(0, 0);
 		}
@@ -786,7 +789,7 @@ public abstract class Entity {
 	 * @param d
 	 */
 	public void hit(Direction d) {
-		Direction absoluteDirection =  Direction.relativeToAbsolute(direction, d);
+		Direction absoluteDirection = Direction.relativeToAbsolute(direction, d);
 		Rectangle2D hitRange;
 		switch (absoluteDirection) {
 		case N:
@@ -957,5 +960,9 @@ public abstract class Entity {
 		ActionTask endThrowTask = new EndThrowTask(this, throwDuration);
 		currenTask = endThrowTask;
 		timer.schedule(endThrowTask, endThrowTask.getDuration());
+	}
+
+	public int getMaxHealtPoint() {
+		return maxHealthPoint;
 	}
 }

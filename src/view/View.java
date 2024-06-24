@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -12,12 +13,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.lang.model.util.Elements.Origin;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import controller.Controller;
 import info3.game.graphics.GameCanvas;
 import model.Model;
+import model.Player;
 
 /**
  * Classe principale de la view. S'occupe de relier la liste des avatars à la
@@ -165,12 +168,53 @@ public class View {
 			viewport.resize();
 			fillBackground(g);
 			drawfixedBackground(g);
+			drawPlayersBars(g);
 			Iterator<Avatar> avatarIterator = getAvatarIterator();
 			while (avatarIterator.hasNext()) {
 				avatarIterator.next().paint(g);
 			}
 		}
 		destroyToRemoves();
+	}
+
+	private void drawPlayersBars(Graphics g) {
+		int margin = 50;
+		int barHeight = 40;
+		int barWidth = 300;
+		Player player1 = m_model.getPlayer1();
+		Player player2 = m_model.getPlayer2();
+
+		if (player1 != null) {
+			g.setColor(Color.lightGray);
+			g.fillRect(margin, margin, barWidth, barHeight);
+			g.setColor(Color.blue);
+			double oxygenRatio = player1.getOxygen() / player1.getMaxOxygen();
+			g.fillRect(margin, margin, (int) (oxygenRatio * (float) barWidth), barHeight);
+
+			g.setColor(Color.lightGray);
+			g.fillRect(margin, margin * 2 + barHeight, barWidth, barHeight);
+			g.setColor(Color.red);
+			double maxHealthRatio = (float) player1.getHealthPoint() / (float) player2.getMaxHealtPoint();
+			g.fillRect(margin, margin * 2 + barHeight,
+					(int) (maxHealthRatio * (float) barWidth), barHeight);
+		}
+
+		if (player2 != null) {
+
+			g.setColor(Color.lightGray);
+			g.fillRect(getScreenWidth() - margin - barWidth, margin, barWidth, barHeight);
+			g.setColor(Color.blue);
+			double oxygenRatio = player2.getOxygen() / player2.getMaxOxygen();
+			g.fillRect(getScreenWidth() - margin - barWidth, margin,
+					(int) (oxygenRatio * (float) barWidth), barHeight);
+
+			g.setColor(Color.lightGray);
+			g.fillRect(getScreenWidth() - margin - barWidth, margin * 2 + barHeight, barWidth, barHeight);
+			g.setColor(Color.red);
+			double maxHealthRatio = (float) player2.getHealthPoint() / (float) player2.getMaxHealtPoint();
+			g.fillRect(getScreenWidth() - margin - barWidth, margin * 2 + barHeight,
+					(int) (maxHealthRatio * (float) barWidth), barHeight);
+		}
 	}
 
 	/**
@@ -182,7 +226,7 @@ public class View {
 		BufferedImage background = bank.getBackgroundset().getSprite(0);
 		float scale = getBackgroundScale();
 		Point origin = getBackgroundPos(scale);
-		System.out.println("x : " + origin.x + ", y : " + origin.y + ", scale : " + scale);
+		// System.out.println("x : " + origin.x + ", y : " + origin.y + ", scale : " + scale);
 		g.drawImage(background, origin.x, origin.y, (int) (background.getWidth() * scale),
 				(int) (background.getHeight() * scale), null);
 	}

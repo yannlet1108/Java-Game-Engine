@@ -311,4 +311,22 @@ public class Model {
 	public Double getShipArea() {
 		return refillArea;
 	}
+
+	public Player getPlayer1() {
+		for (Player player : players) {
+			if(player.name == "Player1") {
+				return player;
+			}
+		}
+		return null;
+	}
+	
+	public Player getPlayer2() {
+		for (Player player : players) {
+			if(player.name == "Player2") {
+				return player;
+			}
+		}
+		return null;
+	}
 }
