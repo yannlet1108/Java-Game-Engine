@@ -121,7 +121,7 @@ public class View {
 	 * Initialise la zone de refill du monde
 	 */
 	private void initRefillArea() {
-		this.refillArea = new Rectangle2D.Double(m_controller.getConfig().getIntValue("World", "width") / 2, 0,
+		this.refillArea = new Rectangle2D.Double(0, -950,
 				m_controller.getConfig().getIntValue("World", "shipSize"),
 				m_controller.getConfig().getIntValue("World", "shipSize"));
 	}
