@@ -16,14 +16,16 @@ public class Viewport {
 
 	private Rectangle2D viewbox;
 	private float scale;
+	private View m_view;
 
 	/**
 	 * Crée le viewport
 	 * 
 	 * @param m_canvas : instance du canvas de la view
 	 */
-	Viewport(GameCanvas m_canvas) {
+	Viewport(GameCanvas m_canvas, View view) {
 		this.m_canvas = m_canvas;
+		this.m_view = view;
 		viewbox = new Rectangle2D.Double(0, 0, m_canvas.getWidth(), m_canvas.getHeight());
 		scale = 1;
 	}
@@ -52,9 +54,6 @@ public class Viewport {
 	 * @param playersPos : positions des joueurs
 	 */
 	void updateViewport(Point2D tops[]) {
-		if(tops.length < 1) {
-			return;
-		}
 		double xMax = tops[0].getX();
 		double xMin = tops[1].getX();
 		double yMax = tops[0].getY();
@@ -82,8 +81,22 @@ public class Viewport {
 		double y_theorical = center.getY() - (viewbox.getHeight() / 2) * reverseScale();
 		double length_x = viewbox.getX() - x_theorical;
 		double length_y = viewbox.getY() - y_theorical;
+		
 		double newX = viewbox.getX() - length_x * ViewCst.MOVE_FACTOR;
+		if (newX < 0 - ViewCst.LEFT_MARGIN) {
+			newX = 0 - ViewCst.LEFT_MARGIN;
+		}
+		if (newX > (0 + m_view.getSimWidth() + ViewCst.RIGHT_MARGIN)) {
+			newX = m_view.getSimWidth() - length_x + ViewCst.RIGHT_MARGIN;
+		}
+		
 		double newY = viewbox.getY() - length_y * ViewCst.MOVE_FACTOR;
+		if (newX < 0 - ViewCst.TOP_MARGIN) {
+			newX = 0 - ViewCst.TOP_MARGIN;
+		}
+		if (newX > (0 + m_view.getSimWidth() + ViewCst.BOTTOM_MARGIN)) {
+			newX = m_view.getSimWidth() - length_x + ViewCst.BOTTOM_MARGIN;
+		}
 		viewbox.setRect(newX, newY, viewbox.getHeight(), viewbox.getHeight());
 	}
 
@@ -152,5 +165,9 @@ public class Viewport {
 	 */
 	int getY() {
 		return (int) viewbox.getY();
+	}
+
+	Point2D getCenter() {
+		return new Point2D.Double(viewbox.getCenterX(), viewbox.getCenterY());
 	}
 }

@@ -15,10 +15,18 @@ public class ViewCst {
 	public static float MAX_SCALING;
 	public static float MIN_SCALING;
 	public static int MARGIN;
+	public static int TOP_MARGIN;
+	public static int BOTTOM_MARGIN;
+	public static int LEFT_MARGIN;
+	public static int RIGHT_MARGIN;
 
 	/* Lissage des déplacements */
 	public static float MOVE_FACTOR;
 	public static float SCALE_FACTOR;
+	
+
+	
+	
 
 	/**
 	 * Initialise les constantes de la view
@@ -35,6 +43,11 @@ public class ViewCst {
 
 		MOVE_FACTOR = conf.getFloatValue("View", "move_factor");
 		SCALE_FACTOR = conf.getFloatValue("View", "scale_factor");
+
+		TOP_MARGIN = conf.getIntValue("View", "top_margin");
+		BOTTOM_MARGIN = conf.getIntValue("View", "bottom_margin");
+		LEFT_MARGIN = conf.getIntValue("View", "left_margin");
+		RIGHT_MARGIN = conf.getIntValue("View", "right_margin");
 
 	}
 
