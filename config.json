@@ -49,14 +49,21 @@
     "healthPoint": 100,
     "throwBots": "missile",
     "automaton": "Diver1",
-    "maxOxygen" : 100,
+    "maxOxygen": 100,
     "stepDensity": 0.1,
     "oxygenBreathe": 0.01,
     "oxygenStep": 2,
-    "reloadStep" : 1,
+    "reloadStep": 1,
     "maxDensity": 2,
     "minDensity": 0,
-    "isPhysicObject": true
+    "isPhysicObject": true,
+    "moveDuration": 500,
+    "hitDuration": 500,
+    "explodeDuration": 500,
+    "popDuration": 500,
+    "eggDuration": 500,
+    "waitDuration": 500,
+    "throwDuration": 500
   },
   "Player2": {
     "width": 20,
@@ -71,14 +78,21 @@
     "healthPoint": 100,
     "throwBots": "missile",
     "automaton": "Diver2",
-    "maxOxygen" : 100,
+    "maxOxygen": 100,
     "stepDensity": 0.1,
     "oxygenBreathe": 0.01,
     "oxygenStep": 2,
-    "reloadStep" : 1,
+    "reloadStep": 1,
     "maxDensity": 2,
     "minDensity": 0,
-    "isPhysicObject": true
+    "isPhysicObject": true,
+    "moveDuration": 500,
+    "hitDuration": 500,
+    "explodeDuration": 500,
+    "popDuration": 500,
+    "eggDuration": 500,
+    "waitDuration": 500,
+    "throwDuration": 500
   },
   "Obstacle": {
     "width": 20,
@@ -93,7 +107,14 @@
     "attackDamage": 0,
     "meleeRange": 0,
     "throwBots": "mob2",
-    "isPhysicObject": false
+    "isPhysicObject": false,
+    "moveDuration": 500,
+    "hitDuration": 500,
+    "explodeDuration": 500,
+    "popDuration": 500,
+    "eggDuration": 500,
+    "waitDuration": 500,
+    "throwDuration": 500
   },
   "Mobs": [
     {
@@ -109,7 +130,14 @@
       "throwBots": "mob2",
       "automaton": "Goldfish",
       "spawnProba": 50,
-      "isPhysicObject": true
+      "isPhysicObject": true,
+      "moveDuration": 500,
+      "hitDuration": 500,
+      "explodeDuration": 500,
+      "popDuration": 500,
+      "eggDuration": 500,
+      "waitDuration": 500,
+      "throwDuration": 500
     },
     {
       "width": 20,
@@ -124,7 +152,14 @@
       "throwBots": "mob2",
       "automaton": "Shark",
       "spawnProba": 10,
-      "isPhysicObject": true
+      "isPhysicObject": true,
+      "moveDuration": 500,
+      "hitDuration": 500,
+      "explodeDuration": 500,
+      "popDuration": 500,
+      "eggDuration": 500,
+      "waitDuration": 500,
+      "throwDuration": 500
     },
     {
       "width": 5,
@@ -138,7 +173,14 @@
       "healthPoint": 20,
       "throwBots": "mob2",
       "automaton": "Missile",
-      "isPhysicObject": true
+      "isPhysicObject": true,
+      "moveDuration": 500,
+      "hitDuration": 500,
+      "explodeDuration": 500,
+      "popDuration": 500,
+      "eggDuration": 500,
+      "waitDuration": 500,
+      "throwDuration": 500
     }
   ]
 }

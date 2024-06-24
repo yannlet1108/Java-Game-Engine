@@ -45,6 +45,14 @@ public abstract class Entity {
 	Timer timer;
 	TimerTask currenTask;
 
+	int moveDuration;
+	int waitDuration;
+	int hitDuration;
+	int eggDuration;
+	int popDuration;
+	int explodeDuration;
+	int throwDuration;
+
 	/**
 	 * @param position
 	 * @param direction
@@ -70,6 +78,13 @@ public abstract class Entity {
 		this.throwEntity = cfg.getStringValue(name, "throwBots");
 		this.isPhysicObject = cfg.getBooleanValue(name, "isPhysicObject");
 		this.range = cfg.getFloatValue(name, "width") * 1;
+		this.moveDuration = cfg.getIntValue(name, "moveDuration");
+		this.waitDuration = cfg.getIntValue(name, "waitDuration");
+		this.hitDuration = cfg.getIntValue(name, "hitDuration");
+		this.eggDuration = cfg.getIntValue(name, "eggDuration");
+		this.popDuration = cfg.getIntValue(name, "popDuration");
+		this.explodeDuration = cfg.getIntValue(name, "explodeDuration");
+		this.throwDuration = cfg.getIntValue(name, "throwDuration");
 
 		this.density = model.getDensity();
 
@@ -179,7 +194,7 @@ public abstract class Entity {
 	public void doWait() {
 		blockAutomaton();
 		setState(State.WAITING);
-		ActionTask endWaitTask = new EndWaitTask(this, 1000);
+		ActionTask endWaitTask = new EndWaitTask(this, waitDuration);
 		currenTask = endWaitTask;
 		timer.schedule(endWaitTask, endWaitTask.getDuration());
 	}
@@ -234,7 +249,7 @@ public abstract class Entity {
 		} else {
 			egg(getRightDirection(direction));
 		}
-		ActionTask endEggTask = new EndEggTask(this, 1000);
+		ActionTask endEggTask = new EndEggTask(this, eggDuration);
 		currenTask = endEggTask;
 		timer.schedule(endEggTask, endEggTask.getDuration());
 	}
@@ -243,7 +258,7 @@ public abstract class Entity {
 		blockAutomaton();
 		setState(State.FILLING);
 		pop(val);
-		ActionTask endPopTask = new EndPopTask(this, 100);
+		ActionTask endPopTask = new EndPopTask(this, popDuration);
 		currenTask = endPopTask;
 		timer.schedule(endPopTask, endPopTask.getDuration());
 	}
@@ -256,7 +271,7 @@ public abstract class Entity {
 		blockAutomaton();
 		setState(State.DYING);
 		explode();
-		ActionTask endExplodeTask = new EndExplodeTask(this, 1000);
+		ActionTask endExplodeTask = new EndExplodeTask(this, explodeDuration);
 		currenTask = endExplodeTask;
 		timer.schedule(endExplodeTask, endExplodeTask.getDuration());
 	}
@@ -743,7 +758,7 @@ public abstract class Entity {
 	public void doHit(Direction direction) {
 		blockAutomaton();
 		setState(State.HITTING);
-		ActionTask hitTask = new HitTask(this, 500 / 2, getRightDirection(direction));
+		ActionTask hitTask = new HitTask(this, hitDuration / 2, getRightDirection(direction));
 		currenTask = hitTask;
 		timer.schedule(hitTask, hitTask.getDuration());
 	}
@@ -939,7 +954,7 @@ public abstract class Entity {
 			this.direction = direction;
 		}
 		throwEntity(throwEntity);
-		ActionTask endThrowTask = new EndThrowTask(this, 1000);
+		ActionTask endThrowTask = new EndThrowTask(this, throwDuration);
 		currenTask = endThrowTask;
 		timer.schedule(endThrowTask, endThrowTask.getDuration());
 	}
