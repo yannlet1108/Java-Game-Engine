@@ -227,7 +227,7 @@ public class View {
 		BufferedImage background = bank.getBackgroundset().getSprite(0);
 		float scale = getBackgroundScale();
 		Point origin = getBackgroundPos(scale);
-		System.out.println("x : " + origin.x + ", y : " + origin.y + ", scale : " + scale);
+		// System.out.println("x : " + origin.x + ", y : " + origin.y + ", scale : " + scale);
 		g.drawImage(background, origin.x, origin.y, (int) (background.getWidth() * scale),
 				(int) (background.getHeight() * scale), null);
 	}

@@ -174,7 +174,7 @@ public abstract class Entity {
 		} else {
 			move(getRightDirection(direction));
 		}
-		ActionTask endMoveTask = new EndMoveTask(this, 500);
+		ActionTask endMoveTask = new EndMoveTask(this, moveDuration);
 		currenTask = endMoveTask;
 		timer.schedule(endMoveTask, endMoveTask.getDuration());
 	}
@@ -240,7 +240,7 @@ public abstract class Entity {
 			if (e.hitbox.intersects(futurHitBox))
 				return;
 		}
-		new Mob(pts, direction, this.model, name);
+		new Mob(pts, this.direction, this.model, name);
 
 	}
 
@@ -525,6 +525,9 @@ public abstract class Entity {
 		Direction absoluteDirection = Direction.relativeToAbsolute(getDirection(), direction);
 		List<Entity> entitiesOfCategory = getEntitiesOfCategory(category);
 		entitiesOfCategory.remove(this);
+		if (entitiesOfCategory.isEmpty()) {
+			return false;
+		}
 		Entity closestEntity = getClosestEntity(entitiesOfCategory);
 		double angle = angleTo(closestEntity);
 		return Direction.isAngleInDirection(angle, absoluteDirection);
@@ -777,6 +780,9 @@ public abstract class Entity {
 	public void doHit(Direction direction) {
 		blockAutomaton();
 		setState(State.HITTING);
+		if (direction != null) {
+			this.direction = Direction.relativeToAbsolute(this.direction, getRightDirection(direction));
+		}
 		ActionTask hitTask = new HitTask(this, hitDuration / 2, getRightDirection(direction));
 		currenTask = hitTask;
 		timer.schedule(hitTask, hitTask.getDuration());
@@ -903,8 +909,8 @@ public abstract class Entity {
 	 * 
 	 * @param ekey
 	 */
-	private void throwEntity(String name) {
-		Direction direction = Direction.relativeToAbsolute(this.direction, Direction.FORWARD);
+	private void throwEntity(String name, Direction dir) {
+		Direction direction = Direction.relativeToAbsolute(this.direction, dir);
 		Point2D pos = null;
 		int marge = 3;
 		config.Config cfg = model.getConfig();
@@ -970,10 +976,12 @@ public abstract class Entity {
 		blockAutomaton();
 		setState(State.WAITING);
 		if (direction != null) {
-			this.direction = direction;
+			this.direction = Direction.relativeToAbsolute(this.direction, getRightDirection(direction));
 		}
-		throwEntity(throwEntity);
+
+		throwEntity(throwEntity, getRightDirection(direction));
 		ActionTask endThrowTask = new EndThrowTask(this, throwDuration);
+
 		currenTask = endThrowTask;
 		timer.schedule(endThrowTask, endThrowTask.getDuration());
 	}

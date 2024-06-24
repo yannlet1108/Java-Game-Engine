@@ -53,7 +53,7 @@ public class Player extends Entity {
 			oxygen -= vest.oxygenBreath;
 		} else {
 			oxygen = 0;
-			this.getHit(15);
+			this.getHit(1);
 		}
 		if (this.hitbox.intersects(model.getShipArea())) {
 			if (oxygen <= maxOxygen - vest.reloadStep) {

@@ -32,7 +32,6 @@ public class Model {
 	private int player2SpawnY;
 	private int seed;
 	private int safeZone;
-	private int refillAreaSize;
 	private Double refillArea;
 
 	private AutomatonBank automatonBank;
@@ -64,7 +63,7 @@ public class Model {
 		safeZone = getConfig().getIntValue("World", "safeZone");
 		int refillAreaSizeX = getConfig().getIntValue("World", "refillAreaSizeX");
 		int refillAreaSizeY = getConfig().getIntValue("World", "refillAreaSizeY");
-		refillArea = new Rectangle2D.Double(worldWidth / 2, 0, refillAreaSizeX, refillAreaSizeY);
+		refillArea = new Rectangle2D.Double((worldWidth - refillAreaSizeX) / 2, 0, refillAreaSizeX, refillAreaSizeY);
 		mapGenerator();
 		new Player(new Point2D.Double(player1SpawnX, player1SpawnY), Direction.N, this, "Player1");
 		new Player(new Point2D.Double(player2SpawnX, player2SpawnY), Direction.N, this, "Player2");
