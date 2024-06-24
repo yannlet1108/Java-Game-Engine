@@ -2,7 +2,7 @@
   "General": {},
   "View": {
     "debug": false,
-    "uid": true,
+    "uid": false,
     "max_scaling": 10.0,
     "min_scaling": 0.5,
     "margin": 60,
@@ -21,7 +21,7 @@
     "viscosity": 0.70,
     "spawnMobProba": 3,
     "nbBots": 3,
-    "spriteFile": "backgroundSprites.jpg",
+    "spriteFile": "background.png",
     "debugColor": -16776961,
     "spriteNrows": 12,
     "spriteNcols": 4,
@@ -34,11 +34,13 @@
     "refillAreaSizeX": 52,
     "refillAreaSizeY": 42,
     "fixedBackgroundSprite": "surface.png",
-    "fixedBackgroundHeight": 1800,
+    "backgroundOverlaySprite": "overlay.png",
+    "backgroundOverlayDebugColor": -16776961,
+    "fixedBackgroundHeight": 1000,
     "fixedBackgroundWidth": 1000,
     "fixedBackgroundXOffset": 0,
-    "fixedBackgroundYOffset": -1000,
-    "shipDebugColor": -16777026
+    "fixedBackgroundYOffset": -200,
+    "fixedBackgroundDebugColor": -16777026
   },
   "Player1": {
     "width": 20,
