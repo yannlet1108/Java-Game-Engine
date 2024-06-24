@@ -352,7 +352,7 @@ public abstract class Entity {
 						return false;
 					}
 				}
-				if(isWorldBorderInZone(rayon, x, y, absoluteDirection)) {
+				if (isWorldBorderInZone(rayon, x, y, absoluteDirection)) {
 					return false;
 				}
 			}
@@ -366,19 +366,23 @@ public abstract class Entity {
 			if (isEntityInZone(rayon, x, y, absoluteDirection, entity.getHitbox()))
 				return true;
 		}
-		if (category == Category.OBSTACLE){
-			if(isWorldBorderInZone(rayon, x, y, absoluteDirection)) {
-					return true;
-				}
+		if (category == Category.OBSTACLE) {
+			if (isWorldBorderInZone(rayon, x, y, absoluteDirection)) {
+				return true;
+			}
 		}
 		return false;
 	}
 
 	private boolean isWorldBorderInZone(Double rayon, double x, double y, Direction direction) {
-		boolean isLeftBorderInZone = isEntityInZone(rayon, x, y, direction, new Rectangle2D.Double(-200, 0, 200, model.getBoardHeight()));
-		boolean isRightBorderInZone = isEntityInZone(rayon, x, y, direction, new Rectangle2D.Double(model.getBoardWidth(), 0, 200, model.getBoardHeight()));
-		boolean isTopBorderInZone = isEntityInZone(rayon, x, y, direction, new Rectangle2D.Double(0, -200, model.getBoardWidth(), 200));
-		boolean isBottomBorderInZone = isEntityInZone(rayon, x, y, direction, new Rectangle2D.Double(0, model.getBoardHeight(), model.getBoardWidth(), 200));
+		boolean isLeftBorderInZone = isEntityInZone(rayon, x, y, direction,
+				new Rectangle2D.Double(-200, 0, 200, model.getBoardHeight()));
+		boolean isRightBorderInZone = isEntityInZone(rayon, x, y, direction,
+				new Rectangle2D.Double(model.getBoardWidth(), 0, 200, model.getBoardHeight()));
+		boolean isTopBorderInZone = isEntityInZone(rayon, x, y, direction,
+				new Rectangle2D.Double(0, -200, model.getBoardWidth(), 200));
+		boolean isBottomBorderInZone = isEntityInZone(rayon, x, y, direction,
+				new Rectangle2D.Double(0, model.getBoardHeight(), model.getBoardWidth(), 200));
 		return isLeftBorderInZone || isRightBorderInZone || isTopBorderInZone || isBottomBorderInZone;
 	}
 
@@ -892,8 +896,12 @@ public abstract class Entity {
 
 	public void destroy() {
 		model.removeEntity(this);
-		currenTask.cancel();
-		timer.cancel();
+		if (currenTask != null) {
+			currenTask.cancel();
+		}
+		if (timer != null) {
+			timer.cancel();
+		}
 		setState(State.DYING);
 		if (this instanceof Player) {
 			model.removePlayer((Player) this);
