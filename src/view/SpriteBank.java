@@ -30,6 +30,9 @@ public class SpriteBank {
 		resizeBackground();
 	}
 
+	/**
+	 * Met a jour la taille du background en fonction de la taille de l'écran
+	 */
 	private void resizeBackground() {
 		SpriteSet background = getBackgroundset();
 		BufferedImage sprite = background.getSprite(0);

@@ -169,49 +169,66 @@ public class View {
 				(int) (background.getHeight() * scale), null);
 	}
 
+	/**
+	 * Calcule le coeficient allant de 0 à 1 permettant de calculer la taille du
+	 * background
+	 * 
+	 * @return coeficient permettant le scaling du background
+	 */
 	private double getScaleRatio() {
 		Point2D tops[] = getFarthestPlayers(m_model.getPlayersPos());
 		double xRatio = (tops[0].getX() - tops[1].getX()) / getSimWidth();
 		double yRatio = (tops[0].getY() - tops[1].getY()) / getSimHeight();
-		return Math.min(xRatio, yRatio);
+		return Math.max(xRatio, yRatio);
 	}
 
+	/**
+	 * Adapte le ratio en fonction du coeficient parallaxale
+	 * 
+	 * @param ratio : ratio entre 0 et 1 résultat de getScaleRatio()
+	 * @return convertie en parallaxe
+	 */
 	private float ratioToParallax(double ratio) {
 		return ((1 - (float) (ratio)) * ViewCst.PARALLAX);
 	}
 
-	private float getBackgroundRawScale() {
-		return getScreenHeight() / bank.getBackgroundset().getSprite(0).getHeight();
-	}
-
 	/**
-	 * Calcule le scale du background basé sur son raw scale et son raport entre la
-	 * différence des raports viewport et simulation
+	 * Calcule le scale du background basé sur son raw scale et sur le coeficient de
+	 * remplisage du viewport adapté au parallaxe courant
 	 * 
 	 * @return scale exacte du background
 	 */
 	private float getBackgroundScale() {
-		float rawScale = getBackgroundRawScale();
+		float rawScale = getScreenHeight() / bank.getBackgroundset().getSprite(0).getHeight();
 		return rawScale + rawScale * ratioToParallax(getScaleRatio());
 	}
 
+	/**
+	 * Calcule la position du background en fonction du scaling du background
+	 * 
+	 * @param scaleb : scaling du background
+	 * @return point origine de l'affichage du background
+	 */
 	private Point getBackgroundPos(float scale) {
 		BufferedImage background = bank.getBackgroundset().getSprite(0);
-		float rawScale = getBackgroundRawScale();
-		float parallax = ratioToParallax(getScaleRatio());
 		Point2D tops[] = getFarthestPlayers(m_model.getPlayersPos());
 		double xRatio = tops[1].getX() / getSimWidth();
 		double yRatio = tops[1].getY() / getSimHeight();
 
 		double diffWidth = (background.getWidth() * scale - viewport.getWidth()) * xRatio;
 		double diffHeight = (background.getHeight() * scale - viewport.getHeight()) * yRatio;
-		double xAlpha = viewport.getWidth() / 2 - background.getWidth() * rawScale / 2;
-		double yAlpha = viewport.getHeight() / 2 - background.getHeight() * rawScale / 2;
 		double x = -diffWidth;
 		double y = -diffHeight;
 		return new Point((int) x, (int) y);
 	}
 
+	/**
+	 * Retourne les extréminés du rectangle contenant tout les joueurs
+	 * 
+	 * @param playersPos : positions des joueurs
+	 * @return deux points, un étant le point bas droit et l'autre étant haut gauche
+	 *         du rectangle englobant tout les joueurs
+	 */
 	private Point2D[] getFarthestPlayers(Iterator<Point2D> playersPos) {
 		Point2D tops[] = new Point2D.Double[2];
 		Point2D current = playersPos.next();
