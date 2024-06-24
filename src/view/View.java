@@ -195,6 +195,7 @@ public class View {
 			g.setColor(Color.red);
 			double maxHealthRatio = (float) player1.getHealthPoint() / (float) player1.getMaxHealtPoint();
 			g.fillRect(margin, margin + barHeight + 10, (int) (maxHealthRatio * (float) barWidth), barHeight);
+
 		}
 
 		if (player2 != null) {
@@ -224,8 +225,6 @@ public class View {
 		BufferedImage background = bank.getBackgroundset().getSprite(0);
 		float scale = getBackgroundScale();
 		Point origin = getBackgroundPos(scale);
-		// System.out.println("x : " + origin.x + ", y : " + origin.y + ", scale : " +
-		// scale);
 		g.drawImage(background, origin.x, origin.y, (int) (background.getWidth() * scale),
 				(int) (background.getHeight() * scale), null);
 	}
