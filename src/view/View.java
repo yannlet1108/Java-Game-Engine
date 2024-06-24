@@ -292,12 +292,13 @@ public class View {
 	private Point2D[] getFarthestPlayers(Iterator<Point2D> playersPos) {
 
 		Point2D tops[] = new Point2D.Double[2];
-		if (!playersPos.hasNext()) {
-			tops[0] = viewport.getCenter();
-			tops[1] = viewport.getCenter();
-			return tops;
+		Point2D current;
+		if(playersPos.hasNext()) {
+			current = playersPos.next();
 		}
-		Point2D current = playersPos.next();
+		else {
+			current = new Point2D.Double(getSimWidth()/2,0);
+		}
 		double xMax = current.getX();
 		double xMin = current.getX();
 		double yMax = current.getY();
