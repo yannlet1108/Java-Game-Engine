@@ -509,6 +509,9 @@ public abstract class Entity {
 		Direction absoluteDirection = Direction.relativeToAbsolute(getDirection(), direction);
 		List<Entity> entitiesOfCategory = getEntitiesOfCategory(category);
 		entitiesOfCategory.remove(this);
+		if (entitiesOfCategory.isEmpty()) {
+			return false;
+		}
 		Entity closestEntity = getClosestEntity(entitiesOfCategory);
 		double angle = angleTo(closestEntity);
 		return Direction.isAngleInDirection(angle, absoluteDirection);
@@ -761,6 +764,9 @@ public abstract class Entity {
 	public void doHit(Direction direction) {
 		blockAutomaton();
 		setState(State.HITTING);
+		if (direction != null) {
+			this.direction = Direction.relativeToAbsolute(this.direction, getRightDirection(direction));
+		}
 		ActionTask hitTask = new HitTask(this, hitDuration / 2, getRightDirection(direction));
 		currenTask = hitTask;
 		timer.schedule(hitTask, hitTask.getDuration());
@@ -954,10 +960,10 @@ public abstract class Entity {
 		blockAutomaton();
 		setState(State.WAITING);
 		if (direction != null) {
-			this.direction = direction;
+			this.direction = Direction.relativeToAbsolute(this.direction, getRightDirection(direction));
 		}
 
-		throwEntity(throwEntity, direction);
+		throwEntity(throwEntity, getRightDirection(direction));
 		ActionTask endThrowTask = new EndThrowTask(this, throwDuration);
 
 		currenTask = endThrowTask;
