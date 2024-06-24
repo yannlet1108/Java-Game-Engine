@@ -52,7 +52,9 @@ public class Viewport {
 	 * @param playersPos : positions des joueurs
 	 */
 	void updateViewport(Point2D tops[]) {
-
+		if(tops.length < 1) {
+			return;
+		}
 		double xMax = tops[0].getX();
 		double xMin = tops[1].getX();
 		double yMax = tops[0].getY();
