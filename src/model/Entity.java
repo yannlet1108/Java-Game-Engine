@@ -289,7 +289,7 @@ public abstract class Entity {
 		while (it.hasNext()) {
 			Entity e = it.next();
 			if (e.getHitbox().intersects(hitRange)) {
-				e.getHit(this.attackDamage);
+				e.getHit(this);
 			}
 		}
 	}
@@ -767,11 +767,17 @@ public abstract class Entity {
 	 * 
 	 * @param val
 	 */
-	public void modifyHealthPoint(int val) {
+	public void modifyHealthPoint(int val, Entity e) {
 		this.healthPoint += val;
 		if (this.healthPoint <= 0) {
 			if (!(model.toRemove.contains(this))) {
 				this.model.addEntityToRemove(this);
+			}
+			if (e != null) {
+				e.modifyHealthPoint(this.attackDamage * 2, e);
+				if (e.healthPoint > 100) {
+					e.setHealthPoint(maxHealthPoint);
+				}
 			}
 		}
 	}
@@ -781,8 +787,12 @@ public abstract class Entity {
 	 * 
 	 * @param val
 	 */
-	public void getHit(int val) {
-		this.modifyHealthPoint(-val);
+	public void getHit(Entity e) {
+		if (e == null) {
+			this.modifyHealthPoint(-1, null);
+		} else {
+			this.modifyHealthPoint(-(e.attackDamage), e);
+		}
 	}
 
 	public void doHit(Direction direction) {
@@ -807,7 +817,7 @@ public abstract class Entity {
 			Entity e = it.next();
 			if (!(e.getCategory().isSameTeam(this.getCategory()))) {
 				if (e.getHitbox().intersects(hitRange)) {
-					e.getHit(this.attackDamage);
+					e.getHit(this);
 				}
 			}
 		}
@@ -857,13 +867,12 @@ public abstract class Entity {
 		default:
 			hitRange = null;
 		}
-
 		Iterator<Entity> it = this.model.entitiesIterator();
 		while (it.hasNext()) {
 			Entity e = it.next();
 			if (!(e.getCategory().isSameTeam(this.getCategory()))) {
 				if (e.getHitbox().intersects(hitRange)) {
-					e.getHit(this.attackDamage);
+					e.getHit(this);
 				}
 			}
 		}

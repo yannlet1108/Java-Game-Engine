@@ -41,6 +41,8 @@
     "fixedBackgroundXOffset": 0,
     "fixedBackgroundYOffset": -200,
     "fixedBackgroundDebugColor": -16777026
+    "maxEntity": 10000
+
   },
   "Player1": {
     "width": 20,
