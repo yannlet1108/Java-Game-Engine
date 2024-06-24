@@ -38,7 +38,8 @@
     "fixedBackgroundWidth": 1000,
     "fixedBackgroundXOffset": 0,
     "fixedBackgroundYOffset": -1000,
-    "shipDebugColor": -16777026
+    "shipDebugColor": -16777026,
+    "maxEntity": 10000
   },
   "Player1": {
     "width": 20,
