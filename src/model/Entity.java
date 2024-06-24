@@ -45,6 +45,15 @@ public abstract class Entity {
 	Timer timer;
 	TimerTask currenTask;
 
+	int moveDuration;
+	int waitDuration;
+	int hitDuration;
+	int eggDuration;
+	int popDuration;
+	int explodeDuration;
+	int throwDuration;
+	private int maxHealthPoint;
+
 	/**
 	 * @param position
 	 * @param direction
@@ -64,12 +73,20 @@ public abstract class Entity {
 		this.category = cfg.getCategory(name, "category");
 		this.name = name;
 		this.attackDamage = cfg.getIntValue(name, "attackDamage");
-		this.healthPoint = cfg.getIntValue(name, "healthPoint");
+		this.maxHealthPoint = cfg.getIntValue(name, "maxHealthPoint");
+		this.healthPoint = maxHealthPoint;
 		this.meleeRange = cfg.getIntValue(name, "meleeRange");
 		this.explodeRange = meleeRange;
 		this.throwEntity = cfg.getStringValue(name, "throwBots");
 		this.isPhysicObject = cfg.getBooleanValue(name, "isPhysicObject");
 		this.range = cfg.getFloatValue(name, "width") * 1;
+		this.moveDuration = cfg.getIntValue(name, "moveDuration");
+		this.waitDuration = cfg.getIntValue(name, "waitDuration");
+		this.hitDuration = cfg.getIntValue(name, "hitDuration");
+		this.eggDuration = cfg.getIntValue(name, "eggDuration");
+		this.popDuration = cfg.getIntValue(name, "popDuration");
+		this.explodeDuration = cfg.getIntValue(name, "explodeDuration");
+		this.throwDuration = cfg.getIntValue(name, "throwDuration");
 
 		this.density = model.getDensity();
 
@@ -157,7 +174,7 @@ public abstract class Entity {
 		} else {
 			move(getRightDirection(direction));
 		}
-		ActionTask endMoveTask = new EndMoveTask(this, 500);
+		ActionTask endMoveTask = new EndMoveTask(this, moveDuration);
 		currenTask = endMoveTask;
 		timer.schedule(endMoveTask, endMoveTask.getDuration());
 	}
@@ -179,7 +196,7 @@ public abstract class Entity {
 	public void doWait() {
 		blockAutomaton();
 		setState(State.WAITING);
-		ActionTask endWaitTask = new EndWaitTask(this, 1000);
+		ActionTask endWaitTask = new EndWaitTask(this, waitDuration);
 		currenTask = endWaitTask;
 		timer.schedule(endWaitTask, endWaitTask.getDuration());
 	}
@@ -223,7 +240,7 @@ public abstract class Entity {
 			if (e.hitbox.intersects(futurHitBox))
 				return;
 		}
-		new Mob(pts, direction, this.model, name);
+		new Mob(pts, this.direction, this.model, name);
 
 	}
 
@@ -234,7 +251,7 @@ public abstract class Entity {
 		} else {
 			egg(getRightDirection(direction));
 		}
-		ActionTask endEggTask = new EndEggTask(this, 1000);
+		ActionTask endEggTask = new EndEggTask(this, eggDuration);
 		currenTask = endEggTask;
 		timer.schedule(endEggTask, endEggTask.getDuration());
 	}
@@ -243,7 +260,7 @@ public abstract class Entity {
 		blockAutomaton();
 		setState(State.FILLING);
 		pop(val);
-		ActionTask endPopTask = new EndPopTask(this, 100);
+		ActionTask endPopTask = new EndPopTask(this, popDuration);
 		currenTask = endPopTask;
 		timer.schedule(endPopTask, endPopTask.getDuration());
 	}
@@ -256,7 +273,7 @@ public abstract class Entity {
 		blockAutomaton();
 		setState(State.DYING);
 		explode();
-		ActionTask endExplodeTask = new EndExplodeTask(this, 1000);
+		ActionTask endExplodeTask = new EndExplodeTask(this, explodeDuration);
 		currenTask = endExplodeTask;
 		timer.schedule(endExplodeTask, endExplodeTask.getDuration());
 	}
@@ -548,16 +565,17 @@ public abstract class Entity {
 	private double angleTo(Entity entity) {
 		double relativeXPosition = entity.getCenter().getX() - getCenter().getX();
 		double relativeYPosition = entity.getCenter().getY() - getCenter().getY();
-		
+
 		double angle = Math.toDegrees(Math.atan2(relativeYPosition, relativeXPosition)) + 90;
-		
+
 		if (angle < 0) {
 			angle += 360;
 		}
-		
+
 		return angle;
 
-		//return Math.toDegrees(Math.atan2(relativeYPosition, relativeXPosition)) % 360;
+		// return Math.toDegrees(Math.atan2(relativeYPosition, relativeXPosition)) %
+		// 360;
 
 	}
 
@@ -609,17 +627,17 @@ public abstract class Entity {
 		Vector movement = speed.scalarMultiplication(timeSeconds);
 		Vector movementX = new Vector(movement.getX(), 0);
 		boolean isMovePossibleX = isMovePossible(movementX);
-		if(!isMovePossibleX) {
+		if (!isMovePossibleX) {
 			speed = new Vector(0, speed.getY());
 			movement = new Vector(0, movement.getY());
 		}
 		Vector movementY = new Vector(0, movement.getY());
 		boolean isMovePossibleY = isMovePossible(movementY);
-		if(!isMovePossibleY) {
+		if (!isMovePossibleY) {
 			speed = new Vector(speed.getX(), 0);
 			movement = new Vector(movement.getX(), 0);
 		}
-		if(isMovePossibleX && isMovePossibleY && !isMovePossible(movement)) {
+		if (isMovePossibleX && isMovePossibleY && !isMovePossible(movement)) {
 			speed = new Vector(0, 0);
 			movement = new Vector(0, 0);
 		}
@@ -743,7 +761,7 @@ public abstract class Entity {
 	public void doHit(Direction direction) {
 		blockAutomaton();
 		setState(State.HITTING);
-		ActionTask hitTask = new HitTask(this, 500 / 2, getRightDirection(direction));
+		ActionTask hitTask = new HitTask(this, hitDuration / 2, getRightDirection(direction));
 		currenTask = hitTask;
 		timer.schedule(hitTask, hitTask.getDuration());
 	}
@@ -771,7 +789,7 @@ public abstract class Entity {
 	 * @param d
 	 */
 	public void hit(Direction d) {
-		Direction absoluteDirection =  Direction.relativeToAbsolute(direction, d);
+		Direction absoluteDirection = Direction.relativeToAbsolute(direction, d);
 		Rectangle2D hitRange;
 		switch (absoluteDirection) {
 		case N:
@@ -938,9 +956,15 @@ public abstract class Entity {
 		if (direction != null) {
 			this.direction = direction;
 		}
+
 		throwEntity(throwEntity, direction);
-		ActionTask endThrowTask = new EndThrowTask(this, 1000);
+		ActionTask endThrowTask = new EndThrowTask(this, throwDuration);
+
 		currenTask = endThrowTask;
 		timer.schedule(endThrowTask, endThrowTask.getDuration());
+	}
+
+	public int getMaxHealtPoint() {
+		return maxHealthPoint;
 	}
 }

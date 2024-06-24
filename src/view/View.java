@@ -1,7 +1,9 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -12,12 +14,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.lang.model.util.Elements.Origin;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import controller.Controller;
 import info3.game.graphics.GameCanvas;
 import model.Model;
+import model.Player;
 
 /**
  * Classe principale de la view. S'occupe de relier la liste des avatars à la
@@ -38,7 +42,7 @@ public class View {
 	private SpriteBank bank;
 	private Viewport viewport;
 
-	private Rectangle2D refillArea;
+	private Rectangle2D fixedBackgroundArea;
 
 	/**
 	 * Initialise la view, ouvre la fenêtre graphique, la liste d'avatar et la
@@ -59,7 +63,7 @@ public class View {
 		initViewport();
 		new SpriteBank(this);
 		initAvatar();
-		initRefillArea();
+		initFixedBackgroundArea();
 	}
 
 	/**
@@ -120,10 +124,12 @@ public class View {
 	/**
 	 * Initialise la zone de refill du monde
 	 */
-	private void initRefillArea() {
-		this.refillArea = new Rectangle2D.Double(0, -950,
-				m_controller.getConfig().getIntValue("World", "shipSize"),
-				m_controller.getConfig().getIntValue("World", "shipSize"));
+	private void initFixedBackgroundArea() {
+		this.fixedBackgroundArea = new Rectangle2D.Double(
+				getController().getConfig().getIntValue("World", "fixedBackgroundXOffset"),
+				getController().getConfig().getIntValue("World", "fixedBackgroundYOffset"),
+				getController().getConfig().getIntValue("World", "fixedBackgroundWidth"),
+				getController().getConfig().getIntValue("World", "fixedBackgroundHeight"));
 	}
 
 	/**
@@ -156,18 +162,60 @@ public class View {
 	 * @param g : instance graphique du canvas
 	 */
 	public void paint(Graphics g) {
+
 		if (m_model != null && m_model.getPlayers().size() > 0) {
 
 			viewport.updateViewport(getFarthestPlayers(m_model.getPlayersPos()));
 			viewport.resize();
 			fillBackground(g);
-			drawRefillZone(g);
+			drawfixedBackground(g);
+			drawPlayersBars(g);
 			Iterator<Avatar> avatarIterator = getAvatarIterator();
 			while (avatarIterator.hasNext()) {
 				avatarIterator.next().paint(g);
 			}
 		}
 		destroyToRemoves();
+	}
+
+	private void drawPlayersBars(Graphics g) {
+		int margin = 50;
+		int barHeight = 40;
+		int barWidth = 300;
+		Player player1 = m_model.getPlayer1();
+		Player player2 = m_model.getPlayer2();
+
+		if (player1 != null) {
+			g.setColor(Color.lightGray);
+			g.fillRect(margin, margin, barWidth, barHeight);
+			g.setColor(Color.blue);
+			double oxygenRatio = player1.getOxygen() / player1.getMaxOxygen();
+			g.fillRect(margin, margin, (int) (oxygenRatio * (float) barWidth), barHeight);
+
+			g.setColor(Color.lightGray);
+			g.fillRect(margin, margin * 2 + barHeight, barWidth, barHeight);
+			g.setColor(Color.red);
+			double maxHealthRatio = (float) player1.getHealthPoint() / (float) player2.getMaxHealtPoint();
+			g.fillRect(margin, margin * 2 + barHeight,
+					(int) (maxHealthRatio * (float) barWidth), barHeight);
+		}
+
+		if (player2 != null) {
+
+			g.setColor(Color.lightGray);
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin, barWidth, barHeight);
+			g.setColor(Color.blue);
+			double oxygenRatio = player2.getOxygen() / player2.getMaxOxygen();
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin,
+					(int) (oxygenRatio * (float) barWidth), barHeight);
+
+			g.setColor(Color.lightGray);
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin * 2 + barHeight, barWidth, barHeight);
+			g.setColor(Color.red);
+			double maxHealthRatio = (float) player2.getHealthPoint() / (float) player2.getMaxHealtPoint();
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin * 2 + barHeight,
+					(int) (maxHealthRatio * (float) barWidth), barHeight);
+		}
 	}
 
 	/**
@@ -179,7 +227,7 @@ public class View {
 		BufferedImage background = bank.getBackgroundset().getSprite(0);
 		float scale = getBackgroundScale();
 		Point origin = getBackgroundPos(scale);
-		System.out.println("x : " + origin.x + ", y : " + origin.y + ", scale : " + scale);
+		// System.out.println("x : " + origin.x + ", y : " + origin.y + ", scale : " + scale);
 		g.drawImage(background, origin.x, origin.y, (int) (background.getWidth() * scale),
 				(int) (background.getHeight() * scale), null);
 	}
@@ -282,18 +330,18 @@ public class View {
 	 * 
 	 * @param g : instance graphique du canvas
 	 */
-	private void drawRefillZone(Graphics g) {
-		Point origin = getViewport().toViewport(refillArea);
+	private void drawfixedBackground(Graphics g) {
+		Point origin = getViewport().toViewport(fixedBackgroundArea);
 		if (origin == null)
 			return;
 		if (ViewCst.DEBUG) {
 			g.setColor(getBank().getShipSet().getDebugColor());
-			g.fillRect(origin.x, origin.y, (int) (refillArea.getWidth() * getViewport().getScale()),
-					(int) (refillArea.getHeight() * getViewport().getScale()));
+			g.fillRect(origin.x, origin.y, (int) (fixedBackgroundArea.getWidth() * getViewport().getScale()),
+					(int) (fixedBackgroundArea.getHeight() * getViewport().getScale()));
 		} else {
 			BufferedImage sprite = getBank().getShipSet().getSprite(0);
-			g.drawImage(sprite, origin.x, origin.y, (int) (refillArea.getWidth() * getViewport().getScale()),
-					(int) (refillArea.getHeight() * getViewport().getScale()), null);
+			g.drawImage(sprite, origin.x, origin.y, (int) (fixedBackgroundArea.getWidth() * getViewport().getScale()),
+					(int) (fixedBackgroundArea.getHeight() * getViewport().getScale()), null);
 		}
 
 	}

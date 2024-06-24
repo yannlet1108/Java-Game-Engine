@@ -21,9 +21,9 @@ Diver2(Init){
 Goldfish(Forward){
 	* (Forward):
 	| Cell(d,A) ? Hit(d) :(Flee)
-	| Cell(F,V) ? Move :(Forward)
-	| Cell(F,T) & Cell(R,T) & Cell(L,T) ? Egg(B) :(Forward)
-	| True ? Wait :(Forward)
+	| Cell(F,O) & Cell(B,V) ? Egg(B) :(Forward)
+	| Cell(B,T) ? Move :(Forward)
+	| True ? Move(_) :(Forward)
 	
 	* (Flee):
 	| Cell(NE,A) ? Move(SW) :(Forward)
