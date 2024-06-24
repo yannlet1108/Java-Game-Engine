@@ -267,6 +267,9 @@ public class Avatar {
 			g.drawString("Oxygen: " + roundValue(((model.Player) instanceEntity).getOxygen(), numberOfDecimals),
 					origin.x, origin.y + g.getFontMetrics().getHeight() * 7);
 		}
+		// affichage de la direction de l'entité
+		g.drawString("Direction: " + instanceEntity.getDirection(), origin.x,
+				origin.y + g.getFontMetrics().getHeight() * 8);
 	}
 
 	/**

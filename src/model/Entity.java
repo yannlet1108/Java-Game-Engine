@@ -157,7 +157,7 @@ public abstract class Entity {
 		} else {
 			move(getRightDirection(direction));
 		}
-		ActionTask endMoveTask = new EndMoveTask(this, 1000);
+		ActionTask endMoveTask = new EndMoveTask(this, 500);
 		currenTask = endMoveTask;
 		timer.schedule(endMoveTask, endMoveTask.getDuration());
 	}
@@ -607,7 +607,23 @@ public abstract class Entity {
 		speed = speed.add(acceleration.scalarMultiplication(timeSeconds));
 
 		Vector movement = speed.scalarMultiplication(timeSeconds);
-		movement = checkCollisions(movement);
+		Vector movementX = new Vector(movement.getX(), 0);
+		boolean isMovePossibleX = isMovePossible(movementX);
+		if(!isMovePossibleX) {
+			speed = new Vector(0, speed.getY());
+			movement = new Vector(0, movement.getY());
+		}
+		Vector movementY = new Vector(0, movement.getY());
+		boolean isMovePossibleY = isMovePossible(movementY);
+		if(!isMovePossibleY) {
+			speed = new Vector(speed.getX(), 0);
+			movement = new Vector(movement.getX(), 0);
+		}
+		if(isMovePossibleX && isMovePossibleY && !isMovePossible(movement)) {
+			speed = new Vector(0, 0);
+			movement = new Vector(0, 0);
+		}
+
 		Direction dir = movement.getVectorDirection();
 		if (dir != Direction.HERE) {
 			direction = dir;
@@ -632,7 +648,7 @@ public abstract class Entity {
 		return unitVector.scalarMultiplication(vs2);
 	}
 
-	Vector checkCollisions(Vector movement) {
+	boolean isMovePossible(Vector movement) {
 		Rectangle2D movementBox = getHitbox();
 		Rectangle2D newHitbox = new Rectangle2D.Double(hitbox.getX() + movement.getX(), hitbox.getY() + movement.getY(),
 				hitbox.getWidth(), hitbox.getHeight());
@@ -641,8 +657,7 @@ public abstract class Entity {
 		Rectangle2D map = new Rectangle2D.Double(0, 0, getModel().getBoardWidth(), getModel().getBoardHeight());
 		boolean isMoveInMap = map.contains(newHitbox);
 		if (!isMoveInMap) {
-			speed = new Vector(0, 0);
-			return new Vector(0, 0);
+			return false;
 		}
 
 		// check if the movement will overlap some other hitbox
@@ -650,9 +665,8 @@ public abstract class Entity {
 		List<Entity> closeEntities = getEntitiesInRectangle(movementBox);
 		closeEntities.remove(this);
 		if (closeEntities.isEmpty())
-			return movement;
-		speed = new Vector(0, 0);
-		return new Vector(0, 0);
+			return true;
+		return false;
 	}
 
 	List<Entity> getEntitiesInRectangle(Rectangle2D rectangle) {
@@ -729,7 +743,7 @@ public abstract class Entity {
 	public void doHit(Direction direction) {
 		blockAutomaton();
 		setState(State.HITTING);
-		ActionTask hitTask = new HitTask(this, 1000 / 2, getRightDirection(direction));
+		ActionTask hitTask = new HitTask(this, 500 / 2, getRightDirection(direction));
 		currenTask = hitTask;
 		timer.schedule(hitTask, hitTask.getDuration());
 	}
@@ -757,9 +771,9 @@ public abstract class Entity {
 	 * @param d
 	 */
 	public void hit(Direction d) {
-		Direction.relativeToAbsolute(d, d);
+		Direction absoluteDirection =  Direction.relativeToAbsolute(direction, d);
 		Rectangle2D hitRange;
-		switch (d) {
+		switch (absoluteDirection) {
 		case N:
 			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
 					this.hitbox.getWidth() + 2 * meleeRange, meleeRange);
@@ -775,6 +789,22 @@ public abstract class Entity {
 		case W:
 			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
 					meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
+			break;
+		case NE:
+			hitRange = new Rectangle2D.Double(getCenter().getX(), this.hitbox.getY() - meleeRange,
+					this.hitbox.getWidth() / 2 + meleeRange, this.hitbox.getHeight() / 2 + meleeRange);
+			break;
+		case NW:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
+					this.hitbox.getWidth() / 2 + meleeRange, this.hitbox.getHeight() / 2 + meleeRange);
+			break;
+		case SE:
+			hitRange = new Rectangle2D.Double(getCenter().getX(), getCenter().getY(),
+					this.hitbox.getWidth() / 2 + meleeRange, this.hitbox.getHeight() / 2 + meleeRange);
+			break;
+		case SW:
+			hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, getCenter().getY(),
+					this.hitbox.getWidth() / 2 + meleeRange, this.hitbox.getHeight() / 2 + meleeRange);
 			break;
 		default:
 			hitRange = null;
