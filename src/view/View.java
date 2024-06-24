@@ -227,8 +227,8 @@ public class View {
 	private Point getBackgroundPos(float scale) {
 		BufferedImage background = bank.getBackgroundset().getSprite(0);
 		Point2D tops[] = getFarthestPlayers(m_model.getPlayersPos());
-		double xRatio = tops[1].getX() / getSimWidth();
-		double yRatio = tops[1].getY() / getSimHeight();
+		double xRatio = (tops[1].getX() + (tops[0].getX() - tops[1].getX())) / getSimWidth();
+		double yRatio = (tops[1].getY() + (tops[0].getY() - tops[1].getY())) / getSimHeight();
 
 		double diffWidth = (background.getWidth() * scale - viewport.getWidth()) * xRatio;
 		double diffHeight = (background.getHeight() * scale - viewport.getHeight()) * yRatio;
