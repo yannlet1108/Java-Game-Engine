@@ -11,6 +11,7 @@ import java.util.Queue;
 
 import model.Direction;
 import model.Entity;
+import model.State;
 
 /**
  * Classe réunissant les champs et méthodes communes à tout les avatars
@@ -44,8 +45,9 @@ public class Avatar {
 		spriteSetNumber = m_view.getBank().getSpritesSetNumber(entityConfig);
 		debugColor = m_view.getBank().getDebugColor(spriteSetNumber);
 		this.animationSprite = new PriorityQueue<Integer>();
-		m_view.store(this);
-		setInvisible();
+		m_view.storeAvatar(this);
+		lastState = State.WAITING;
+		setVisible();
 	}
 
 	/**
@@ -63,20 +65,24 @@ public class Avatar {
 	/**
 	 * Met à jour la file d'animation en fonction de l'état de l'entité Relance
 	 * l'animation liée à l'état si necessaire
+	 * 
 	 */
 	void updateAnimations() {
 		model.State newState = instanceEntity.getState();
 		if (newState != lastState) {
 			lastState = newState;
-			if (lastState == model.State.HITTING
-					|| lastState == model.State.HITTING_AROUND && lastState != model.State.DYING) {
+			if (lastState == model.State.HITTING || lastState == model.State.HITTING_AROUND
+					|| lastState == model.State.DYING) {
 				animationSprite.clear();
 			}
 			addAnimation(lastState);
 		} else {
 			if (animationSprite.isEmpty()) {
-				if (lastState != model.State.HITTING && lastState != model.State.HITTING_AROUND
-						&& lastState != model.State.DYING) {
+				if (lastState == model.State.DYING) {
+					m_view.addToRemove(this);
+					setInvisible();
+				}
+				if (lastState != model.State.HITTING && lastState != model.State.HITTING_AROUND) {
 					addAnimation(lastState);
 				}
 			}
@@ -198,45 +204,69 @@ public class Avatar {
 	 * @param g : instance graphique du canvas
 	 */
 	void paint(Graphics g) {
-		if (ViewCst.DEBUG) {
-			debugPaint(g);
-		} else {
-			updateAnimations();
-			Rectangle2D collisionBox = instanceEntity.getHitbox();
-			Point origin = m_view.getViewport().toViewport(collisionBox);
-			if (origin == null) {
-				return;
+		if (isVisible) {
+			if (ViewCst.DEBUG) {
+				debugPaint(g);
+			} else {
+				updateAnimations();
+				Rectangle2D collisionBox = instanceEntity.getHitbox();
+				Point origin = m_view.getViewport().toViewport(collisionBox);
+				if (origin == null) {
+					return;
+				}
+				BufferedImage sprite = m_view.getBank().getSprite(spriteSetNumber, getNextSpriteNumber());
+				g.drawImage(sprite, origin.x, origin.y,
+						(int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
+						(int) (collisionBox.getHeight() * m_view.getViewport().getScale()), null);
 			}
-			BufferedImage sprite = m_view.getBank().getSprite(spriteSetNumber, getNextSpriteNumber());
-			g.drawImage(sprite, origin.x, origin.y,
-					(int) (collisionBox.getWidth() * m_view.getViewport().getScale()),
-					(int) (collisionBox.getHeight() * m_view.getViewport().getScale()), null);
-		}
-		if (ViewCst.UID) {
-			uidPaint(g);
+			if (ViewCst.UID) {
+				uidPaint(g);
+			}
 		}
 	}
 
+	/**
+	 * Arrondi la valeur à un nombre de décimales donné
+	 * 
+	 * @param value            : valeur à arrondir
+	 * @param numberOfDecimals : nombre de décimales
+	 * @return valeur arrondie
+	 */
 	private double roundValue(double value, int numberOfDecimals) {
 		return Math.round(value * Math.pow(10, numberOfDecimals)) / Math.pow(10, numberOfDecimals);
 	}
 
+	/**
+	 * Affiche les informations de l'entité en mode uid
+	 * 
+	 * @param g : instance graphique du canvas
+	 */
 	void uidPaint(Graphics g) {
 		Rectangle2D collisionBox = instanceEntity.getHitbox();
 		Point origin = m_view.getViewport().toViewport(collisionBox);
 		if (origin == null) {
 			return;
 		}
-		int numberOfDecimals = 3;
+		int numberOfDecimals = 2;
 		g.setColor(Color.BLACK);
 
-		g.setFont(new Font("SansSerif",Font.PLAIN,11));
+		g.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		g.drawString("Name: " + instanceEntity.toString(), origin.x, origin.y + g.getFontMetrics().getHeight());
-		g.drawString("Position: " + "(" + roundValue(instanceEntity.getX(), numberOfDecimals) + ","
-				+ roundValue(instanceEntity.getY(), numberOfDecimals) + ")", origin.x, origin.y + g.getFontMetrics().getHeight() * 2);
+		g.drawString(
+				"Position: " + "(" + roundValue(instanceEntity.getX(), numberOfDecimals) + ","
+						+ roundValue(instanceEntity.getY(), numberOfDecimals) + ")",
+				origin.x, origin.y + g.getFontMetrics().getHeight() * 2);
 		g.drawString("Speed: " + instanceEntity.getSpeed(), origin.x, origin.y + g.getFontMetrics().getHeight() * 3);
 		g.drawString("Force: " + instanceEntity.getForce(), origin.x, origin.y + g.getFontMetrics().getHeight() * 4);
-		g.drawString("Density: " + roundValue(instanceEntity.getDensity(), numberOfDecimals), origin.x, origin.y + g.getFontMetrics().getHeight() * 5);
+		g.drawString("Density: " + roundValue(instanceEntity.getDensity(), numberOfDecimals), origin.x,
+				origin.y + g.getFontMetrics().getHeight() * 5);
+
+		g.drawString("Hp: " + instanceEntity.getHealthPoint(), origin.x, origin.y + g.getFontMetrics().getHeight() * 6);
+		// affichage du niveau d'oxygen des joueurs
+		if (instanceEntity instanceof model.Player) {
+			g.drawString("Oxygen: " + roundValue(((model.Player) instanceEntity).getOxygen(), numberOfDecimals),
+					origin.x, origin.y + g.getFontMetrics().getHeight() * 7);
+		}
 	}
 
 	/**

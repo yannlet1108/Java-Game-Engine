@@ -14,7 +14,7 @@ public class VestTest {
 		int x = 100;
 		while (x > 0) {
 			System.out.println("Density = " + P1.density + " ,Oxygen = " + P1.getOxygen() + " ,Air in vest = "
-					+ P1.vest.getVestAir() + " Health = " + P1.getHealthPoint());
+					+ P1.getOxygen() + " Health = " + P1.getHealthPoint());
 			P1.step();
 			P1.pop(-1);
 			x -= 10;
@@ -23,7 +23,7 @@ public class VestTest {
 		System.out.println("------------------------------------------------");
 		while (x > 0) {
 			System.out.println("Density = " + P1.density + " ,Oxygen = " + P1.getOxygen() + " ,Air in vest = "
-					+ P1.vest.getVestAir() + " ,Health = " + P1.getHealthPoint());
+					+ P1.getOxygen() + " ,Health = " + P1.getHealthPoint());
 			P1.step();
 			P1.pop(1);
 			x -= 10;

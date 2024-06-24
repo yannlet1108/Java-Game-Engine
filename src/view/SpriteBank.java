@@ -52,6 +52,13 @@ public class SpriteBank {
 		background.setSprite(0, newSprite);
 	}
 
+	/**
+	 * Renvoie l'emplacement du spriteset dans la banque de sprite en fonction de
+	 * son type dans la config
+	 * 
+	 * @param fileName
+	 * @return
+	 */
 	int getSpritesSetNumber(String entityType) {
 		String fileName = getconfStr(entityType, "spriteFile");
 		for (int i = 0; i < spritesBank.size(); i++) {
@@ -62,6 +69,9 @@ public class SpriteBank {
 		return -1;
 	}
 
+	/**
+	 * Charge les spriteset de la config dans la banque de sprite
+	 */
 	void loadSpritesSets() {
 
 		String currentFile = "";
@@ -69,17 +79,20 @@ public class SpriteBank {
 			/* background */
 			currentFile = getconfStr("World", "spriteFile");
 			spritesBank.add(0, loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "debugColor"))));
+			/* ship */
+			currentFile = getconfStr("World", "shipSpriteFile");
+			spritesBank.add(1, loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "shipDebugColor"))));
 			/* player1 */
 			currentFile = getconfStr("Player1", "spriteFile");
-			spritesBank.add(1, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+			spritesBank.add(loadSprite(currentFile, getconfInt("World", "spriteNrows"),
 					getconfInt("World", "spriteNcols"), new Color(getconfInt("Player1", "debugColor"))));
 			/* player2 */
 			currentFile = getconfStr("Player2", "spriteFile");
-			spritesBank.add(2, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+			spritesBank.add(loadSprite(currentFile, getconfInt("World", "spriteNrows"),
 					getconfInt("World", "spriteNcols"), new Color(getconfInt("Player2", "debugColor"))));
 			/* block */
 			currentFile = getconfStr("Obstacle", "spriteFile");
-			spritesBank.add(3, loadSprite(currentFile, getconfInt("World", "spriteNrows"),
+			spritesBank.add(loadSprite(currentFile, getconfInt("World", "spriteNrows"),
 					getconfInt("World", "spriteNcols"), new Color(getconfInt("Obstacle", "debugColor"))));
 			/* Mobs */
 			for (int i = 0; i < getconfInt("World", "nbBots"); i++) {
@@ -93,12 +106,13 @@ public class SpriteBank {
 	}
 
 	/**
-	 * Charge les sprites d'un fichier sous forme d'un tableau de sprites
+	 * Charge un spriteset à partir d'un fichier
 	 * 
-	 * @param filename : nom du fichier contenant les sprites
-	 * @param nrows    : nombre de lignes de sprites dans le fichier
-	 * @param ncols    : nombre de colonnes de sprites dans le fichier
-	 * @return : le tableau des sprites du fichier
+	 * @param filename   : nom du fichier
+	 * @param nrows      : nombre de lignes de sprites
+	 * @param ncols      : nombre de colonnes de sprites
+	 * @param debugColor : couleur de debug
+	 * @return : le spriteset
 	 * @throws IOException
 	 */
 	public static SpriteSet loadSprite(String filename, int nrows, int ncols, Color debugColor) throws IOException {
@@ -126,7 +140,7 @@ public class SpriteBank {
 	 * Cherche le sprite d'un avatar dans la banque de sprite
 	 * 
 	 * @param avatar    : avatar dont on veut le sprite
-	 * @param numSprite : numéro du sprite souhaité parmi les sprites de l'avatar
+	 * @param numSprite : numéro du sprite souhaité parmi le spriteset
 	 * @return : le sprite de l'avatar
 	 */
 	BufferedImage getSprite(int numSetSprite, int numSprite) {
@@ -145,12 +159,21 @@ public class SpriteBank {
 	}
 
 	/**
-	 * Retourne le sprite de l'arrière plan
+	 * Retourne le spriteset de l'arrière plan
 	 * 
-	 * @return buffered image du background
+	 * @return
 	 */
 	SpriteSet getBackgroundset() {
 		return spritesBank.get(0);
+	}
+
+	/**
+	 * Retourne le spriteset de la zone de refill
+	 * 
+	 * @return
+	 */
+	SpriteSet getShipSet() {
+		return spritesBank.get(1);
 	}
 
 	/**

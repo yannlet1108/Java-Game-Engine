@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -16,7 +17,6 @@ import javax.swing.JLabel;
 
 import controller.Controller;
 import info3.game.graphics.GameCanvas;
-import model.Entity;
 import model.Model;
 
 /**
@@ -34,8 +34,11 @@ public class View {
 	private long m_textElapsed;
 
 	private List<Avatar> avatarStorage;
+	private List<Avatar> toRemoveList;
 	private SpriteBank bank;
 	private Viewport viewport;
+
+	private Rectangle2D refillArea;
 
 	/**
 	 * Initialise la view, ouvre la fenêtre graphique, la liste d'avatar et la
@@ -56,6 +59,7 @@ public class View {
 		initViewport();
 		new SpriteBank(this);
 		initAvatar();
+		initRefillArea();
 	}
 
 	/**
@@ -99,13 +103,6 @@ public class View {
 	}
 
 	/**
-	 * Initialise la liste d'avatar
-	 */
-	private void initAvatar() {
-		avatarStorage = new LinkedList<Avatar>();
-	}
-
-	/**
 	 * Initialise le viewport
 	 */
 	private void initViewport() {
@@ -113,28 +110,43 @@ public class View {
 	}
 
 	/**
+	 * Initialise la liste d'avatar et sa liste de suppression
+	 */
+	private void initAvatar() {
+		avatarStorage = new LinkedList<Avatar>();
+		toRemoveList = new LinkedList<Avatar>();
+	}
+
+	/**
+	 * Initialise la zone de refill du monde
+	 */
+	private void initRefillArea() {
+		this.refillArea = new Rectangle2D.Double(m_controller.getConfig().getIntValue("World", "width") / 2, 0,
+				m_controller.getConfig().getIntValue("World", "shipSize"),
+				m_controller.getConfig().getIntValue("World", "shipSize"));
+	}
+
+	/**
 	 * Enregistre un avatar dans la liste des avatar existante
 	 * 
 	 * @param a : nouvel avatar à sauvegarder
 	 */
-	public void store(Avatar a) {
+	public void storeAvatar(Avatar a) {
 		avatarStorage.add(a);
 	}
 
+	public void addToRemove(Avatar a) {
+		toRemoveList.add(a);
+	}
+
 	/**
-	 * Detruit l'avatar d'une entité en cours de destruction
-	 * 
-	 * @param e : entité en cours de destruction
+	 * Retire de la liste d'avatar les avatars de ToRemoveList
 	 */
-	public void destroy(Entity e) {
-		Iterator<Avatar> avatarIterator = getAvatarIterator();
-		Avatar current;
-		while (avatarIterator.hasNext()) {
-			current = avatarIterator.next();
-			if (current.getEntity() == e) {
-				avatarStorage.remove(current);
-				return;
-			}
+	public void destroyToRemoves() {
+		Iterator<Avatar> it = toRemoveList.iterator();
+		while (it.hasNext()) {
+			avatarStorage.remove(it.next());
+
 		}
 	}
 
@@ -148,11 +160,13 @@ public class View {
 			viewport.updateViewport(getFarthestPlayers(m_model.getPlayersPos()));
 			viewport.resize();
 			fillBackground(g);
+			drawRefillZone(g);
 			Iterator<Avatar> avatarIterator = getAvatarIterator();
 			while (avatarIterator.hasNext()) {
 				avatarIterator.next().paint(g);
 			}
 		}
+		destroyToRemoves();
 	}
 
 	/**
@@ -255,6 +269,27 @@ public class View {
 	}
 
 	/**
+	 * Dessine la zone de refill avec un sprite ou une couleur de debug
+	 * 
+	 * @param g : instance graphique du canvas
+	 */
+	private void drawRefillZone(Graphics g) {
+		Point origin = getViewport().toViewport(refillArea);
+		if (origin == null)
+			return;
+		if (ViewCst.DEBUG) {
+			g.setColor(getBank().getShipSet().getDebugColor());
+			g.fillRect(origin.x, origin.y, (int) (refillArea.getWidth() * getViewport().getScale()),
+					(int) (refillArea.getHeight() * getViewport().getScale()));
+		} else {
+			BufferedImage sprite = getBank().getShipSet().getSprite(0);
+			g.drawImage(sprite, origin.x, origin.y, (int) (refillArea.getWidth() * getViewport().getScale()),
+					(int) (refillArea.getHeight() * getViewport().getScale()), null);
+		}
+
+	}
+
+	/**
 	 * Enregistre l'instance courante du model
 	 * 
 	 * @param m_model : instance courante du model
@@ -275,10 +310,20 @@ public class View {
 	/**
 	 * Crée un iterateur sur les avatars
 	 * 
-	 * @return iterateur sur la liste d'avatar
+	 * @return iterateur sur une copie de la liste d'avatar
 	 */
 	private Iterator<Avatar> getAvatarIterator() {
-		return avatarStorage.iterator();
+		LinkedList<Avatar> avatars = new LinkedList<Avatar>(avatarStorage);
+		return avatars.iterator();
+	}
+
+	/**
+	 * Retourne l'instance courante du controller
+	 * 
+	 * @return instance du controller
+	 */
+	Controller getController() {
+		return m_controller;
 	}
 
 	/**
@@ -297,10 +342,6 @@ public class View {
 	 */
 	Viewport getViewport() {
 		return viewport;
-	}
-
-	Controller getController() {
-		return m_controller;
 	}
 
 	/**

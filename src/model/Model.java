@@ -2,6 +2,7 @@ package model;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -31,6 +32,8 @@ public class Model {
 	private int player2SpawnY;
 	private int seed;
 	private int safeZone;
+	private int shipSize;
+	private Double shipArea;
 
 	private AutomatonBank automatonBank;
 
@@ -59,6 +62,8 @@ public class Model {
 		player2SpawnY = getConfig().getIntValue("World", "player2SpawnY");
 		seed = getConfig().getIntValue("World", "seed");
 		safeZone = getConfig().getIntValue("World", "safeZone");
+		shipSize = getConfig().getIntValue("World", "shipSize");
+		shipArea = new Rectangle2D.Double(worldWidth / 2, 0, shipSize, shipSize);
 		mapGenerator();
 		new Player(new Point2D.Double(player1SpawnX, player1SpawnY), Direction.N, this, "Player1");
 		new Player(new Point2D.Double(player2SpawnX, player2SpawnY), Direction.N, this, "Player2");
@@ -94,6 +99,7 @@ public class Model {
 				entity.computeMovement();
 			}
 		}
+		removeEntityToRemove();
 		spawnEnemy();
 	}
 
@@ -108,16 +114,16 @@ public class Model {
 	private Mob spawnEnemy() {
 		config.Config cfg = this.m_controller.getConfig();
 		Random yesOrNotRand = new Random();
-		int yesOrNot = yesOrNotRand.nextInt(1000); // 1000 à modif
-		if (yesOrNot < ModelConstants.IN_GENERAL) {
+		int yesOrNot = yesOrNotRand.nextInt(100); // 100 à modif
+		if (yesOrNot < cfg.getIntValue("World", "spawnMobProba")) {
 			Random ranWhatFish = new Random();
 			int mobProb = ranWhatFish.nextInt(100);
 			int mobnum = -1;
 			double width = 0, height = 0;
 			if (mobProb < cfg.getIntValue("Mob0", "spawnProba")) {
 				mobnum = 0;
-			} else if (mobProb >= ModelConstants.GOLDENFISH_PROBA
-					&& mobProb < ModelConstants.GOLDENFISH_PROBA + ModelConstants.SHARK_PROBA) {
+			} else if (mobProb >= cfg.getIntValue("Mob0", "spawnProba")
+					&& mobProb < cfg.getIntValue("Mob1", "spawnProba") + cfg.getIntValue("Mob0", "spawnProba")) {
 				mobnum = 1;
 			} else {
 				return null;
@@ -130,7 +136,7 @@ public class Model {
 			Rectangle2D candidate;
 			int whileCounter = 0;
 			while (!isGood) {
-				if (whileCounter > 10) {
+				if (whileCounter > 30) {
 					System.out.println("Almost Nowhere to spawn, gave Up");
 					return null;
 				}
@@ -253,10 +259,7 @@ public class Model {
 		Iterator<Entity> iter = this.toRemove.iterator();
 		while (iter.hasNext()) {
 			Entity e = iter.next();
-			this.removeEntity(e);
-			if (e instanceof Player) {
-				this.removePlayer((Player) e);
-			}
+			e.destroy();
 		}
 		toRemove.clear();
 	}
@@ -303,5 +306,9 @@ public class Model {
 
 	public int getSafeZone() {
 		return safeZone;
+	}
+
+	public Double getShipArea() {
+		return shipArea;
 	}
 }

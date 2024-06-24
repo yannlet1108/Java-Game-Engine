@@ -2,28 +2,29 @@ package model;
 
 import java.awt.geom.Point2D;
 
-import view.Avatar;
-
 public class Player extends Entity {
 
-	private Vest vest;
+	Vest vest;
 	private double oxygen;
+	private double maxOxygen;
 
 	public Player(Point2D position, Direction direction, Model model, String name) {
 		super(position, direction, model, name);
 		density = model.getConfig().getIntValue(name, "density");
-		oxygen = 100;
+		maxOxygen = model.getConfig().getFloatValue(name, "maxOxygen");
+		oxygen = maxOxygen;
 		vest = new Vest();
 		this.team = model.getConfig().getCategory(name, "category");
 		this.model.addPlayer(this);
 	}
 
-	private class Vest {
-		public double densityStep;
-		public double oxygenStep;
-		public double maxDensity;
-		public double minDensity;
-		public double oxygenBreath;
+	class Vest {
+		private double densityStep;
+		private double oxygenStep;
+		private double maxDensity;
+		private double minDensity;
+		private double oxygenBreath;
+		private double reloadStep; 
 
 		Vest() {
 			densityStep = model.getConfig().getFloatValue(name, "stepDensity");
@@ -31,6 +32,7 @@ public class Player extends Entity {
 			maxDensity = model.getConfig().getFloatValue(name, "maxDensity");
 			minDensity = model.getConfig().getFloatValue(name, "minDensity");
 			oxygenStep = model.getConfig().getFloatValue(name, "oxygenStep");
+			reloadStep = model.getConfig().getFloatValue(name, "reloadStep");
 		}
 
 	}
@@ -39,16 +41,25 @@ public class Player extends Entity {
 		return oxygen;
 	}
 
+	void setOxygen(double oxygen) {
+		this.oxygen = oxygen;
+	}
+
 	/**
 	 * Diminue l'oxygen dans le gilet chaque step
 	 */
-	public void breathe() {
+	void breathe() {
 		if (oxygen > 0) {
 			oxygen -= vest.oxygenBreath;
-			;
 		} else {
 			oxygen = 0;
 			this.getHit(15);
+		}
+		if (this.hitbox.intersects(model.getShipArea())) {
+			if (oxygen <= maxOxygen - vest.reloadStep) {
+				setOxygen(oxygen + vest.reloadStep);
+				this.state = State.REFILLING;
+			}
 		}
 	}
 
@@ -58,7 +69,7 @@ public class Player extends Entity {
 	 * 
 	 * @param i
 	 */
-	public void pop(int i) {
+	void pop(int i) {
 		if (i == 1) {
 			this.swell();
 		} else if (i == -1) {
@@ -88,13 +99,16 @@ public class Player extends Entity {
 	}
 
 	/**
-	 * degonfler le gilet : augmente l'oxygen, augmente la densité, diminuer l'air
-	 * dans le gilet
+	 * degonfler le gilet : augmente la densité, diminuer l'air dans le gilet
 	 */
 	private void deflate() {
 		density += vest.densityStep;
 		if (density > vest.maxDensity) {
 			density = vest.maxDensity;
 		}
+	}
+
+	Vest getVest() {
+		return vest;
 	}
 }
