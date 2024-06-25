@@ -57,7 +57,7 @@
     "meleeRange": 20,
     "maxHealthPoint": 100,
     "throwBots": "Mob2",
-    "automaton": "Baloon1",
+    "automaton": "Diver1",
     "maxOxygen": 100,
     "stepDensity": 0.1,
     "oxygenBreathe": 0.01,

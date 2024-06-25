@@ -1,0 +1,123 @@
+{
+  "General": {},
+  "View": {
+    "debug": false : affiche des sprites / true affiche des rectangles 
+    "uid": true : affiche les informations relatives aux avatars
+    "parallax": 0-1 (0,95 recommandé): 0 = pas de parallaxe / 1 = parallaxe totale
+    "max_scaling": 10.0 : zoom maximum sur les joueurs
+    "min_scaling": 1 : zoom minimum sur les joueurs (depend aussi du monde)
+    "margin": 60 : marge de déplacement de la caméra
+    "top_margin": 100 : marge de depassement de la simulation en haut
+    "bottom_margin": 0: marge de depassement de la simulation en bas
+    "left_margin": 0 : marge de depassement de la simulation à gauche
+    "right_margin": 0 : marge de depassement de la simulation à droite
+    "move_factor": 0.06 : vitesse de déplacement de la caméra
+    "scale_factor": 0.06 : vitesse de zoom
+  },
+
+  "World": {
+    "width": 1000 : largeur du monde
+    "height": 800 : hauteur du monde
+    "density": 1 : densité du milieu
+    "viscosity": 0.70 : viscosité du milieu
+    "spawnMobProba": 6 : probabilité de spawn d'un mob
+    "nbBots": 3 : nombre de bots (dans la liste "Mobs" ci dessous)
+    "spriteFile": "background.png" : image de fond
+    "debugColor": -16776961 : couleur de debug du fond (bleu)
+    "spriteNrows": 12 : nombre de lignes de sprites dans le sprite
+    "spriteNcols": 4 : nombre de colonnes de sprites dans le sprite
+    "seed": 12 : seed pour la génération aléatoire du monde
+    "player1SpawnX": 400 : position x de spawn du joueur 1
+    "player1SpawnY": 50 : position y de spawn du joueur 1
+    "player2SpawnX": 600 : position x de spawn du joueur 2
+    "player2SpawnY": 50 : position y de spawn du joueur 2
+    "safeZone": 50 : zone autour des joueurs dans laquelle les obstacles ne peuvent pas apparaitre lors de la génération du monde
+    "refillAreaSizeX": 52 : largeur de la zone de refill de l'oxygène
+    "refillAreaSizeY": 42 : hauteur de la zone de refill de l'oxygène
+    "fixedBackgroundSprite": "surface.png" : image de fond fixe (2eme layer de background)
+    "backgroundOverlaySprite": "overlay.png" : image de fond overlay (3eme layer de background au dessus des avatars)
+    "backgroundOverlayDebugColor": -16776961 : (non utilisé en dehors de la construction de spriteset)
+    "fixedBackgroundHeight": 1000 : hauteur du background fixe
+    "fixedBackgroundWidth": 1000 : largeur du background fixe
+    "fixedBackgroundXOffset": 0 : offset x du background fixe
+    "fixedBackgroundYOffset": -200 : offset y du background fixe
+    "fixedBackgroundDebugColor": -16777026 non utilisé en dehors de la construction de spriteset
+    "maxEntity": 10000 : nombre maximum d'entités dans le monde
+
+  },
+  "<Player>": {
+    "width": 20 : largeur de l'entité
+    "height": 10 : hauteur de l'entité
+    "speed": 25 : vitesse de l'entité
+    "density": 1 : densité de l'entité
+    "spriteFile": "playerSprites.png" : fichier de sprites de l'entité
+    "debugColor": -65536 : couleur de debug de l'entité
+    "category": "TEAM1/2/3/..." : catégorie de l'entité
+    "attackDamage": 20 : dégats de l'entité
+    "meleeRange": 20 : portée de l'attaque de l'entité
+    "maxHealthPoint": 100 : points de vie max de l'entité
+    "throwBots": "Mob2" : type de bot throable par l'entité (nom dans la config)
+    "automaton": "Player" : automate associé à l'entité
+    "maxOxygen": 100 : oxygène max de l'entité
+    "stepDensity": 0.1 : pas de densité de l'entité lors d'appui sur les touches
+    "oxygenBreathe": 0.01 : quantité d'oxygène respirée par l'entité
+    "oxygenStep": 2 : pas de respiration de l'entité
+    "reloadStep": 1 : pas de rechargement de l'entité
+    "maxDensity": 2 : densité max de l'entité
+    "minDensity": 0 : densité min de l'entité
+    "isPhysicObject": true : subit ou non la physique (false pour les obstacles par exemple)
+    "moveDuration": 100 : durée de l'action mouvement de l'entité (en ms)
+    "hitDuration": 500 : durée de l'action attaque de l'entité
+    "explodeDuration": 1000 : durée de l'action explosion de l'entité
+    "popDuration": 100 : durée de l'action pop de l'entité
+    "eggDuration": 1000 : durée de l'action egg de l'entité
+    "waitDuration": 500 : durée de l'action wait de l'entité
+    "throwDuration": 1000 : durée de l'action throw de l'entité
+  },
+  "<Entity>": {
+    "width": 20,
+    "height": 20,
+    "speed": 0,
+    "spriteFile": "obstacleSprites.png",
+    "debugColor": -8355712,
+    "category": "OBSTACLE",
+    "maxHealthPoint": 10,
+    "automaton": "Block",
+    "probability": 0.001 : probabilité de spawn de cette entité lors du spawn aléatoire d'une entité
+    "attackDamage": 0,
+    "meleeRange": 0,
+    "throwBots": "mob2",
+    "isPhysicObject": false,
+    "moveDuration": 500,
+    "hitDuration": 500,
+    "explodeDuration": 500,
+    "popDuration": 500,
+    "eggDuration": 500,
+    "waitDuration": 500,
+    "throwDuration": 500
+  },
+  "Mobs": [ : liste des différents mobs possibles
+    {
+      "width": 10,
+      "height": 5,
+      "speed": 20,
+      "spriteFile": "goldFishSprites.png",
+      "debugColor": -23296,
+      "category": "TEAM2",
+      "attackDamage": 5,
+      "meleeRange": 10,
+      "maxHealthPoint": 30,
+      "throwBots": "mob2",
+      "automaton": "Goldfish",
+      "spawnProba": 0,
+      "isPhysicObject": true,
+      "moveDuration": 3000,
+      "hitDuration": 500,
+      "explodeDuration": 1000,
+      "popDuration": 500,
+      "eggDuration": 1000,
+      "waitDuration": 500,
+      "throwDuration": 1000
+    }
+  ]
+}
