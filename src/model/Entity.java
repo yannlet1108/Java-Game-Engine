@@ -43,8 +43,8 @@ public abstract class Entity {
 	private double explodeRange;
 
 	private double moveForce;
-	private Timer timer;
-	private TimerTask currenTask;
+	Timer timer;
+	TimerTask currenTask;
 
 	private int moveDuration;
 	private int waitDuration;
