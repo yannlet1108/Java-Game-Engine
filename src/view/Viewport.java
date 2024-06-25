@@ -16,6 +16,7 @@ public class Viewport {
 
 	private Rectangle2D viewbox;
 	private float scale;
+	private View m_view;
 
 	/**
 	 * Crée le viewport
@@ -24,6 +25,7 @@ public class Viewport {
 	 */
 	Viewport(GameCanvas m_canvas, View view) {
 		this.m_canvas = m_canvas;
+		this.m_view = view;
 		viewbox = new Rectangle2D.Double(0, 0, m_canvas.getWidth(), m_canvas.getHeight());
 		scale = 1;
 	}
@@ -82,6 +84,15 @@ public class Viewport {
 
 		double newX = viewbox.getX() - length_x * ViewCst.MOVE_FACTOR;
 		double newY = viewbox.getY() - length_y * ViewCst.MOVE_FACTOR;
+
+		if (newX < -ViewCst.LEFT_MARGIN)
+			newX = -ViewCst.LEFT_MARGIN;
+		if (newX > m_view.getSimWidth() + ViewCst.RIGHT_MARGIN - viewbox.getWidth() * reverseScale())
+			newX = m_view.getSimWidth() + ViewCst.RIGHT_MARGIN - viewbox.getWidth() * reverseScale();
+		if (newY < -ViewCst.TOP_MARGIN)
+			newY = -ViewCst.TOP_MARGIN;
+		if (newY > m_view.getSimHeight() + ViewCst.BOTTOM_MARGIN - viewbox.getHeight() * reverseScale())
+			newY = m_view.getSimHeight() + ViewCst.BOTTOM_MARGIN - viewbox.getHeight() * reverseScale();
 		viewbox.setRect(newX, newY, viewbox.getHeight(), viewbox.getHeight());
 	}
 
