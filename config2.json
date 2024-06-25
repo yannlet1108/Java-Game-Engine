@@ -3,6 +3,7 @@
   "View": {
     "debug": false,
     "uid": false,
+    "parallax": 0.95,
     "max_scaling": 10.0,
     "min_scaling": 0.5,
     "margin": 60,
@@ -45,7 +46,7 @@
 
   },
   "Player1": {
-    "width": 50,
+    "width": 30,
     "height": 50,
     "speed": 25,
     "density": 2,
@@ -74,7 +75,7 @@
     "throwDuration": 1000
   },
   "Player2": {
-    "width": 50,
+    "width": 30,
     "height": 50,
     "speed": 25,
     "density": 2,
@@ -111,7 +112,7 @@
     "category": "OBSTACLE",
     "maxHealthPoint": 10,
     "automaton": "Block",
-    "probability": 0,
+    "probability": 0.05,
     "attackDamage": 0,
     "meleeRange": 0,
     "throwBots": "mob2",

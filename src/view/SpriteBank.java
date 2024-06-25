@@ -36,8 +36,9 @@ public class SpriteBank {
 	private void resizeBackground() {
 		SpriteSet background = getBackgroundset();
 		BufferedImage sprite = background.getSprite(0);
-		double xRatio = (double) sprite.getWidth() / (double)m_view.getScreenWidth();
-		double yRatio = (double) sprite.getHeight() / (double) m_view.getScreenHeight();
+
+		double xRatio = (double) (sprite.getWidth()) / (double) (m_view.getScreenWidth());
+		double yRatio = (double) (sprite.getHeight()) / (double) (m_view.getScreenHeight());
 		double ratio = Math.min(xRatio, yRatio);
 		double newWidth = sprite.getWidth();
 		double newHeight = sprite.getHeight();
