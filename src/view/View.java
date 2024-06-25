@@ -276,7 +276,7 @@ public class View {
 	 * @return scale exacte du background
 	 */
 	private float getBackgroundScale() {
-		float rawScale = getScreenHeight() / bank.getBackgroundset().getSprite(0).getHeight();
+		float rawScale = (float) (getScreenHeight()) / (float) (bank.getBackgroundset().getSprite(0).getHeight());
 		return rawScale + rawScale * ratioToParallax(getScaleRatio());
 	}
 
