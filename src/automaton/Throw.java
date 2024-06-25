@@ -15,9 +15,9 @@ class Throw implements Action {
 	public void exec(Entity e) {
 		if (dir == Direction.UNDERSCORE) {
 			Direction randomDirection = dir.getRandomDirection();
-			e.doEgg(randomDirection);
+			e.doThrow(randomDirection);
 		} else {
-			e.doEgg(dir);
+			e.doThrow(dir);
 		}
 	}
 	
