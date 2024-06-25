@@ -107,7 +107,7 @@
     "width": 20,
     "height": 20,
     "speed": 0,
-    "spriteFile": "obstacleSprites.png",
+    "spriteFile": "obstacle2Sprites.png",
     "debugColor": -8355712,
     "category": "OBSTACLE",
     "maxHealthPoint": 10,
