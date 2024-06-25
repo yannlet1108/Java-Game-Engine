@@ -30,12 +30,13 @@ public class Controller implements GameCanvasListener {
 		this.keyList = new LinkedList<Integer>();
 		System.out.println("Tapez le nom du fichier de config voulu");
 		String input = null;
-        try (Scanner inputReader = new Scanner(System.in)) {
+		try (Scanner inputReader = new Scanner(System.in)) {
 			input = inputReader.nextLine();
 		}
         m_config = new Config(input + ".json");
 		m_view = new View(this);
 		m_model = new Model(this, m_view);
+		m_view.correctMinScaling();
 		this.tick = 0;
 	}
 
