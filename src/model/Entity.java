@@ -205,6 +205,11 @@ public abstract class Entity {
 		egg(Direction.BACKWARD);
 	}
 
+	/**
+	 * Spwan une entitée de même type que "this" proche de "this" selon la direction
+	 * 
+	 * @param direct
+	 */
 	public void egg(Direction direct) {
 		Point2D pts = null;
 		int marge = 3;
@@ -265,6 +270,13 @@ public abstract class Entity {
 		timer.schedule(endPopTask, endPopTask.getDuration());
 	}
 
+	/**
+	 * Si "this" est un player :
+	 * Si i = 1 il gonfle le gilet par un pas, si i = -1 il le dégonfle Sinon il
+	 * rends une exception
+	 * 
+	 * @param i
+	 */
 	private void pop(int val) {
 		((Player) this).pop(val);
 	}
@@ -386,6 +398,17 @@ public abstract class Entity {
 		return isLeftBorderInZone || isRightBorderInZone || isTopBorderInZone || isBottomBorderInZone;
 	}
 
+	/**
+	 * Returne true si le hitbox a une intersection avec le losange ou le carré
+	 * selon la direction, false sinon.
+	 * 
+	 * @param rayon
+	 * @param x
+	 * @param y
+	 * @param absoluteDirection
+	 * @param hitbox
+	 * @return
+	 */
 	private boolean isEntityInZone(double rayon, double x, double y, Direction absoluteDirection, Rectangle2D hitbox) {
 		// Cela test si un des points de rectangle est dans cette direction
 		double GBx, GBy;
@@ -431,62 +454,49 @@ public abstract class Entity {
 		// Cela test si le rectangle ou le losange de la direction a un point dans le
 		// hitbox d'entité
 		Rectangle2D hitBox = hitbox;
-		Point2D point1, point2, point3;
+		Point2D point1 = null, point2 = null, point3 = null;
 		if (absoluteDirection == Direction.SE) {
 			point1 = new Point2D.Double(x + rayon, y);
 			point2 = new Point2D.Double(x, y + rayon);
 			point3 = new Point2D.Double(x + rayon, y + rayon);
-			if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-				return true;
 		}
 		if (absoluteDirection == Direction.SW) {
 			point1 = new Point2D.Double(x - rayon, y);
 			point2 = new Point2D.Double(x, y + rayon);
 			point3 = new Point2D.Double(x - rayon, y + rayon);
-			if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-				return true;
 		}
 		if (absoluteDirection == Direction.NW) {
 			point1 = new Point2D.Double(x - rayon, y);
 			point2 = new Point2D.Double(x, y - rayon);
 			point3 = new Point2D.Double(x - rayon, y - rayon);
-			if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-				return true;
 		}
 		if (absoluteDirection == Direction.NE) {
 			point1 = new Point2D.Double(x + rayon, y);
 			point2 = new Point2D.Double(x, y - rayon);
 			point3 = new Point2D.Double(x + rayon, y - rayon);
-			if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-				return true;
 		}
 		if (absoluteDirection == Direction.E) {
 			point1 = new Point2D.Double(x + rayon, y);
 			point2 = new Point2D.Double(x + rayon / 2, y + rayon / 2);
 			point3 = new Point2D.Double(x + rayon / 2, y - rayon / 2);
-			if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-				return true;
 		}
 		if (absoluteDirection == Direction.W) {
 			point1 = new Point2D.Double(x - rayon, y);
 			point2 = new Point2D.Double(x - rayon / 2, y + rayon / 2);
 			point3 = new Point2D.Double(x - rayon / 2, y - rayon / 2);
-			if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-				return true;
 		}
 		if (absoluteDirection == Direction.N) {
 			point1 = new Point2D.Double(x, y - rayon);
 			point2 = new Point2D.Double(x + rayon / 2, y - rayon / 2);
 			point3 = new Point2D.Double(x - rayon / 2, y - rayon / 2);
-			if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-				return true;
 		}
 		if (absoluteDirection == Direction.S) {
 			point1 = new Point2D.Double(x, y + rayon);
 			point2 = new Point2D.Double(x + rayon / 2, y + rayon / 2);
 			point3 = new Point2D.Double(x - rayon / 2, y + rayon / 2);
-			if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3))
-				return true;
+		}
+		if (hitBox.contains(point1) || hitBox.contains(point2) || hitBox.contains(point3)) {
+			return true;
 		}
 		return false;
 	}
