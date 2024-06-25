@@ -13,7 +13,12 @@ class Egg implements Action {
 
 	@Override
 	public void exec(Entity e) {
-		e.doEgg(dir);
+		if (dir == Direction.UNDERSCORE) {
+			Direction randomDirection = dir.getRandomDirection();
+			e.doEgg(randomDirection);
+		} else {
+			e.doEgg(dir);
+		}
 	}
 
 	@Override

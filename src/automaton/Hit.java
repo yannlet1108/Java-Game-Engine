@@ -13,7 +13,12 @@ class Hit implements Action {
 
 	@Override
 	public void exec(Entity e) {
-		e.doHit(dir);
+		if (dir == Direction.UNDERSCORE) {
+			Direction randomDirection = dir.getRandomDirection();
+			e.doHit(randomDirection);
+		} else {
+			e.doHit(dir);
+		}
 	}
 
 	@Override
