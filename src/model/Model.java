@@ -256,28 +256,28 @@ public class Model {
 	 * @param e
 	 */
 	void addEntityToRemove(Entity e) {
-		toRemove.add(e);
+		getToRemove().add(e);
 	}
 
 	/**
 	 * Supprime une entité des tableaux entities et players
 	 */
 	void removeEntityToRemove() {
-		Iterator<Entity> iter = this.toRemove.iterator();
+		Iterator<Entity> iter = this.getToRemove().iterator();
 		while (iter.hasNext()) {
 			Entity e = iter.next();
 			e.destroy();
 		}
-		toRemove.clear();
+		getToRemove().clear();
 	}
 
 	void addEntityToAdd() {
-		Iterator<Entity> iter = this.toAdd.iterator();
+		Iterator<Entity> iter = this.getToAdd().iterator();
 		while (iter.hasNext()) {
 			Entity e = iter.next();
 			addEntity(e);
 		}
-		toAdd.clear();
+		getToAdd().clear();
 	}
 
 	public Collection<Player> getPlayers() {
@@ -344,5 +344,13 @@ public class Model {
 			}
 		}
 		return null;
+	}
+
+	public Collection<Entity> getToRemove() {
+		return toRemove;
+	}
+
+	public Collection<Entity> getToAdd() {
+		return toAdd;
 	}
 }

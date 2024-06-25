@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import automaton.FSM;
+import config.Config;
 import view.Avatar;
 
 public abstract class Entity {
@@ -42,16 +43,16 @@ public abstract class Entity {
 	private double explodeRange;
 
 	private double moveForce;
-	Timer timer;
-	TimerTask currenTask;
+	private Timer timer;
+	private TimerTask currenTask;
 
-	int moveDuration;
-	int waitDuration;
-	int hitDuration;
-	int eggDuration;
-	int popDuration;
-	int explodeDuration;
-	int throwDuration;
+	private int moveDuration;
+	private int waitDuration;
+	private int hitDuration;
+	private int eggDuration;
+	private int popDuration;
+	private int explodeDuration;
+	private int throwDuration;
 	private int maxHealthPoint;
 
 	/**
@@ -60,13 +61,13 @@ public abstract class Entity {
 	 * @param model
 	 */
 
-	public Entity(Point2D position, Direction direction, Model model, String name) {
-		config.Config cfg = model.getConfig();
+	Entity(Point2D position, Direction direction, Model model, String name) {
+		Config cfg = model.getConfig();
 		hitbox = new Rectangle2D.Double(position.getX(), position.getY(), cfg.getFloatValue(name, "width"),
 				cfg.getFloatValue(name, "height"));
 		this.direction = direction;
 		this.model = model;
-		this.model.toAdd.add(this);
+		this.model.getToAdd().add(this);
 		force = new Vector();
 		speed = new Vector();
 		this.moveForce = cfg.getFloatValue(name, "speed");
@@ -126,7 +127,7 @@ public abstract class Entity {
 		return force;
 	}
 
-	public void setSpeed(Vector speed) {
+	private void setSpeed(Vector speed) {
 		this.speed = speed;
 	}
 
@@ -138,19 +139,19 @@ public abstract class Entity {
 		return hitbox.getWidth();
 	}
 
-	public Point2D getCenter() {
+	Point2D getCenter() {
 		return new Point2D.Double(hitbox.getCenterX(), hitbox.getCenterY());
 	}
 
-	public void setPosition(Point2D position) {
+	private void setPosition(Point2D position) {
 		hitbox.setRect(position.getX(), position.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
 
-	public void translatePosition(Vector v) {
+	private void translatePosition(Vector v) {
 		hitbox.setRect(hitbox.getX() + v.getX(), hitbox.getY() + v.getY(), hitbox.getWidth(), hitbox.getHeight());
 	}
 
-	public Model getModel() {
+	private Model getModel() {
 		return this.model;
 	}
 
@@ -184,12 +185,12 @@ public abstract class Entity {
 	 * 
 	 * @param direction
 	 */
-	public void move(Direction direction) {
+	private void move(Direction direction) {
 		setForce(Vector.getVectorUnitVectorFromDirection(Direction.relativeToAbsolute(this.direction, direction))
 				.scalarMultiplication(moveForce));
 	}
 
-	public void move() {
+	private void move() {
 		move(Direction.FORWARD);
 	}
 
@@ -210,7 +211,7 @@ public abstract class Entity {
 	 * 
 	 * @param direct
 	 */
-	public void egg(Direction direct) {
+	private void egg(Direction direct) {
 		Point2D pts = null;
 		int marge = 3;
 		config.Config cfg = model.getConfig();
@@ -293,7 +294,7 @@ public abstract class Entity {
 	/**
 	 * Supprime l'entite
 	 */
-	public void explode() {
+	private void explode() {
 		Rectangle2D hitRange = new Rectangle2D.Double(this.hitbox.getX() - explodeRange,
 				this.hitbox.getY() - explodeRange, this.hitbox.getWidth() + 2 * explodeRange,
 				this.hitbox.getHeight() + 2 * explodeRange);
@@ -349,7 +350,7 @@ public abstract class Entity {
 	 * @param rayon
 	 * @return true or false
 	 */
-	public boolean cell(Direction direction, Category category, Double rayon) {
+	boolean cell(Direction direction, Category category, Double rayon) {
 
 		Point2D currentPos = getCenter();
 		double x = currentPos.getX();
@@ -632,14 +633,14 @@ public abstract class Entity {
 	 * 
 	 * @param direction
 	 */
-	public void setDirection(Direction direction) {
+	private void setDirection(Direction direction) {
 		this.direction = direction;
 	}
 
 	/**
 	 * Met a jour l'etat de l'entite comme definit par son automate
 	 */
-	public void step() {
+	void step() {
 		if (this instanceof Player) {
 			Player player = (Player) this;
 			player.breathe();
@@ -649,7 +650,7 @@ public abstract class Entity {
 		}
 	}
 
-	public void computeMovement() {
+	void computeMovement() {
 		Vector weight = computeWeight();
 		Vector archimede = computeArchimedes();
 		Vector friction = computeFriction();
@@ -703,7 +704,7 @@ public abstract class Entity {
 		return unitVector.scalarMultiplication(vs2);
 	}
 
-	boolean isMovePossible(Vector movement) {
+	private boolean isMovePossible(Vector movement) {
 		Rectangle2D movementBox = getHitbox();
 		Rectangle2D newHitbox = new Rectangle2D.Double(hitbox.getX() + movement.getX(), hitbox.getY() + movement.getY(),
 				hitbox.getWidth(), hitbox.getHeight());
@@ -735,19 +736,19 @@ public abstract class Entity {
 		return list;
 	}
 
-	public Point2D.Double getHitboxTopLeft() {
+	private Point2D.Double getHitboxTopLeft() {
 		return new Point2D.Double(hitbox.getX(), hitbox.getY());
 	}
 
-	public Point2D.Double getHitboxTopRight() {
+	private Point2D.Double getHitboxTopRight() {
 		return new Point2D.Double(hitbox.getX() + hitbox.getWidth(), hitbox.getY());
 	}
 
-	public Point2D.Double getHitboxBottomLeft() {
+	private Point2D.Double getHitboxBottomLeft() {
 		return new Point2D.Double(hitbox.getX(), hitbox.getY() + hitbox.getHeight());
 	}
 
-	public Point2D.Double getHitboxBottomRight() {
+	private Point2D.Double getHitboxBottomRight() {
 		return new Point2D.Double(hitbox.getX() + hitbox.getWidth(), hitbox.getY() + hitbox.getHeight());
 	}
 
@@ -766,7 +767,7 @@ public abstract class Entity {
 		return healthPoint;
 	}
 
-	public void setHealthPoint(int healthPoint) {
+	private void setHealthPoint(int healthPoint) {
 		this.healthPoint = healthPoint;
 	}
 
@@ -777,10 +778,10 @@ public abstract class Entity {
 	 * 
 	 * @param val
 	 */
-	public void modifyHealthPoint(int val, Entity e) {
+	private void modifyHealthPoint(int val, Entity e) {
 		this.healthPoint += val;
 		if (this.healthPoint <= 0) {
-			if (!(model.toRemove.contains(this))) {
+			if (!(model.getToRemove().contains(this))) {
 				this.model.addEntityToRemove(this);
 			}
 			if (e != null) {
@@ -797,7 +798,7 @@ public abstract class Entity {
 	 * 
 	 * @param val
 	 */
-	public void getHit(Entity e) {
+	void getHit(Entity e) {
 		if (e == null) {
 			this.modifyHealthPoint(-1, null);
 		} else {
@@ -819,7 +820,7 @@ public abstract class Entity {
 	/**
 	 * Action hit autour du personnage dans sa range
 	 */
-	public void hit() {
+	void hit() {
 		Rectangle2D hitRange = new Rectangle2D.Double(this.hitbox.getX() - meleeRange, this.hitbox.getY() - meleeRange,
 				this.hitbox.getWidth() + 2 * meleeRange, this.hitbox.getHeight() + 2 * meleeRange);
 		Iterator<Entity> it = this.model.entitiesIterator();
@@ -838,7 +839,7 @@ public abstract class Entity {
 	 * 
 	 * @param d
 	 */
-	public void hit(Direction d) {
+	void hit(Direction d) {
 		Direction absoluteDirection = Direction.relativeToAbsolute(direction, d);
 		Rectangle2D hitRange;
 		switch (absoluteDirection) {
@@ -904,19 +905,19 @@ public abstract class Entity {
 		return myFSM;
 	}
 
-	public void setForce(Vector newForce) {
+	void setForce(Vector newForce) {
 		force = newForce;
 	}
 
-	public void blockAutomaton() {
+	void blockAutomaton() {
 		automatonAvailable = false;
 	}
 
-	public void freeAutomaton() {
+	void freeAutomaton() {
 		automatonAvailable = true;
 	}
 
-	public void destroy() {
+	void destroy() {
 		model.removeEntity(this);
 		if (currenTask != null) {
 			currenTask.cancel();

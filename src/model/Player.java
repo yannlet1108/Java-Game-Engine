@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 
 public class Player extends Entity {
 
-	Vest vest;
+	private Vest vest;
 	private double oxygen;
 	private double maxOxygen;
 
@@ -106,10 +106,6 @@ public class Player extends Entity {
 		if (density > vest.maxDensity) {
 			density = vest.maxDensity;
 		}
-	}
-
-	Vest getVest() {
-		return vest;
 	}
 
 	public double getMaxOxygen() {
