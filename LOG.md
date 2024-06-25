@@ -1,3 +1,11 @@
+### Mardi 25 juin
+| Nom | Tache | Etat |
+|:-:|---|:-:|
+| Yann | Montage vidéo | Done |
+| Matthieu  | Tournage de la vidéo et réalisation des differentes config | Done |
+| Yohan & Axel | Résolution de problemes dans la vue | Done |
+| Gwendal | Résolution de bugs dans le modele | Done |
+
 ### Lundi 24 juin
 | Nom | Tache | Etat |
 |:-:|---|:-:|
@@ -27,7 +35,7 @@
 |:-:|---|:-:|
 | Gwendal | Fichiers de config et chargement | Done |
 | Matthieu | Restructuration des entités et deplacement des constantes dans la config | Done |
-| Yoahn | Sprites | En cours |
+| Yohan | Sprites | En cours |
 | Yann & Gwendal | Liaison automate et modele | Done |
 | Axel | Background | En cours |
 
