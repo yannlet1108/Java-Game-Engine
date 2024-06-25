@@ -9,8 +9,8 @@ public class EndExplodeTask extends ActionTask {
 	@Override
 	public void run() {
 		entity.setState(State.WAITING);
-		entity.model.toRemove.add(entity);
-		entity.freeAutomaton();
+		entity.model.addEntityToRemove(entity);
+		//entity.freeAutomaton();
 	}
 
 }
