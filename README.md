@@ -74,6 +74,7 @@ Le fichier contient 6 champs principaux :
 - `PlayerN` : paramètre du joueur N. Position de départ, vitesse, sprite, taille, durée des actions, constante de physique et de sa gestion.
 - `Obstacle` : paramètre des obstacles. Position, taille, sprite, constante de physique.
 - `Mobs` : liste de paramètres de chaque mob pour la simulation et l'affichage. Position, taille, sprite, constante de physique, durée des actions, etc.
+Le fichier configStruc.txt contient les commentaires décrivant chaque paramètre de la configuration.
 ### Fichiers des automates
 
 - Tous les automates utilisables par notre moteur de jeu se trouvent dans le fichier GalBank.gal dans le dossier gal_bank.
