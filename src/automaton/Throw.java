@@ -13,7 +13,12 @@ class Throw implements Action {
 
 	@Override
 	public void exec(Entity e) {
-		e.doThrow(dir);
+		if (dir == Direction.UNDERSCORE) {
+			Direction randomDirection = dir.getRandomDirection();
+			e.doThrow(randomDirection);
+		} else {
+			e.doThrow(dir);
+		}
 	}
 	
 	@Override

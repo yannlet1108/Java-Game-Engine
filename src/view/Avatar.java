@@ -14,16 +14,16 @@ import model.Entity;
 import model.State;
 
 /**
- * Classe réunissant les champs et méthodes communes à tout les avatars
+ * Classe réunissant les champs et méthodes des avatars d'entités
  */
 public class Avatar {
 
-	protected View m_view;
+	private View m_view;
 
-	protected Entity instanceEntity;
-	protected boolean isVisible;
+	private Entity instanceEntity;
+	private boolean isVisible;
 
-	protected int spriteSetNumber; // numero de set de sprite
+	private int spriteSetNumber; // numero de set de sprite
 
 	private model.State lastState;
 
@@ -35,9 +35,9 @@ public class Avatar {
 	 * Crée et initialise les champs communs des avatars. Doit être appellé par une
 	 * sous-classe charge le set de sprites associé à l'entité
 	 * 
-	 * @param m_view     : instance courante de la view
-	 * @param e          : entité associé à l'avatar
-	 * @param entityType : numero de l'entité dans la config
+	 * @param m_view       : instance courante de la view
+	 * @param e            : entité associé à l'avatar
+	 * @param entityConfig : nom du type entité dans la config
 	 */
 	public Avatar(View m_view, Entity e, String entityConfig) {
 		this.m_view = m_view;
@@ -51,7 +51,8 @@ public class Avatar {
 	}
 
 	/**
-	 * Retourne le prochain sprite à afficher dans la liste d'animation
+	 * Retourne le prochain sprite à afficher dans la liste d'animation Si la liste
+	 * est vide, on la remplit avec les sprites d'état de base
 	 * 
 	 * @return numero du sprite
 	 */
@@ -67,7 +68,7 @@ public class Avatar {
 	 * l'animation liée à l'état si necessaire
 	 * 
 	 */
-	void updateAnimations() {
+	private void updateAnimations() {
 		model.State newState = instanceEntity.getState();
 		if (newState != lastState) {
 			lastState = newState;
@@ -91,11 +92,11 @@ public class Avatar {
 	}
 
 	/**
-	 * Determine si l'avatar est orienté vers la droite pouur le choix des sprites
+	 * Determine si l'avatar est orienté vers la droite pour le choix des sprites
 	 * 
-	 * @return true si l'avatar est orienté vers la droite
+	 * @return true si l'avatar est orienté vers l'est relatif, false sinon
 	 */
-	Boolean isRightSided() {
+	private boolean isRightSided() {
 		Direction dir = instanceEntity.getDirection();
 		if (dir == Direction.E || dir == Direction.SE || dir == Direction.NE) {
 			return true;
@@ -105,11 +106,12 @@ public class Avatar {
 
 	/**
 	 * Ajoute les sprites correspondant à l'état de l'entité dans la file
-	 * d'animation
+	 * d'animation Les numéros de sprites sont déterminés en fonction de la table
+	 * d'animation de spriteset
 	 * 
 	 * @param state : état de l'entité
 	 */
-	void addAnimation(model.State state) {
+	private void addAnimation(model.State state) {
 		int diff = 0;
 		if (!isRightSided()) {
 			diff = 24;
@@ -175,31 +177,23 @@ public class Avatar {
 	}
 
 	/**
-	 * Retourne l'entité associé a l'avatar
-	 * 
-	 * @return instance de l'entité associé
-	 */
-	Entity getEntity() {
-		return instanceEntity;
-	}
-
-	/**
 	 * Rend l'avatar visible sur la fenêtre
 	 */
-	public void setVisible() {
+	void setVisible() {
 		isVisible = true;
 	}
 
 	/**
 	 * Rend l'avatar invisible sur la fenêtre
 	 */
-	public void setInvisible() {
+	void setInvisible() {
 		isVisible = false;
 	}
 
 	/**
 	 * Affiche l'avatar en fonction du viewport et des coordonnées de l'entité
-	 * affichage en hitbox si mode debug activé en sprite sinon
+	 * affichage en hitbox si mode debug activé en sprite sinon affichage des
+	 * informations de l'entité si mode uid activé
 	 * 
 	 * @param g : instance graphique du canvas
 	 */
@@ -241,7 +235,7 @@ public class Avatar {
 	 * 
 	 * @param g : instance graphique du canvas
 	 */
-	void uidPaint(Graphics g) {
+	private void uidPaint(Graphics g) {
 		Rectangle2D collisionBox = instanceEntity.getHitbox();
 		Point origin = m_view.getViewport().toViewport(collisionBox);
 		if (origin == null) {
@@ -251,16 +245,21 @@ public class Avatar {
 		g.setColor(Color.BLACK);
 
 		g.setFont(new Font("SansSerif", Font.PLAIN, 11));
+		// affichage du nom de l'entité
 		g.drawString("Name: " + instanceEntity.toString(), origin.x, origin.y + g.getFontMetrics().getHeight());
+		// affichage de la position
 		g.drawString(
 				"Position: " + "(" + roundValue(instanceEntity.getX(), numberOfDecimals) + ","
 						+ roundValue(instanceEntity.getY(), numberOfDecimals) + ")",
 				origin.x, origin.y + g.getFontMetrics().getHeight() * 2);
+		// affichage de la vitesse
 		g.drawString("Speed: " + instanceEntity.getSpeed(), origin.x, origin.y + g.getFontMetrics().getHeight() * 3);
+		// affichage de la force
 		g.drawString("Force: " + instanceEntity.getForce(), origin.x, origin.y + g.getFontMetrics().getHeight() * 4);
+		// affichage de la densité
 		g.drawString("Density: " + roundValue(instanceEntity.getDensity(), numberOfDecimals), origin.x,
 				origin.y + g.getFontMetrics().getHeight() * 5);
-
+		// affichage des points de vie
 		g.drawString("Hp: " + instanceEntity.getHealthPoint(), origin.x, origin.y + g.getFontMetrics().getHeight() * 6);
 		// affichage du niveau d'oxygen des joueurs
 		if (instanceEntity instanceof model.Player) {
@@ -270,16 +269,17 @@ public class Avatar {
 		// affichage de la direction de l'entité
 		g.drawString("Direction: " + instanceEntity.getDirection(), origin.x,
 				origin.y + g.getFontMetrics().getHeight() * 8);
+		// affichage de l'état de l'entité
 		g.drawString("State: " + instanceEntity.getState(), origin.x, origin.y + g.getFontMetrics().getHeight() * 9);
 	}
 
 	/**
-	 * affichage des hitbox de l'avatar en mode debug (differe en fonction de
-	 * l'avatar)
+	 * affichage des hitbox de l'avatar en mode debug avec sa couleur de debug
+	 * associée
 	 * 
 	 * @param g
 	 */
-	void debugPaint(Graphics g) {
+	private void debugPaint(Graphics g) {
 		Rectangle2D collisionBox = instanceEntity.getHitbox();
 		g.setColor(debugColor);
 		Point origin = m_view.getViewport().toViewport(collisionBox);

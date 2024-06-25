@@ -44,8 +44,8 @@ public class SpriteBank {
 		double newHeight = sprite.getHeight();
 		int offset = sprite.getMinX();
 		if (xRatio > ratio) {
-			newWidth = (int) ((ratio * sprite.getWidth()) / xRatio);
-			offset = (int) ((sprite.getWidth() - newWidth) / 2);
+			newWidth = (int) ((ratio * (double) sprite.getWidth()) / xRatio);
+			offset = (int) (((double) sprite.getWidth() - newWidth) / 2);
 		}
 		if (yRatio > ratio)
 			newHeight = (int) ((ratio * sprite.getHeight()) / yRatio);
@@ -73,7 +73,7 @@ public class SpriteBank {
 	/**
 	 * Charge les spriteset de la config dans la banque de sprite
 	 */
-	void loadSpritesSets() {
+	private void loadSpritesSets() {
 
 		String currentFile = "";
 		try {
@@ -126,7 +126,7 @@ public class SpriteBank {
 	 * @return : le spriteset
 	 * @throws IOException
 	 */
-	public static SpriteSet loadSprite(String filename, int nrows, int ncols, Color debugColor) throws IOException {
+	private SpriteSet loadSprite(String filename, int nrows, int ncols, Color debugColor) throws IOException {
 		File imageFile = new File("sprites/" + filename);
 		if (imageFile.exists()) {
 			BufferedImage image = ImageIO.read(imageFile);

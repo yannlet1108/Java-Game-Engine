@@ -43,8 +43,8 @@ public class View {
 	private Rectangle2D fixedBackgroundArea;
 
 	/**
-	 * Initialise la view, ouvre la fenêtre graphique, la liste d'avatar et la
-	 * banque d'avatar
+	 * Initialise la view, la liste d'avatar et la banque d'avatar et ouvre la
+	 * fenêtre graphique,
 	 * 
 	 * @param m_controller : Instance courante du controller
 	 */
@@ -104,6 +104,13 @@ public class View {
 		}
 	}
 
+	public void correctMinScaling() {
+		double th_xScaling = getSimWidth() / getScreenWidth();
+		double th_yScaling = getSimHeight() / getScreenHeight();
+		double th_minScaling = Math.min(1 / th_xScaling, 1 / th_yScaling);
+		ViewCst.MIN_SCALING = Math.max(ViewCst.MIN_SCALING, (float) (th_minScaling));
+	}
+
 	/**
 	 * Initialise le viewport
 	 */
@@ -120,7 +127,7 @@ public class View {
 	}
 
 	/**
-	 * Initialise la zone de refill du monde
+	 * Initialise la zone du background fixe
 	 */
 	private void initFixedBackgroundArea() {
 		this.fixedBackgroundArea = new Rectangle2D.Double(
@@ -139,14 +146,20 @@ public class View {
 		avatarStorage.add(a);
 	}
 
-	public void addToRemove(Avatar a) {
+	/**
+	 * Ajoute un avatar à la liste des avatars à supprimer
+	 * 
+	 * @param a : avatar à supprimer
+	 */
+	void addToRemove(Avatar a) {
 		toRemoveList.add(a);
 	}
 
 	/**
-	 * Retire de la liste d'avatar les avatars de ToRemoveList
+	 * Supprime les avatars, contenu dans la liste des avatars à supprimer, de la
+	 * liste d'avatars
 	 */
-	public void destroyToRemoves() {
+	private void destroyToRemoves() {
 		Iterator<Avatar> it = toRemoveList.iterator();
 		while (it.hasNext()) {
 			avatarStorage.remove(it.next());
@@ -155,7 +168,8 @@ public class View {
 	}
 
 	/**
-	 * Affiche l'integralité des éléments à afficher
+	 * Affiche l'integralité des éléments à afficher Les différents layer de
+	 * background, les avatars et les barres de vie
 	 * 
 	 * @param g : instance graphique du canvas
 	 */
@@ -166,19 +180,24 @@ public class View {
 			viewport.updateViewport(getFarthestPlayers(m_model.getPlayersPos()));
 			viewport.resize();
 			fillBackground(g);
-			drawfixedBackground(g);
-			
+			paintFixedBackground(g);
+
 			Iterator<Avatar> avatarIterator = getAvatarIterator();
 			while (avatarIterator.hasNext()) {
 				avatarIterator.next().paint(g);
 			}
-			drawOverlayBackground(g);
-			drawPlayersBars(g);
+			paintOverlayBackground(g);
+			paintPlayersBars(g);
 		}
 		destroyToRemoves();
 	}
 
-	private void drawOverlayBackground(Graphics g) {
+	/**
+	 * Paint le background overlay (au dessus des avatars et du background fixe)
+	 * 
+	 * @param g : instance graphique du canvas
+	 */
+	private void paintOverlayBackground(Graphics g) {
 		Point origin = getViewport().toViewport(fixedBackgroundArea);
 		if (origin == null)
 			return;
@@ -190,10 +209,17 @@ public class View {
 		}
 	}
 
-	private void drawPlayersBars(Graphics g) {
+	/**
+	 * Paint les barres de vie des joueurs
+	 * 
+	 * @param g : instance graphique du canvas
+	 */
+	private void paintPlayersBars(Graphics g) {
+		// Peut etre mis en config si besoin
 		int margin = 30;
 		int barHeight = 15;
 		int barWidth = 300;
+
 		Player player1 = m_model.getPlayer1();
 		Player player2 = m_model.getPlayer2();
 
@@ -223,16 +249,16 @@ public class View {
 					barHeight);
 
 			g.setColor(Color.lightGray);
-			g.fillRect(viewport.getWidth() - margin - barWidth, margin + barHeight+10, barWidth, barHeight);
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin + barHeight + 10, barWidth, barHeight);
 			g.setColor(Color.red);
 			double maxHealthRatio = (float) player2.getHealthPoint() / (float) player2.getMaxHealtPoint();
-			g.fillRect(viewport.getWidth() - margin - barWidth, margin + barHeight+10,
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin + barHeight + 10,
 					(int) (maxHealthRatio * (float) barWidth), barHeight);
 		}
 	}
 
 	/**
-	 * Remplit le background a chaque repaint
+	 * Remplit la fenetre avec le background adapté au scaling
 	 * 
 	 * @param g : instance graphique du canvas
 	 */
@@ -240,8 +266,6 @@ public class View {
 		BufferedImage background = bank.getBackgroundset().getSprite(0);
 		float scale = getBackgroundScale();
 		Point origin = getBackgroundPos(scale);
-		// System.out.println("x : " + origin.x + ", y : " + origin.y + ", scale : " +
-		// scale);
 		g.drawImage(background, origin.x, origin.y, (int) (background.getWidth() * scale),
 				(int) (background.getHeight() * scale), null);
 	}
@@ -300,7 +324,7 @@ public class View {
 	}
 
 	/**
-	 * Retourne les extréminés du rectangle contenant tout les joueurs
+	 * Retourne les extréminés du rectangle contenant tous les joueurs
 	 * 
 	 * @param playersPos : positions des joueurs
 	 * @return deux points, un étant le point bas droit et l'autre étant haut gauche
@@ -310,11 +334,10 @@ public class View {
 
 		Point2D tops[] = new Point2D.Double[2];
 		Point2D current;
-		if(playersPos.hasNext()) {
+		if (playersPos.hasNext()) {
 			current = playersPos.next();
-		}
-		else {
-			current = new Point2D.Double(getSimWidth()/2,0);
+		} else {
+			current = new Point2D.Double(getSimWidth() / 2, 0);
 		}
 		double xMax = current.getX();
 		double xMin = current.getX();
@@ -347,11 +370,11 @@ public class View {
 	}
 
 	/**
-	 * Dessine le background fixe
+	 * Paint le layer du background sans parralax
 	 * 
 	 * @param g : instance graphique du canvas
 	 */
-	private void drawfixedBackground(Graphics g) {
+	private void paintFixedBackground(Graphics g) {
 		Point origin = getViewport().toViewport(fixedBackgroundArea);
 		if (origin == null)
 			return;
@@ -381,7 +404,7 @@ public class View {
 	 * 
 	 * @param sb : banque des sprites chargée
 	 */
-	public void setBank(SpriteBank sb) {
+	void setBank(SpriteBank sb) {
 		bank = sb;
 	}
 
@@ -440,11 +463,21 @@ public class View {
 		return m_model.getBoardWidth();
 	}
 
+	/**
+	 * Retourne la largeur de l'écran
+	 * 
+	 * @return largeur de l'écran
+	 */
 	int getScreenWidth() {
-		return Toolkit.getDefaultToolkit().getScreenSize().width;
+		return m_canvas.getWidth();
 	}
 
+	/**
+	 * Retourne la hauteur de l'écran
+	 * 
+	 * @return hauteur de l'écran
+	 */
 	int getScreenHeight() {
-		return Toolkit.getDefaultToolkit().getScreenSize().height;
+		return m_canvas.getWidth();
 	}
 }
