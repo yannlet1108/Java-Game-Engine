@@ -68,9 +68,9 @@ public class Viewport {
 			th_scaling = scaling_x;
 		if (th_scaling != 0) {
 			th_scaling = 1 / th_scaling;
-			if (th_scaling > ViewCst.MAX_SCALING)
+			if (th_scaling > ViewCst.MAX_SCALING) {
 				th_scaling = ViewCst.MAX_SCALING;
-			else if (th_scaling < ViewCst.MIN_SCALING)
+			} else if (th_scaling < ViewCst.MIN_SCALING)
 				th_scaling = ViewCst.MIN_SCALING;
 		} else
 			th_scaling = ViewCst.MAX_SCALING;
@@ -81,22 +81,18 @@ public class Viewport {
 		double y_theorical = center.getY() - (viewbox.getHeight() / 2) * reverseScale();
 		double length_x = viewbox.getX() - x_theorical;
 		double length_y = viewbox.getY() - y_theorical;
-		
+
 		double newX = viewbox.getX() - length_x * ViewCst.MOVE_FACTOR;
-		if (newX < 0 - ViewCst.LEFT_MARGIN) {
-			newX = 0 - ViewCst.LEFT_MARGIN;
-		}
-		if (newX > (0 + m_view.getSimWidth() + ViewCst.RIGHT_MARGIN)) {
-			newX = m_view.getSimWidth() - length_x + ViewCst.RIGHT_MARGIN;
-		}
-		
 		double newY = viewbox.getY() - length_y * ViewCst.MOVE_FACTOR;
-		if (newY < 0 - ViewCst.TOP_MARGIN) {
-			newY = 0 - ViewCst.TOP_MARGIN;
-		}
-		if (newY > (0 + m_view.getSimWidth() + ViewCst.BOTTOM_MARGIN)) {
-			newY = m_view.getSimWidth() - length_y + ViewCst.BOTTOM_MARGIN;
-		}
+
+		if (newX < -ViewCst.LEFT_MARGIN)
+			newX = -ViewCst.LEFT_MARGIN;
+		if (newX > m_view.getSimWidth() + ViewCst.RIGHT_MARGIN - viewbox.getWidth() * reverseScale())
+			newX = m_view.getSimWidth() + ViewCst.RIGHT_MARGIN - viewbox.getWidth() * reverseScale();
+		if (newY < -ViewCst.TOP_MARGIN)
+			newY = -ViewCst.TOP_MARGIN;
+		if (newY > m_view.getSimHeight() + ViewCst.BOTTOM_MARGIN - viewbox.getHeight() * reverseScale())
+			newY = m_view.getSimHeight() + ViewCst.BOTTOM_MARGIN - viewbox.getHeight() * reverseScale();
 		viewbox.setRect(newX, newY, viewbox.getHeight(), viewbox.getHeight());
 	}
 
