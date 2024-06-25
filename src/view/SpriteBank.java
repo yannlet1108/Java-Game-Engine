@@ -79,9 +79,19 @@ public class SpriteBank {
 			/* background */
 			currentFile = getconfStr("World", "spriteFile");
 			spritesBank.add(0, loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "debugColor"))));
-			/* ship */
-			currentFile = getconfStr("World", "shipSpriteFile");
-			spritesBank.add(1, loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "shipDebugColor"))));
+
+			/* fixedBackground */
+			currentFile = getconfStr("World", "fixedBackgroundSprite");
+
+			spritesBank.add(1,
+					loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "fixedBackgroundDebugColor"))));
+
+			/* fixedBackground */
+			currentFile = getconfStr("World", "backgroundOverlaySprite");
+
+			spritesBank.add(2,
+					loadSprite(currentFile, 1, 1, new Color(getconfInt("World", "backgroundOverlayDebugColor"))));
+
 			/* player1 */
 			currentFile = getconfStr("Player1", "spriteFile");
 			spritesBank.add(loadSprite(currentFile, getconfInt("World", "spriteNrows"),
@@ -168,12 +178,21 @@ public class SpriteBank {
 	}
 
 	/**
-	 * Retourne le spriteset de la zone de refill
+	 * Retourne le spriteset du background fixe
 	 * 
 	 * @return
 	 */
-	SpriteSet getShipSet() {
+	SpriteSet getFixedBackgroundSet() {
 		return spritesBank.get(1);
+	}
+
+	/**
+	 * Retourne le spriteset de l'overlay du background
+	 * 
+	 * @return
+	 */
+	SpriteSet getBackgroundOverlaySet() {
+		return spritesBank.get(2);
 	}
 
 	/**

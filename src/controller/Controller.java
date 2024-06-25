@@ -3,7 +3,6 @@ package controller;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-
 import java.util.*;
 
 import config.Config;
@@ -29,7 +28,12 @@ public class Controller implements GameCanvasListener {
 	 */
 	private Controller() {
 		this.keyList = new LinkedList<Integer>();
-		m_config = new Config("config.json");
+		System.out.println("Tapez 1 pour Divers, tapez 2 pour Bloons Baloon ^^");
+		String input = null;
+        try (Scanner inputReader = new Scanner(System.in)) {
+			input = inputReader.nextLine();
+		}
+        m_config = new Config("config" + input + ".json");
 		m_view = new View(this);
 		m_model = new Model(this, m_view);
 		this.tick = 0;

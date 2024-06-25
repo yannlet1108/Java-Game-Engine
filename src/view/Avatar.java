@@ -57,7 +57,7 @@ public class Avatar {
 	 */
 	int getNextSpriteNumber() {
 		if (animationSprite.isEmpty()) {
-			return 0;
+			addAnimation(State.WAITING);
 		}
 		return animationSprite.poll();
 	}
@@ -267,6 +267,10 @@ public class Avatar {
 			g.drawString("Oxygen: " + roundValue(((model.Player) instanceEntity).getOxygen(), numberOfDecimals),
 					origin.x, origin.y + g.getFontMetrics().getHeight() * 7);
 		}
+		// affichage de la direction de l'entité
+		g.drawString("Direction: " + instanceEntity.getDirection(), origin.x,
+				origin.y + g.getFontMetrics().getHeight() * 8);
+		g.drawString("State: " + instanceEntity.getState(), origin.x, origin.y + g.getFontMetrics().getHeight() * 9);
 	}
 
 	/**
