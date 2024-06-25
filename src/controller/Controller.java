@@ -28,7 +28,7 @@ public class Controller implements GameCanvasListener {
 	 */
 	private Controller() {
 		this.keyList = new LinkedList<Integer>();
-		System.out.println("Tapez 1 pour Divers, tapez 2 pour Bloons Baloon ^^");
+		System.out.println("Tapez le numéro de fichier de config voulu");
 		String input = null;
         try (Scanner inputReader = new Scanner(System.in)) {
 			input = inputReader.nextLine();
