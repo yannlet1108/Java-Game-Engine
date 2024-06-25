@@ -2,7 +2,7 @@ package model;
 
 class EndEggTask extends ActionTask {
 
-	public EndEggTask(Entity entity, long duration) {
+	EndEggTask(Entity entity, long duration) {
 		super(entity, duration);
 	}
 

@@ -2,7 +2,7 @@ package model;
 
 class EndThrowTask extends ActionTask {
 
-	public EndThrowTask(Entity entity, long duration) {
+	EndThrowTask(Entity entity, long duration) {
 		super(entity, duration);
 	}
 

@@ -1,8 +1,8 @@
 package model;
 
-public class EndExplodeTask extends ActionTask {
+class EndExplodeTask extends ActionTask {
 
-	public EndExplodeTask(Entity entity, long duration) {
+	EndExplodeTask(Entity entity, long duration) {
 		super(entity, duration);
 	}
 

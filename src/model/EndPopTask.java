@@ -2,7 +2,7 @@ package model;
 
 class EndPopTask extends ActionTask {
 
-	public EndPopTask(Entity entity, long duration) {
+	EndPopTask(Entity entity, long duration) {
 		super(entity, duration);
 	}
 
