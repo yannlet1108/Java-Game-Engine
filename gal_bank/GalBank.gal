@@ -7,7 +7,7 @@ Diver1(Init){
 	| Key(SPACE) ? Hit :(Init)
 	| True ? :(Init)
 }
-
+ 
 Diver2(Init){
 	* (Init):
 	| Key(FU) ? Pop(1) :(Init)
