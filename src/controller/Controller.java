@@ -30,12 +30,13 @@ public class Controller implements GameCanvasListener {
 		this.keyList = new LinkedList<Integer>();
 		System.out.println("Tapez 1 pour Divers, tapez 2 pour Bloons Baloon ^^");
 		String input = null;
-        try (Scanner inputReader = new Scanner(System.in)) {
+		try (Scanner inputReader = new Scanner(System.in)) {
 			input = inputReader.nextLine();
 		}
-        m_config = new Config("config" + input + ".json");
+		m_config = new Config("config" + input + ".json");
 		m_view = new View(this);
 		m_model = new Model(this, m_view);
+		m_view.correctMinScaling();
 		this.tick = 0;
 	}
 

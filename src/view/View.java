@@ -104,6 +104,13 @@ public class View {
 		}
 	}
 
+	public void correctMinScaling() {
+		double th_xScaling = getSimWidth() / getScreenWidth();
+		double th_yScaling = getSimHeight() / getScreenHeight();
+		double th_minScaling = Math.min(1 / th_xScaling, 1 / th_yScaling);
+		ViewCst.MIN_SCALING = Math.max(ViewCst.MIN_SCALING, (float) (th_minScaling));
+	}
+
 	/**
 	 * Initialise le viewport
 	 */
@@ -167,7 +174,7 @@ public class View {
 			viewport.resize();
 			fillBackground(g);
 			drawfixedBackground(g);
-			
+
 			Iterator<Avatar> avatarIterator = getAvatarIterator();
 			while (avatarIterator.hasNext()) {
 				avatarIterator.next().paint(g);
@@ -223,10 +230,10 @@ public class View {
 					barHeight);
 
 			g.setColor(Color.lightGray);
-			g.fillRect(viewport.getWidth() - margin - barWidth, margin + barHeight+10, barWidth, barHeight);
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin + barHeight + 10, barWidth, barHeight);
 			g.setColor(Color.red);
 			double maxHealthRatio = (float) player2.getHealthPoint() / (float) player2.getMaxHealtPoint();
-			g.fillRect(viewport.getWidth() - margin - barWidth, margin + barHeight+10,
+			g.fillRect(viewport.getWidth() - margin - barWidth, margin + barHeight + 10,
 					(int) (maxHealthRatio * (float) barWidth), barHeight);
 		}
 	}
@@ -310,11 +317,10 @@ public class View {
 
 		Point2D tops[] = new Point2D.Double[2];
 		Point2D current;
-		if(playersPos.hasNext()) {
+		if (playersPos.hasNext()) {
 			current = playersPos.next();
-		}
-		else {
-			current = new Point2D.Double(getSimWidth()/2,0);
+		} else {
+			current = new Point2D.Double(getSimWidth() / 2, 0);
 		}
 		double xMax = current.getX();
 		double xMin = current.getX();
@@ -441,10 +447,10 @@ public class View {
 	}
 
 	int getScreenWidth() {
-		return Toolkit.getDefaultToolkit().getScreenSize().width;
+		return m_canvas.getWidth();
 	}
 
 	int getScreenHeight() {
-		return Toolkit.getDefaultToolkit().getScreenSize().height;
+		return m_canvas.getWidth();
 	}
 }
