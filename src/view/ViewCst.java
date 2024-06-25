@@ -23,10 +23,6 @@ public class ViewCst {
 	/* Lissage des déplacements */
 	public static float MOVE_FACTOR;
 	public static float SCALE_FACTOR;
-	
-
-	
-	
 
 	/**
 	 * Initialise les constantes de la view

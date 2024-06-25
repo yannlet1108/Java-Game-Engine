@@ -15,7 +15,7 @@ public class SpriteSet {
 	 * @param name       : nom du fichier de sprites
 	 * @param debugColor : couleur de debug
 	 */
-	public SpriteSet(BufferedImage[] img, String name, Color debugColor) {
+	SpriteSet(BufferedImage[] img, String name, Color debugColor) {
 		this.img = img;
 		this.name = name;
 		this.debugColor = debugColor;
@@ -27,7 +27,7 @@ public class SpriteSet {
 	 * @param i : indice du sprite
 	 * @return le sprite à l'indice i
 	 */
-	public BufferedImage getSprite(int i) {
+	BufferedImage getSprite(int i) {
 		return img[i];
 	}
 
@@ -36,7 +36,7 @@ public class SpriteSet {
 	 * 
 	 * @return
 	 */
-	public String getName() {
+	String getName() {
 		return name;
 	}
 
@@ -45,7 +45,7 @@ public class SpriteSet {
 	 * 
 	 * @return
 	 */
-	public Color getDebugColor() {
+	Color getDebugColor() {
 		return debugColor;
 	}
 

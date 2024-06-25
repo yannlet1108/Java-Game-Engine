@@ -103,12 +103,6 @@ public class Viewport {
 		viewbox.setRect(viewbox.getX(), viewbox.getY(), m_canvas.getWidth(), m_canvas.getHeight());
 	}
 
-	Point backgroundPos(double simX, double simY, float height, float width) {
-		double distX = viewbox.getX() / width * simX;
-		double distY = viewbox.getY() / height * simY;
-		return new Point((int) (viewbox.getX() - distX), (int) (viewbox.getY() - distY));
-	}
-
 	/**
 	 * Retourne le scaling du viewport
 	 * 
