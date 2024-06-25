@@ -55,7 +55,7 @@ public class Player extends Entity {
 			oxygen = 0;
 			this.getHit(null);
 		}
-		if (this.hitbox.intersects(model.getShipArea())) {
+		if (this.hitbox.intersects(model.getRefillArea())) {
 			if (oxygen <= maxOxygen - vest.reloadStep) {
 				setOxygen(oxygen + vest.reloadStep);
 				this.state = State.REFILLING;

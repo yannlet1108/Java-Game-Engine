@@ -24,8 +24,8 @@ public class Model {
 
 	private Collection<Entity> entities;
 	private Collection<Player> players;
-	Collection<Entity> toRemove;
-	Collection<Entity> toAdd;
+	private Collection<Entity> toRemove;
+	private Collection<Entity> toAdd;
 	private int maxEntity;
 
 	private int player1SpawnX;
@@ -182,11 +182,11 @@ public class Model {
 		return new Point2D.Double(worldWidth / 2, worldHeight / 2);
 	}
 
-	public double getViscosity() {
+	double getViscosity() {
 		return viscosity;
 	}
 
-	public double getDensity() {
+	double getDensity() {
 		return density;
 	}
 
@@ -228,7 +228,7 @@ public class Model {
 	 * 
 	 * @param Player P
 	 */
-	public void addPlayer(Player P) {
+	void addPlayer(Player P) {
 		players.add(P);
 	}
 
@@ -237,7 +237,7 @@ public class Model {
 	 * 
 	 * @param Player P
 	 */
-	public void removePlayer(Player P) {
+	void removePlayer(Player P) {
 		players.remove(P);
 	}
 
@@ -284,7 +284,7 @@ public class Model {
 		return players;
 	}
 
-	public void mapGenerator() {
+	void mapGenerator() {
 		Random r = new Random(seed);
 		int obstacleWidth = getConfig().getIntValue("Obstacle", "width");
 		int obstacleHeight = getConfig().getIntValue("Obstacle", "height");
@@ -304,27 +304,27 @@ public class Model {
 		}
 	}
 
-	public Collection<Entity> getEntities() {
+	Collection<Entity> getEntities() {
 		return entities;
 	}
 
-	public AutomatonBank getAutomatonBank() {
+	AutomatonBank getAutomatonBank() {
 		return automatonBank;
 	}
 
-	public Config getConfig() {
+	Config getConfig() {
 		return m_controller.getConfig();
 	}
 
-	public Controller getController() {
+	Controller getController() {
 		return m_controller;
 	}
 
-	public int getSafeZone() {
+	int getSafeZone() {
 		return safeZone;
 	}
 
-	public Double getShipArea() {
+	Double getRefillArea() {
 		return refillArea;
 	}
 
