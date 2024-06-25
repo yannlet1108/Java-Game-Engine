@@ -3,6 +3,7 @@
   "View": {
     "debug": false,
     "uid": false,
+    "parallax": 0.95,
     "max_scaling": 10.0,
     "min_scaling": 0.5,
     "margin": 60,
