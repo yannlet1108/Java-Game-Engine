@@ -2,11 +2,11 @@ package model;
 
 import java.util.TimerTask;
 
-public class ActionTask extends TimerTask {
+class ActionTask extends TimerTask {
 	protected Entity entity;
 	protected long duration;
 
-	public ActionTask(Entity entity, long duration) {
+	ActionTask(Entity entity, long duration) {
 		this.entity = entity;
 		this.duration = duration;
 	}
@@ -15,7 +15,7 @@ public class ActionTask extends TimerTask {
 	public void run() {
 	}
 
-	public long getDuration() {
+	long getDuration() {
 		return duration;
 	}
 

@@ -2,10 +2,10 @@ package model;
 
 import java.util.Timer;
 
-public class HitTask extends ActionTask {
+class HitTask extends ActionTask {
 	Direction direction;
 
-	public HitTask(Entity entity, long duration, Direction direction) {
+	HitTask(Entity entity, long duration, Direction direction) {
 		super(entity, duration);
 		this.direction = direction;
 	}

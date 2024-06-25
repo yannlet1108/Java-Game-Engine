@@ -104,6 +104,13 @@ public class View {
 		}
 	}
 
+	public void correctMinScaling() {
+		double th_xScaling = getSimWidth() / getScreenWidth();
+		double th_yScaling = getSimHeight() / getScreenHeight();
+		double th_minScaling = Math.min(1 / th_xScaling, 1 / th_yScaling);
+		ViewCst.MIN_SCALING = Math.max(ViewCst.MIN_SCALING, (float) (th_minScaling));
+	}
+
 	/**
 	 * Initialise le viewport
 	 */
@@ -293,7 +300,7 @@ public class View {
 	 * @return scale exacte du background
 	 */
 	private float getBackgroundScale() {
-		float rawScale = getScreenHeight() / bank.getBackgroundset().getSprite(0).getHeight();
+		float rawScale = (float) (getScreenHeight()) / (float) (bank.getBackgroundset().getSprite(0).getHeight());
 		return rawScale + rawScale * ratioToParallax(getScaleRatio());
 	}
 
@@ -462,7 +469,7 @@ public class View {
 	 * @return largeur de l'écran
 	 */
 	int getScreenWidth() {
-		return Toolkit.getDefaultToolkit().getScreenSize().width;
+		return m_canvas.getWidth();
 	}
 
 	/**
@@ -471,6 +478,6 @@ public class View {
 	 * @return hauteur de l'écran
 	 */
 	int getScreenHeight() {
-		return Toolkit.getDefaultToolkit().getScreenSize().height;
+		return m_canvas.getWidth();
 	}
 }
