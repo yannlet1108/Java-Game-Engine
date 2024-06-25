@@ -112,7 +112,7 @@
     "category": "OBSTACLE",
     "maxHealthPoint": 10,
     "automaton": "Block",
-    "probability": 0.05,
+    "probability": 0,
     "attackDamage": 0,
     "meleeRange": 0,
     "throwBots": "mob2",
