@@ -107,9 +107,9 @@ public class Model {
 	}
 
 	/**
-	 * spawn un poisson d'une probabilitée IN_GENERAL / 1000 dans une poisition
+	 * spawn un poisson d'une probabilitée spawnMobProba% dans une position
 	 * aléatoire , ce poisson peut être de differents types avec une probabilitée
-	 * chacun, 10 essaies si il n y a pas de la place l'opération s'arrête.
+	 * chacun, 30 essaies si il n y a pas de la place l'opération s'arrête.
 	 * 
 	 * @return le poisson
 	 * @author MO ER
