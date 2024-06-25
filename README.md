@@ -84,3 +84,4 @@ Attention : les actions non utilisées dans notre moteur (Take et Pick par exemp
 <br>De plus, à chaque transition de l'automate est associée au plus une action.
 
 ## IV Lien vers la vidéo
+https://www.swisstransfer.com/d/623d69e2-05ac-47a3-ae30-402a00b65e6d

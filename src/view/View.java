@@ -181,7 +181,6 @@ public class View {
 			viewport.resize();
 			fillBackground(g);
 			paintFixedBackground(g);
-
 			Iterator<Avatar> avatarIterator = getAvatarIterator();
 			while (avatarIterator.hasNext()) {
 				avatarIterator.next().paint(g);
