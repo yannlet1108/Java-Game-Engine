@@ -167,12 +167,13 @@ public class View {
 			viewport.resize();
 			fillBackground(g);
 			drawfixedBackground(g);
-			drawPlayersBars(g);
+			
 			Iterator<Avatar> avatarIterator = getAvatarIterator();
 			while (avatarIterator.hasNext()) {
 				avatarIterator.next().paint(g);
 			}
 			drawOverlayBackground(g);
+			drawPlayersBars(g);
 		}
 		destroyToRemoves();
 	}
