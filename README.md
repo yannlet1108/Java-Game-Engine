@@ -3,7 +3,7 @@
 ## I Compilation sous eclipse
 - Importer le projet sur sa machine depuis git :
   - Se placer là ou on veut mettre le projet sur sa machine
-  - Lancer la commande "git clone git@gricad-gitlab.univ-grenoble-alpes.fr:michael_perin_private_project/2023_info3_ple/g7.git "
+  - Lancer la commande "git clone git@github.com:yannlet1108/Java-Game-Engine.git"
 - Lancer eclipse
 - Pour importer le fichier sous eclipse : 
   - File -> Import -> Project from Folder or Archive -> Dans la ligne Import source, selectionner le dossier /g7/
